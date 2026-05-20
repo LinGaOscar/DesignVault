@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURÈLE - 精品品牌</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        :root {
+            --boutique-bg: #f8f7f5;
+            --boutique-text: #1a1a1a;
+            --boutique-text-light: #6b6b6b;
+            --boutique-cream: #f5f0eb;
+            --boutique-gold: #c9a96e;
+            --boutique-dark: #2c2c2c;
+            --boutique-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            background: var(--boutique-bg);
+            color: var(--boutique-text);
+            line-height: 1.8;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 80px;
+            background: transparent;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .nav.scrolled {
+            background: rgba(248, 247, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 80px;
+        }
+
+        .nav-logo {
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 48px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--boutique-text);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--boutique-gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 24px;
+            font-size: 1.1rem;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 80px;
+        }
+
+        .hero-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--boutique-gold);
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--boutique-gold);
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--boutique-text-light);
+            margin-bottom: 48px;
+            max-width: 380px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--boutique-text);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--boutique-text);
+            width: fit-content;
+            transition: all 0.3s;
+        }
+
+        .hero-btn:hover {
+            color: var(--boutique-gold);
+            border-color: var(--boutique-gold);
+        }
+
+        .hero-image {
+            background: var(--boutique-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image-text {
+            font-size: 20rem;
+            font-weight: 300;
+            color: rgba(0,0,0,0.04);
+            line-height: 1;
+        }
+
+        /* Philosophy */
+        .philosophy {
+            padding: 140px 80px;
+            text-align: center;
+            background: var(--boutique-white);
+        }
+
+        .philosophy-quote {
+            font-size: 2.2rem;
+            font-weight: 300;
+            font-style: italic;
+            max-width: 900px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        .philosophy-author {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--boutique-text-light);
+        }
+
+        /* Collections Grid */
+        .collections {
+            padding: 120px 80px;
+            background: var(--boutique-bg);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--boutique-gold);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 400;
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .collection-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collection-image {
+            height: 500px;
+            background: var(--boutique-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.6s;
+        }
+
+        .collection-card:hover .collection-image {
+            transform: scale(1.02);
+        }
+
+        .collection-icon {
+            font-size: 6rem;
+            opacity: 0.3;
+        }
+
+        .collection-name {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .collection-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--boutique-text-light);
+        }
+
+        /* Story */
+        .story {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+        }
+
+        .story-image {
+            background: linear-gradient(135deg, #e8e0d8 0%, #d4ccc4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-image-text {
+            font-size: 12rem;
+            font-weight: 300;
+            color: rgba(0,0,0,0.05);
+        }
+
+        .story-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 80px;
+            background: var(--boutique-dark);
+            color: var(--boutique-white);
+        }
+
+        .story-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--boutique-gold);
+            margin-bottom: 24px;
+        }
+
+        .story-title {
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .story-text {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
+            line-height: 2;
+        }
+
+        .story-btn {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--boutique-white);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--boutique-white);
+            width: fit-content;
+            transition: all 0.3s;
+        }
+
+        .story-btn:hover {
+            color: var(--boutique-gold);
+            border-color: var(--boutique-gold);
+        }
+
+        /* Products */
+        .products {
+            padding: 120px 80px;
+            background: var(--boutique-white);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 200px;
+            height: 260px;
+            background: var(--boutique-cream);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            opacity: 0.4;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--boutique-gold);
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .product-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--boutique-text-light);
+            line-height: 1.7;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 120px 80px;
+            background: var(--boutique-bg);
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+
+        .contact-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--boutique-text-light);
+            margin-bottom: 48px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--boutique-white);
+            background: var(--boutique-dark);
+            padding: 18px 48px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: var(--boutique-gold);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 80px;
+            background: var(--boutique-dark);
+            color: var(--boutique-white);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand {
+            font-size: 1.4rem;
+            letter-spacing: 6px;
+            margin-bottom: 20px;
+        }
+
+        .footer-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.8;
+        }
+
+        .footer-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            color: var(--boutique-gold);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 14px;
+        }
+
+        .footer-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--boutique-white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .hero-content {
+                padding: 140px 40px 80px;
+            }
+            .hero-image {
+                height: 50vh;
+            }
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            .nav {
+                padding: 20px 40px;
+            }
+            .philosophy {
+                padding: 100px 40px;
+            }
+            .philosophy-quote {
+                font-size: 1.8rem;
+            }
+            .collections {
+                padding: 80px 40px;
+            }
+            .collections-grid {
+                grid-template-columns: 1fr;
+            }
+            .collection-image {
+                height: 350px;
+            }
+            .story {
+                grid-template-columns: 1fr;
+            }
+            .story-image {
+                height: 40vh;
+            }
+            .story-content {
+                padding: 80px 40px;
+            }
+            .products {
+                padding: 80px 40px;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            .contact {
+                padding: 80px 40px;
+            }
+            .footer {
+                padding: 60px 40px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(248, 247, 245, 0.98);
+                flex-direction: column;
+                padding: 24px;
+                gap: 20px;
+                border-top: 1px solid rgba(0,0,0,0.05);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .hero-content {
+                padding: 120px 24px 60px;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-desc {
+                font-size: 1rem;
+            }
+            .hero-image {
+                height: 40vh;
+            }
+            .hero-image-text {
+                font-size: 10rem;
+            }
+            .philosophy {
+                padding: 80px 24px;
+            }
+            .philosophy-quote {
+                font-size: 1.5rem;
+            }
+            .collections {
+                padding: 60px 24px;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+            .collections-grid {
+                gap: 32px;
+            }
+            .collection-image {
+                height: 280px;
+            }
+            .story-content {
+                padding: 60px 24px;
+            }
+            .story-title {
+                font-size: 2rem;
+            }
+            .products {
+                padding: 60px 24px;
+            }
+            .product-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            .product-image {
+                width: 160px;
+                height: 200px;
+            }
+            .contact {
+                padding: 60px 24px;
+            }
+            .contact-title {
+                font-size: 2.2rem;
+            }
+            .contact-btn {
+                padding: 16px 36px;
+            }
+            .footer {
+                padding: 48px 24px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-brand {
+                letter-spacing: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .story-title {
+                font-size: 1.6rem;
+            }
+            .contact-title {
+                font-size: 1.8rem;
+            }
+            .collection-image {
+                height: 220px;
+            }
+            .collection-icon {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-logo">AURÈLE</div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+        <ul class="nav-links">
+            <li><a href="#">品牌故事</a></li>
+            <li><a href="#">系列</a></li>
+            <li><a href="#">作品</a></li>
+            <li><a href="#">店鋪</a></li>
+            <li><a href="#">聯繫</a></li>
+        </ul>
+        <div class="nav-icons">
+            <span>🔍</span>
+            <span>🛒</span>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-tag">2026 春夏系列</p>
+            <h1 class="hero-title">永恆的<br><em>優雅</em></h1>
+            <p class="hero-desc">每一件作品都是時間的藝術。我們相信，真正的奢華不在於炫耀，而在於對細節的執著與對品質的堅持。</p>
+            <a href="#" class="hero-btn">探索系列</a>
+        </div>
+        <div class="hero-image">
+            <span class="hero-image-text">A</span>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="philosophy">
+        <p class="philosophy-quote">「真正的奢華，是穿著者與作品之間那份無聲的默契，是每一次觸摸時心中泛起的微小卻真實的滿足。」</p>
+        <p class="philosophy-author">— Aurèle Maison，創辦人</p>
+    </section>
+
+    <!-- Collections -->
+    <section class="collections">
+        <div class="section-header">
+            <p class="section-tag">精選系列</p>
+            <h2 class="section-title">探索我們的世界</h2>
+        </div>
+        <div class="collections-grid">
+            <div class="collection-card">
+                <div class="collection-image">
+                    <span class="collection-icon">👗</span>
+                </div>
+                <h3 class="collection-name">高級訂製服</h3>
+                <p class="collection-desc">每一件都是為你量身打造的藝術品</p>
+            </div>
+            <div class="collection-card">
+                <div class="collection-image">
+                    <span class="collection-icon">👜</span>
+                </div>
+                <h3 class="collection-name">皮革系列</h3>
+                <p class="collection-desc">義大利工匠手工縫製，傳承百年技藝</p>
+            </div>
+            <div class="collection-card">
+                <div class="collection-image">
+                    <span class="collection-icon">💎</span>
+                </div>
+                <h3 class="collection-name">珠寶配飾</h3>
+                <p class="collection-desc">低調奢華，為日常增添光彩</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story -->
+    <section class="story">
+        <div class="story-image">
+            <span class="story-image-text">A</span>
+        </div>
+        <div class="story-content">
+            <p class="story-tag">我們的故事</p>
+            <h2 class="story-title">始於追求<br>極致的工匠精神</h2>
+            <p class="story-text">1998年，品牌創辦人從巴黎回到台北，帶回的不只是設計理念，更是一種對工藝的執著。每一件 AURÈLE 的作品，都承載著我們對美的追求與對細節的堅持。從素材挑選到最後一道工序，我們拒絕任何妥協。</p>
+            <a href="#" class="story-btn">深入了解</a>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products">
+        <div class="section-header">
+            <p class="section-tag">新品上市</p>
+            <h2 class="section-title">本季精選</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-item">
+                <div class="product-image">👗</div>
+                <div class="product-info">
+                    <p class="product-number">No. 001</p>
+                    <h3 class="product-name">絲綢晚禮服</h3>
+                    <p class="product-desc">精選義大利絲綢，簡約而不簡單的線條，適合各種正式場合。</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <div class="product-image">👜</div>
+                <div class="product-info">
+                    <p class="product-number">No. 002</p>
+                    <h3 class="product-name">手工皮質手提包</h3>
+                    <p class="product-desc">採用頭層牛皮，歷經32道工序，每一個細節都經過精心打磨。</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <div class="product-image">💎</div>
+                <div class="product-info">
+                    <p class="product-number">No. 003</p>
+                    <h3 class="product-name">珍珠項鍊</h3>
+                    <p class="product-desc">精選南洋珍珠，每一顆都是自然孕育的瑰寶，獨一無二。</p>
+                </div>
+            </div>
+            <div class="product-item">
+                <div class="product-image">👠</div>
+                <div class="product-info">
+                    <p class="product-number">No. 004</p>
+                    <h3 class="product-name">經典高跟鞋</h3>
+                    <p class="product-desc">舒適與優雅兼顧，採用特殊鞋墊設計，長時間穿著也不累。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact">
+        <h2 class="contact-title">預約來店體驗</h2>
+        <p class="contact-desc">我們的專業顧問將為你提供一對一的服務，歡迎預約來店，探索 AURÈLE 的世界。</p>
+        <a href="#" class="contact-btn">立即預約</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <h3 class="footer-brand">AURÈLE</h3>
+                <p class="footer-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
+            </div>
+            <div>
+                <h4 class="footer-title">系列</h4>
+                <ul class="footer-links">
+                    <li><a href="#">高級訂製</a></li>
+                    <li><a href="#">皮革系列</a></li>
+                    <li><a href="#">珠寶配飾</a></li>
+                    <li><a href="#">限定款</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">服務</h4>
+                <ul class="footer-links">
+                    <li><a href="#">量身訂製</a></li>
+                    <li><a href="#">保養維修</a></li>
+                    <li><a href="#">包裝禮品</a></li>
+                    <li><a href="#">會員專區</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">關注</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LINE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 AURÈLE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
