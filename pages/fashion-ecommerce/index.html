@@ -4,34 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAISON NOIR - 時尚電商</title>
+    <link rel="stylesheet" href="../../css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* ===== Fashion E-commerce 專屬樣式 ===== */
         :root {
-            --bg: #faf8f5;
-            --text: #1a1a1a;
-            --text-light: #777;
-            --accent: #c9a96e;
-            --accent-dark: #b8944d;
-            --white: #ffffff;
-            --border: #e8e4df;
+            --fashion-bg: #faf8f5;
+            --fashion-text: #1a1a1a;
+            --fashion-text-light: #777;
+            --fashion-accent: #c9a96e;
+            --fashion-accent-dark: #b8944d;
+            --fashion-white: #ffffff;
+            --fashion-border: #e8e4df;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
+            background: var(--fashion-bg);
+            color: var(--fashion-text);
         }
 
         /* Navigation */
@@ -40,8 +30,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
+            background: var(--fashion-white);
+            border-bottom: 1px solid var(--fashion-border);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -65,18 +55,26 @@
             font-weight: 500;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             transition: color 0.2s;
         }
 
         .nav-links a:hover {
-            color: var(--accent);
+            color: var(--fashion-accent);
         }
 
         .nav-icons {
             display: flex;
             gap: 20px;
             font-size: 1.2rem;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         /* Hero Section */
@@ -98,7 +96,7 @@
             font-weight: 600;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--fashion-accent);
             margin-bottom: 20px;
         }
 
@@ -112,15 +110,15 @@
 
         .hero-desc {
             font-size: 1rem;
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             margin-bottom: 40px;
             max-width: 400px;
         }
 
         .hero-btn {
             display: inline-block;
-            background: var(--text);
-            color: var(--white);
+            background: var(--fashion-text);
+            color: var(--fashion-white);
             padding: 16px 40px;
             font-size: 0.85rem;
             font-weight: 500;
@@ -131,7 +129,7 @@
         }
 
         .hero-btn:hover {
-            background: var(--accent-dark);
+            background: var(--fashion-accent-dark);
         }
 
         .hero-image {
@@ -154,7 +152,7 @@
         /* Categories */
         .categories {
             padding: 100px 60px;
-            background: var(--white);
+            background: var(--fashion-white);
         }
 
         .section-header {
@@ -167,7 +165,7 @@
             font-weight: 600;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--fashion-accent);
             margin-bottom: 12px;
         }
 
@@ -230,7 +228,7 @@
             right: 0;
             padding: 30px;
             background: linear-gradient(transparent, rgba(0,0,0,0.5));
-            color: var(--white);
+            color: var(--fashion-white);
         }
 
         .category-name {
@@ -248,7 +246,7 @@
         /* Featured Products */
         .featured {
             padding: 100px 60px;
-            background: var(--bg);
+            background: var(--fashion-bg);
         }
 
         .products-grid {
@@ -260,7 +258,7 @@
         }
 
         .product-card {
-            background: var(--white);
+            background: var(--fashion-white);
             overflow: hidden;
         }
 
@@ -283,7 +281,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--fashion-accent);
             margin-bottom: 6px;
         }
 
@@ -300,7 +298,7 @@
 
         .product-price .original {
             font-size: 0.9rem;
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             text-decoration: line-through;
             margin-left: 8px;
             font-weight: 400;
@@ -308,8 +306,8 @@
 
         /* Banner */
         .banner {
-            background: var(--text);
-            color: var(--white);
+            background: var(--fashion-text);
+            color: var(--fashion-white);
             padding: 80px 60px;
             text-align: center;
         }
@@ -332,8 +330,8 @@
 
         .banner-btn {
             display: inline-block;
-            background: var(--accent);
-            color: var(--white);
+            background: var(--fashion-accent);
+            color: var(--fashion-white);
             padding: 16px 50px;
             font-size: 0.85rem;
             font-weight: 500;
@@ -343,14 +341,14 @@
         }
 
         .banner-btn:hover {
-            background: var(--accent-dark);
+            background: var(--fashion-accent-dark);
         }
 
         /* Footer */
         .footer {
-            background: var(--white);
+            background: var(--fashion-white);
             padding: 60px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--fashion-border);
         }
 
         .footer-content {
@@ -369,7 +367,7 @@
         }
 
         .footer-desc {
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             font-size: 0.9rem;
             line-height: 1.8;
         }
@@ -391,61 +389,149 @@
         }
 
         .footer-links a {
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             font-size: 0.9rem;
             transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            color: var(--accent);
+            color: var(--fashion-accent);
         }
 
         .footer-bottom {
             margin-top: 60px;
             padding-top: 30px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--fashion-border);
             text-align: center;
-            color: var(--text-light);
+            color: var(--fashion-text-light);
             font-size: 0.85rem;
         }
 
-        /* Responsive */
+        /* ===== Responsive ===== */
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 1024px) {
             .hero {
                 grid-template-columns: 1fr;
+                min-height: auto;
             }
             .hero-image {
                 height: 50vh;
             }
+            .hero-title {
+                font-size: 3rem;
+            }
             .categories-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .category-card {
+                height: 350px;
             }
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             .footer-content {
                 grid-template-columns: 1fr 1fr;
+                gap: 40px;
             }
         }
 
         @media (max-width: 768px) {
             .nav {
                 padding: 16px 24px;
+                flex-wrap: wrap;
+                gap: 16px;
             }
             .nav-links {
                 display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+                border-top: 1px solid var(--fashion-border);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .nav-icons {
+                position: absolute;
+                right: 60px;
             }
             .hero-content {
                 padding: 60px 24px;
             }
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+            }
+            .hero-desc {
+                font-size: 0.95rem;
+            }
+            .hero-btn {
+                padding: 14px 32px;
+                font-size: 0.8rem;
+            }
+            .hero-image {
+                height: 40vh;
+            }
+            .hero-image-text {
+                font-size: 4rem;
             }
             .categories, .featured, .banner {
                 padding: 60px 24px;
             }
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            .category-card {
+                height: 280px;
+            }
+            .category-icon {
+                font-size: 3.5rem;
+            }
             .products-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .product-image {
+                height: 250px;
+            }
+            .banner-title {
+                font-size: 2rem;
+            }
+            .banner-desc {
+                font-size: 0.9rem;
+            }
+            .banner-btn {
+                padding: 14px 36px;
+            }
+            .footer {
+                padding: 40px 24px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .footer-bottom {
+                margin-top: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .category-card {
+                height: 220px;
             }
         }
     </style>
@@ -454,8 +540,9 @@
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-logo">MAISON NOIR</div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
         <ul class="nav-links">
-            <li><a href="#">首页</a></li>
+            <li><a href="#">首頁</a></li>
             <li><a href="#">女性</a></li>
             <li><a href="#">男性</a></li>
             <li><a href="#">配件</a></li>
