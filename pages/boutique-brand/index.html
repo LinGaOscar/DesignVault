@@ -194,21 +194,15 @@
         .hero-cta:hover { color: var(--gold); border-color: var(--gold); }
 
         .hero-visual {
-            background: var(--cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             position: relative;
             overflow: hidden;
         }
 
-        .hero-visual-letter {
-            font-size: 28rem;
-            font-weight: 300;
-            font-style: italic;
-            color: rgba(184,150,90,0.07);
-            line-height: 1;
-            user-select: none;
+        .hero-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
         }
 
         .hero-visual-caption {
@@ -285,26 +279,19 @@
 
         .collection-img {
             height: 480px;
-            background: var(--cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
             overflow: hidden;
-            position: relative;
+            margin-bottom: 20px;
         }
 
-        .collection-img-letter {
-            font-size: 16rem;
-            font-weight: 300;
-            font-style: italic;
-            color: rgba(184,150,90,0.1);
-            line-height: 1;
+        .collection-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
             transition: transform 0.6s ease;
-            user-select: none;
         }
 
-        .collection-card:hover .collection-img-letter {
+        .collection-card:hover .collection-img img {
             transform: scale(1.04);
         }
 
@@ -329,19 +316,15 @@
         }
 
         .story-visual {
-            background: linear-gradient(135deg, #e8e2d8 0%, #d6cfc3 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
-        .story-visual-letter {
-            font-size: 20rem;
-            font-weight: 300;
-            color: rgba(0,0,0,0.05);
-            line-height: 1;
-            user-select: none;
+        .story-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         .story-content {
@@ -426,17 +409,14 @@
         .product-img {
             width: 180px;
             flex-shrink: 0;
-            background: var(--cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
 
-        .product-img-letter {
-            font-size: 5rem;
-            font-weight: 300;
-            font-style: italic;
-            color: rgba(184,150,90,0.18);
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
         }
 
         .product-info {
@@ -668,7 +648,7 @@
             <a href="#" class="hero-cta">探索系列 →</a>
         </div>
         <div class="hero-visual">
-            <span class="hero-visual-letter">A</span>
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=80" alt="">
             <span class="hero-visual-caption">SS 2026</span>
         </div>
     </section>
@@ -686,21 +666,21 @@
         <div class="collections-grid">
             <div class="collection-card">
                 <div class="collection-img">
-                    <span class="collection-img-letter">C</span>
+                    <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=700&q=80" alt="高級訂製服">
                 </div>
                 <h3 class="collection-name">高級訂製服</h3>
                 <p class="collection-desc">每一件都是為你量身打造的藝術品</p>
             </div>
             <div class="collection-card">
                 <div class="collection-img">
-                    <span class="collection-img-letter">L</span>
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80" alt="皮革系列">
                 </div>
                 <h3 class="collection-name">皮革系列</h3>
                 <p class="collection-desc">義大利工匠手工縫製，傳承百年技藝</p>
             </div>
             <div class="collection-card">
                 <div class="collection-img">
-                    <span class="collection-img-letter">J</span>
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=700&q=80" alt="珠寶配飾">
                 </div>
                 <h3 class="collection-name">珠寶配飾</h3>
                 <p class="collection-desc">低調奢華，為日常增添光彩</p>
@@ -710,7 +690,7 @@
 
     <section class="story">
         <div class="story-visual">
-            <span class="story-visual-letter">A</span>
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80" alt="">
         </div>
         <div class="story-content">
             <p class="story-eyebrow">我們的故事</p>
@@ -727,7 +707,7 @@
         </div>
         <div class="products-grid">
             <div class="product-item">
-                <div class="product-img"><span class="product-img-letter">E</span></div>
+                <div class="product-img"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80" alt="絲綢晚禮服"></div>
                 <div class="product-info">
                     <p class="product-num">No. 001</p>
                     <h3 class="product-name">絲綢晚禮服</h3>
@@ -735,7 +715,7 @@
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-img"><span class="product-img-letter">B</span></div>
+                <div class="product-img"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" alt="手工皮質手提包"></div>
                 <div class="product-info">
                     <p class="product-num">No. 002</p>
                     <h3 class="product-name">手工皮質手提包</h3>
@@ -743,7 +723,7 @@
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-img"><span class="product-img-letter">P</span></div>
+                <div class="product-img"><img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=400&q=80" alt="珍珠項鍊"></div>
                 <div class="product-info">
                     <p class="product-num">No. 003</p>
                     <h3 class="product-name">珍珠項鍊</h3>
@@ -751,7 +731,7 @@
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-img"><span class="product-img-letter">H</span></div>
+                <div class="product-img"><img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=400&q=80" alt="經典高跟鞋"></div>
                 <div class="product-info">
                     <p class="product-num">No. 004</p>
                     <h3 class="product-name">經典高跟鞋</h3>
