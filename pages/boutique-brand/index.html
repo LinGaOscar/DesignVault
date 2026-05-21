@@ -3,104 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURÈLE - 精品品牌</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <title>AURÈLE — 精品品牌</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --boutique-bg: #f8f7f5;
-            --boutique-text: #1a1a1a;
-            --boutique-text-light: #6b6b6b;
-            --boutique-cream: #f5f0eb;
-            --boutique-gold: #c9a96e;
-            --boutique-dark: #2c2c2c;
-            --boutique-white: #ffffff;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg: #f9f8f6;
+            --white: #ffffff;
+            --text: #1a1a1a;
+            --muted: #9a9888;
+            --border: rgba(0,0,0,0.08);
+            --border-solid: #e6e2db;
+            --gold: #b8965a;
+            --gold-light: #c9a96e;
+            --cream: #f0ece4;
+            --dark: #1a1a1a;
         }
 
         body {
-            font-family: 'Cormorant Garamond', 'Georgia', serif;
-            background: var(--boutique-bg);
-            color: var(--boutique-text);
-            line-height: 1.8;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation */
+        a { text-decoration: none; color: inherit; }
+
+        /* ====== Navigation ====== */
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 28px 80px;
-            background: transparent;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 100;
-            transition: all 0.3s;
+            transition: background 0.4s, padding 0.3s, border-color 0.4s;
+            border-bottom: 1px solid transparent;
         }
 
         .nav.scrolled {
-            background: rgba(248, 247, 245, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 80px;
+            background: rgba(249,248,246,0.96);
+            backdrop-filter: blur(12px);
+            padding: 18px 80px;
+            border-bottom-color: var(--border-solid);
         }
 
         .nav-logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 400;
-            letter-spacing: 8px;
+            letter-spacing: 10px;
+            text-transform: uppercase;
         }
 
         .nav-links {
             display: flex;
-            gap: 48px;
+            gap: 44px;
             list-style: none;
         }
 
         .nav-links a {
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--boutique-text);
+            color: var(--text);
             position: relative;
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: -3px;
             left: 0;
             width: 0;
             height: 1px;
-            background: var(--boutique-gold);
+            background: var(--gold);
             transition: width 0.3s;
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover::after { width: 100%; }
 
         .nav-toggle {
             display: none;
+            flex-direction: column;
+            gap: 5px;
             background: none;
             border: none;
-            font-size: 1.5rem;
             cursor: pointer;
+            padding: 4px;
         }
 
-        .nav-icons {
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--text);
+        }
+
+        .nav-actions {
             display: flex;
-            gap: 24px;
-            font-size: 1.1rem;
+            gap: 20px;
+            align-items: center;
         }
 
-        /* Hero */
+        .nav-action-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-action-btn:hover { color: var(--gold); }
+
+        /* ====== Hero ====== */
         .hero {
             height: 100vh;
             display: grid;
@@ -111,60 +139,62 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 120px 80px;
+            padding: 140px 80px 80px;
         }
 
-        .hero-tag {
+        .hero-eyebrow {
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.65rem;
+            font-weight: 400;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--boutique-gold);
-            margin-bottom: 32px;
+            color: var(--gold);
+            margin-bottom: 36px;
         }
 
         .hero-title {
-            font-size: 4.5rem;
-            font-weight: 400;
-            line-height: 1.1;
+            font-size: 5rem;
+            font-weight: 300;
+            line-height: 1.05;
             margin-bottom: 40px;
+            letter-spacing: -0.5px;
         }
 
         .hero-title em {
             font-style: italic;
-            color: var(--boutique-gold);
+            color: var(--gold);
         }
 
         .hero-desc {
-            font-size: 1.1rem;
-            color: var(--boutique-text-light);
-            margin-bottom: 48px;
-            max-width: 380px;
             font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.85;
+            max-width: 360px;
+            margin-bottom: 52px;
+            font-weight: 300;
         }
 
-        .hero-btn {
-            display: inline-block;
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 2px;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: var(--boutique-text);
+            color: var(--text);
             padding-bottom: 8px;
-            border-bottom: 1px solid var(--boutique-text);
+            border-bottom: 1px solid var(--text);
             width: fit-content;
-            transition: all 0.3s;
+            transition: color 0.3s, border-color 0.3s;
         }
 
-        .hero-btn:hover {
-            color: var(--boutique-gold);
-            border-color: var(--boutique-gold);
-        }
+        .hero-cta:hover { color: var(--gold); border-color: var(--gold); }
 
-        .hero-image {
-            background: var(--boutique-cream);
+        .hero-visual {
+            background: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -172,122 +202,146 @@
             overflow: hidden;
         }
 
-        .hero-image-text {
-            font-size: 20rem;
+        .hero-visual-letter {
+            font-size: 28rem;
             font-weight: 300;
-            color: rgba(0,0,0,0.04);
+            font-style: italic;
+            color: rgba(184,150,90,0.07);
             line-height: 1;
+            user-select: none;
         }
 
-        /* Philosophy */
+        .hero-visual-caption {
+            position: absolute;
+            bottom: 48px;
+            right: 48px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.25);
+        }
+
+        /* ====== Philosophy ====== */
         .philosophy {
             padding: 140px 80px;
             text-align: center;
-            background: var(--boutique-white);
+            background: var(--white);
+            border-top: 1px solid var(--border-solid);
+            border-bottom: 1px solid var(--border-solid);
         }
 
         .philosophy-quote {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 300;
             font-style: italic;
-            max-width: 900px;
-            margin: 0 auto 48px;
-            line-height: 1.6;
+            max-width: 840px;
+            margin: 0 auto 40px;
+            line-height: 1.65;
+            color: var(--text);
         }
 
-        .philosophy-author {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--boutique-text-light);
-        }
-
-        /* Collections Grid */
-        .collections {
-            padding: 120px 80px;
-            background: var(--boutique-bg);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .section-tag {
+        .philosophy-attr {
             font-family: 'Inter', sans-serif;
             font-size: 0.7rem;
-            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ====== Collections ====== */
+        .collections {
+            padding: 120px 80px;
+            background: var(--bg);
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+
+        .section-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 400;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--boutique-gold);
+            color: var(--gold);
             margin-bottom: 16px;
         }
 
         .section-title {
-            font-size: 3rem;
-            font-weight: 400;
+            font-size: 2.75rem;
+            font-weight: 300;
         }
 
         .collections-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 32px;
         }
 
-        .collection-card {
-            position: relative;
-            overflow: hidden;
-        }
+        .collection-card { cursor: pointer; }
 
-        .collection-image {
-            height: 500px;
-            background: var(--boutique-cream);
+        .collection-img {
+            height: 480px;
+            background: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
-            transition: transform 0.6s;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .collection-card:hover .collection-image {
-            transform: scale(1.02);
+        .collection-img-letter {
+            font-size: 16rem;
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(184,150,90,0.1);
+            line-height: 1;
+            transition: transform 0.6s ease;
+            user-select: none;
         }
 
-        .collection-icon {
-            font-size: 6rem;
-            opacity: 0.3;
+        .collection-card:hover .collection-img-letter {
+            transform: scale(1.04);
         }
 
         .collection-name {
-            font-size: 1.4rem;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 6px;
         }
 
         .collection-desc {
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            color: var(--boutique-text-light);
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 300;
         }
 
-        /* Story */
+        /* ====== Story ====== */
         .story {
             display: grid;
             grid-template-columns: 1fr 1fr;
             min-height: 80vh;
         }
 
-        .story-image {
-            background: linear-gradient(135deg, #e8e0d8 0%, #d4ccc4 100%);
+        .story-visual {
+            background: linear-gradient(135deg, #e8e2d8 0%, #d6cfc3 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
-        .story-image-text {
-            font-size: 12rem;
+        .story-visual-letter {
+            font-size: 20rem;
             font-weight: 300;
             color: rgba(0,0,0,0.05);
+            line-height: 1;
+            user-select: none;
         }
 
         .story-content {
@@ -295,392 +349,304 @@
             flex-direction: column;
             justify-content: center;
             padding: 100px 80px;
-            background: var(--boutique-dark);
-            color: var(--boutique-white);
+            background: var(--dark);
+            color: var(--white);
         }
 
-        .story-tag {
+        .story-eyebrow {
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.65rem;
+            font-weight: 400;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--boutique-gold);
-            margin-bottom: 24px;
+            color: var(--gold-light);
+            margin-bottom: 28px;
         }
 
         .story-title {
-            font-size: 2.8rem;
-            font-weight: 400;
-            margin-bottom: 32px;
+            font-size: 2.5rem;
+            font-weight: 300;
             line-height: 1.2;
+            margin-bottom: 32px;
         }
 
         .story-text {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 40px;
-            line-height: 2;
-        }
-
-        .story-btn {
-            display: inline-block;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 2px;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.9;
+            margin-bottom: 44px;
+            font-weight: 300;
+        }
+
+        .story-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: var(--boutique-white);
+            color: var(--white);
             padding-bottom: 8px;
-            border-bottom: 1px solid var(--boutique-white);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
             width: fit-content;
-            transition: all 0.3s;
+            transition: color 0.3s, border-color 0.3s;
         }
 
-        .story-btn:hover {
-            color: var(--boutique-gold);
-            border-color: var(--boutique-gold);
-        }
+        .story-cta:hover { color: var(--gold-light); border-color: var(--gold-light); }
 
-        /* Products */
+        /* ====== Products ====== */
         .products {
             padding: 120px 80px;
-            background: var(--boutique-white);
+            background: var(--white);
+            border-top: 1px solid var(--border-solid);
         }
 
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 60px 80px;
+            gap: 1px;
+            background: var(--border-solid);
+            border: 1px solid var(--border-solid);
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .product-item {
+            background: var(--white);
             display: flex;
-            gap: 40px;
-            align-items: center;
+            gap: 0;
+            transition: background 0.2s;
         }
 
-        .product-image {
-            width: 200px;
-            height: 260px;
-            background: var(--boutique-cream);
+        .product-item:hover { background: var(--bg); }
+
+        .product-img {
+            width: 180px;
             flex-shrink: 0;
+            background: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            opacity: 0.4;
+        }
+
+        .product-img-letter {
+            font-size: 5rem;
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(184,150,90,0.18);
         }
 
         .product-info {
-            flex: 1;
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .product-number {
+        .product-num {
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.62rem;
             letter-spacing: 2px;
-            color: var(--boutique-gold);
-            margin-bottom: 8px;
+            color: var(--gold);
+            margin-bottom: 10px;
         }
 
         .product-name {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 400;
             margin-bottom: 12px;
         }
 
         .product-desc {
             font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            color: var(--boutique-text-light);
-            line-height: 1.7;
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.75;
+            font-weight: 300;
         }
 
-        /* Contact */
+        /* ====== Contact ====== */
         .contact {
-            padding: 120px 80px;
-            background: var(--boutique-bg);
+            padding: 140px 80px;
+            background: var(--bg);
             text-align: center;
+            border-top: 1px solid var(--border-solid);
         }
 
         .contact-title {
             font-size: 3rem;
-            font-weight: 400;
-            margin-bottom: 24px;
+            font-weight: 300;
+            margin-bottom: 20px;
         }
 
         .contact-desc {
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            color: var(--boutique-text-light);
-            margin-bottom: 48px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.85;
+            max-width: 460px;
+            margin: 0 auto 52px;
+            font-weight: 300;
         }
 
-        .contact-btn {
+        .contact-cta {
             display: inline-block;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 2px;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: var(--boutique-white);
-            background: var(--boutique-dark);
-            padding: 18px 48px;
-            transition: all 0.3s;
+            color: var(--white);
+            background: var(--dark);
+            padding: 18px 52px;
+            transition: background 0.3s;
         }
 
-        .contact-btn:hover {
-            background: var(--boutique-gold);
-        }
+        .contact-cta:hover { background: var(--gold); }
 
-        /* Footer */
+        /* ====== Footer ====== */
         .footer {
-            padding: 80px;
-            background: var(--boutique-dark);
-            color: var(--boutique-white);
+            background: var(--dark);
+            color: var(--white);
+            padding: 80px 80px 48px;
         }
 
-        .footer-content {
+        .footer-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto 60px;
+            margin-bottom: 60px;
         }
 
-        .footer-brand {
-            font-size: 1.4rem;
-            letter-spacing: 6px;
+        .footer-brand-name {
+            font-size: 1.25rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
             margin-bottom: 20px;
         }
 
-        .footer-desc {
+        .footer-brand-desc {
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.8;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.38);
+            line-height: 1.85;
+            font-weight: 300;
+            max-width: 260px;
         }
 
-        .footer-title {
+        .footer-col-title {
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.62rem;
+            font-weight: 500;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 24px;
-            color: var(--boutique-gold);
+            color: var(--gold-light);
+            margin-bottom: 20px;
         }
 
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 14px;
-        }
-
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
         .footer-links a {
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+            font-weight: 300;
             transition: color 0.2s;
         }
-
-        .footer-links a:hover {
-            color: var(--boutique-white);
-        }
+        .footer-links a:hover { color: var(--white); }
 
         .footer-bottom {
-            text-align: center;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 36px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.4);
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.25);
         }
 
-        /* Responsive */
+        /* ====== Responsive ====== */
         @media (max-width: 1024px) {
-            .hero {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
-            .hero-content {
-                padding: 140px 40px 80px;
-            }
-            .hero-image {
-                height: 50vh;
-            }
-            .hero-title {
-                font-size: 3.5rem;
-            }
-            .nav {
-                padding: 20px 40px;
-            }
-            .philosophy {
-                padding: 100px 40px;
-            }
-            .philosophy-quote {
-                font-size: 1.8rem;
-            }
-            .collections {
-                padding: 80px 40px;
-            }
-            .collections-grid {
-                grid-template-columns: 1fr;
-            }
-            .collection-image {
-                height: 350px;
-            }
-            .story {
-                grid-template-columns: 1fr;
-            }
-            .story-image {
-                height: 40vh;
-            }
-            .story-content {
-                padding: 80px 40px;
-            }
-            .products {
-                padding: 80px 40px;
-            }
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 48px;
-            }
-            .contact {
-                padding: 80px 40px;
-            }
-            .footer {
-                padding: 60px 40px;
-            }
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
+            .nav { padding: 20px 40px; }
+            .nav.scrolled { padding: 16px 40px; }
+            .hero { grid-template-columns: 1fr; height: auto; }
+            .hero-content { padding: 140px 40px 80px; }
+            .hero-visual { height: 50vh; }
+            .hero-title { font-size: 3.75rem; }
+            .philosophy { padding: 100px 40px; }
+            .collections { padding: 80px 40px; }
+            .collections-grid { grid-template-columns: 1fr; gap: 40px; }
+            .collection-img { height: 360px; }
+            .story { grid-template-columns: 1fr; }
+            .story-visual { height: 40vh; }
+            .story-content { padding: 80px 40px; }
+            .products { padding: 80px 40px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .contact { padding: 100px 40px; }
+            .footer { padding: 60px 40px 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
         }
 
         @media (max-width: 768px) {
+            .nav { padding: 18px 24px; }
+            .nav.scrolled { padding: 14px 24px; }
             .nav-links {
                 display: none;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 right: 0;
-                background: rgba(248, 247, 245, 0.98);
+                background: rgba(249,248,246,0.98);
                 flex-direction: column;
-                padding: 24px;
-                gap: 20px;
-                border-top: 1px solid rgba(0,0,0,0.05);
+                gap: 0;
+                border-top: 1px solid var(--border-solid);
+                padding: 8px 24px;
             }
-            .nav-links.active {
-                display: flex;
-            }
-            .nav-toggle {
-                display: block;
-            }
-            .hero-content {
-                padding: 120px 24px 60px;
-            }
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            .hero-desc {
-                font-size: 1rem;
-            }
-            .hero-image {
-                height: 40vh;
-            }
-            .hero-image-text {
-                font-size: 10rem;
-            }
-            .philosophy {
-                padding: 80px 24px;
-            }
-            .philosophy-quote {
-                font-size: 1.5rem;
-            }
-            .collections {
-                padding: 60px 24px;
-            }
-            .section-title {
-                font-size: 2.2rem;
-            }
-            .collections-grid {
-                gap: 32px;
-            }
-            .collection-image {
-                height: 280px;
-            }
-            .story-content {
-                padding: 60px 24px;
-            }
-            .story-title {
-                font-size: 2rem;
-            }
-            .products {
-                padding: 60px 24px;
-            }
-            .product-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            .product-image {
-                width: 160px;
-                height: 200px;
-            }
-            .contact {
-                padding: 60px 24px;
-            }
-            .contact-title {
-                font-size: 2.2rem;
-            }
-            .contact-btn {
-                padding: 16px 36px;
-            }
-            .footer {
-                padding: 48px 24px;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            .footer-brand {
-                letter-spacing: 4px;
-            }
+            .nav-links.active { display: flex; }
+            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border-solid); }
+            .nav-links li:last-child a { border-bottom: none; }
+            .nav-actions { display: none; }
+            .nav-toggle { display: flex; }
+            .hero-content { padding: 120px 24px 60px; }
+            .hero-title { font-size: 2.75rem; }
+            .hero-visual { height: 40vh; }
+            .hero-visual-letter { font-size: 16rem; }
+            .philosophy { padding: 80px 24px; }
+            .philosophy-quote { font-size: 1.5rem; }
+            .collections { padding: 60px 24px; }
+            .collection-img { height: 280px; }
+            .collection-img-letter { font-size: 10rem; }
+            .story-content { padding: 60px 24px; }
+            .story-title { font-size: 2rem; }
+            .products { padding: 60px 24px; }
+            .product-item { flex-direction: column; }
+            .product-img { width: 100%; height: 200px; }
+            .contact { padding: 80px 24px; }
+            .contact-title { font-size: 2.25rem; }
+            .footer { padding: 48px 24px 32px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+            .footer-bottom { flex-direction: column; gap: 8px; }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            .section-title {
-                font-size: 1.8rem;
-            }
-            .story-title {
-                font-size: 1.6rem;
-            }
-            .contact-title {
-                font-size: 1.8rem;
-            }
-            .collection-image {
-                height: 220px;
-            }
-            .collection-icon {
-                font-size: 4rem;
-            }
+            .hero-title { font-size: 2.25rem; }
+            .section-title { font-size: 2.25rem; }
+            .story-title { font-size: 1.75rem; }
+            .contact-title { font-size: 1.875rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="nav" id="nav">
-        <div class="nav-logo">AURÈLE</div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+        <div class="nav-logo">Aurèle</div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="#">品牌故事</a></li>
             <li><a href="#">系列</a></li>
@@ -688,55 +654,53 @@
             <li><a href="#">店鋪</a></li>
             <li><a href="#">聯繫</a></li>
         </ul>
-        <div class="nav-icons">
-            <span>🔍</span>
-            <span>🛒</span>
+        <div class="nav-actions">
+            <button class="nav-action-btn">搜尋</button>
+            <button class="nav-action-btn">購物</button>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <p class="hero-tag">2026 春夏系列</p>
+            <p class="hero-eyebrow">2026 春夏系列</p>
             <h1 class="hero-title">永恆的<br><em>優雅</em></h1>
             <p class="hero-desc">每一件作品都是時間的藝術。我們相信，真正的奢華不在於炫耀，而在於對細節的執著與對品質的堅持。</p>
-            <a href="#" class="hero-btn">探索系列</a>
+            <a href="#" class="hero-cta">探索系列 →</a>
         </div>
-        <div class="hero-image">
-            <span class="hero-image-text">A</span>
+        <div class="hero-visual">
+            <span class="hero-visual-letter">A</span>
+            <span class="hero-visual-caption">SS 2026</span>
         </div>
     </section>
 
-    <!-- Philosophy -->
     <section class="philosophy">
         <p class="philosophy-quote">「真正的奢華，是穿著者與作品之間那份無聲的默契，是每一次觸摸時心中泛起的微小卻真實的滿足。」</p>
-        <p class="philosophy-author">— Aurèle Maison，創辦人</p>
+        <p class="philosophy-attr">— Aurèle Maison，創辦人</p>
     </section>
 
-    <!-- Collections -->
     <section class="collections">
-        <div class="section-header">
-            <p class="section-tag">精選系列</p>
+        <div class="section-head">
+            <p class="section-eyebrow">精選系列</p>
             <h2 class="section-title">探索我們的世界</h2>
         </div>
         <div class="collections-grid">
             <div class="collection-card">
-                <div class="collection-image">
-                    <span class="collection-icon">👗</span>
+                <div class="collection-img">
+                    <span class="collection-img-letter">C</span>
                 </div>
                 <h3 class="collection-name">高級訂製服</h3>
                 <p class="collection-desc">每一件都是為你量身打造的藝術品</p>
             </div>
             <div class="collection-card">
-                <div class="collection-image">
-                    <span class="collection-icon">👜</span>
+                <div class="collection-img">
+                    <span class="collection-img-letter">L</span>
                 </div>
                 <h3 class="collection-name">皮革系列</h3>
                 <p class="collection-desc">義大利工匠手工縫製，傳承百年技藝</p>
             </div>
             <div class="collection-card">
-                <div class="collection-image">
-                    <span class="collection-icon">💎</span>
+                <div class="collection-img">
+                    <span class="collection-img-letter">J</span>
                 </div>
                 <h3 class="collection-name">珠寶配飾</h3>
                 <p class="collection-desc">低調奢華，為日常增添光彩</p>
@@ -744,54 +708,52 @@
         </div>
     </section>
 
-    <!-- Story -->
     <section class="story">
-        <div class="story-image">
-            <span class="story-image-text">A</span>
+        <div class="story-visual">
+            <span class="story-visual-letter">A</span>
         </div>
         <div class="story-content">
-            <p class="story-tag">我們的故事</p>
+            <p class="story-eyebrow">我們的故事</p>
             <h2 class="story-title">始於追求<br>極致的工匠精神</h2>
             <p class="story-text">1998年，品牌創辦人從巴黎回到台北，帶回的不只是設計理念，更是一種對工藝的執著。每一件 AURÈLE 的作品，都承載著我們對美的追求與對細節的堅持。從素材挑選到最後一道工序，我們拒絕任何妥協。</p>
-            <a href="#" class="story-btn">深入了解</a>
+            <a href="#" class="story-cta">深入了解 →</a>
         </div>
     </section>
 
-    <!-- Products -->
     <section class="products">
-        <div class="section-header">
-            <p class="section-tag">新品上市</p>
+        <div class="section-head">
+            <p class="section-eyebrow">新品上市</p>
             <h2 class="section-title">本季精選</h2>
         </div>
         <div class="products-grid">
             <div class="product-item">
-                <div class="product-image">👗</div>
+                <div class="product-img"><span class="product-img-letter">E</span></div>
                 <div class="product-info">
-                    <p class="product-number">No. 001</p>
+                    <p class="product-num">No. 001</p>
                     <h3 class="product-name">絲綢晚禮服</h3>
                     <p class="product-desc">精選義大利絲綢，簡約而不簡單的線條，適合各種正式場合。</p>
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-image">👜</div>
+                <div class="product-img"><span class="product-img-letter">B</span></div>
                 <div class="product-info">
-                    <p class="product-number">No. 002</p>
+                    <p class="product-num">No. 002</p>
                     <h3 class="product-name">手工皮質手提包</h3>
                     <p class="product-desc">採用頭層牛皮，歷經32道工序，每一個細節都經過精心打磨。</p>
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-image">💎</div>
+                <div class="product-img"><span class="product-img-letter">P</span></div>
                 <div class="product-info">
-                    <p class="product-number">No. 003</p>
+                    <p class="product-num">No. 003</p>
                     <h3 class="product-name">珍珠項鍊</h3>
                     <p class="product-desc">精選南洋珍珠，每一顆都是自然孕育的瑰寶，獨一無二。</p>
                 </div>
             </div>
             <div class="product-item">
-                <div class="product-image">👠</div>
+                <div class="product-img"><span class="product-img-letter">H</span></div>
                 <div class="product-info">
-                    <p class="product-number">No. 004</p>
+                    <p class="product-num">No. 004</p>
                     <h3 class="product-name">經典高跟鞋</h3>
                     <p class="product-desc">舒適與優雅兼顧，採用特殊鞋墊設計，長時間穿著也不累。</p>
                 </div>
@@ -799,22 +761,20 @@
         </div>
     </section>
 
-    <!-- Contact -->
     <section class="contact">
         <h2 class="contact-title">預約來店體驗</h2>
         <p class="contact-desc">我們的專業顧問將為你提供一對一的服務，歡迎預約來店，探索 AURÈLE 的世界。</p>
-        <a href="#" class="contact-btn">立即預約</a>
+        <a href="#" class="contact-cta">立即預約</a>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
+        <div class="footer-grid">
             <div>
-                <h3 class="footer-brand">AURÈLE</h3>
-                <p class="footer-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
+                <h3 class="footer-brand-name">Aurèle</h3>
+                <p class="footer-brand-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
             </div>
             <div>
-                <h4 class="footer-title">系列</h4>
+                <h4 class="footer-col-title">系列</h4>
                 <ul class="footer-links">
                     <li><a href="#">高級訂製</a></li>
                     <li><a href="#">皮革系列</a></li>
@@ -823,7 +783,7 @@
                 </ul>
             </div>
             <div>
-                <h4 class="footer-title">服務</h4>
+                <h4 class="footer-col-title">服務</h4>
                 <ul class="footer-links">
                     <li><a href="#">量身訂製</a></li>
                     <li><a href="#">保養維修</a></li>
@@ -832,7 +792,7 @@
                 </ul>
             </div>
             <div>
-                <h4 class="footer-title">關注</h4>
+                <h4 class="footer-col-title">關注</h4>
                 <ul class="footer-links">
                     <li><a href="#">Instagram</a></li>
                     <li><a href="#">Facebook</a></li>
@@ -841,18 +801,14 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 AURÈLE. All rights reserved.</p>
+            <span>© 2026 AURÈLE. All rights reserved.</span>
+            <span>Taiwan · Privacy · Terms</span>
         </div>
     </footer>
 
     <script>
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
         });
     </script>
 </body>

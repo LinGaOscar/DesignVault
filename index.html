@@ -3,75 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DesignVault - 網頁設計作品集</title>
+    <title>DesignVault — 網頁設計作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <header class="header">
         <div class="container header-inner">
-            <h1 class="logo">DesignVault</h1>
-            <p class="tagline">精選網頁設計作品展示</p>
+            <a href="/" class="logo">DesignVault</a>
+            <span class="tagline">精選網頁設計作品展示</span>
         </div>
     </header>
 
-    <main class="main-content">
+    <main>
         <section class="hero">
             <div class="container">
-                <h2 class="hero-title">探索網頁設計的各種可能性</h2>
+                <h1 class="hero-title">探索網頁設計<br><em>的各種可能性</em></h1>
                 <p class="hero-desc">三種不同情境，三種獨特風格</p>
             </div>
         </section>
 
         <section class="projects">
-            <div class="container projects-grid">
-                <!-- Fashion E-commerce -->
-                <a href="pages/fashion-ecommerce/index.html" class="project-card">
-                    <div class="card-preview fashion-preview">
-                        <div class="preview-content">
-                            <span class="preview-icon">👗</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-tag">電商</span>
-                        <h3 class="card-title">時尚電商首頁</h3>
-                        <p class="card-desc">明亮現代風格，大圖視覺與流暢購物體驗</p>
-                    </div>
-                </a>
+            <div class="container">
+                <div class="projects-grid">
 
-                <!-- SaaS Dashboard -->
-                <a href="pages/saas-dashboard/index.html" class="project-card">
-                    <div class="card-preview saas-preview">
-                        <div class="preview-content">
-                            <span class="preview-icon">📊</span>
+                    <a href="pages/fashion-ecommerce/index.html" class="project-card">
+                        <div class="card-preview fashion-preview">
+                            <span class="preview-num">01</span>
                         </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-tag">SaaS</span>
-                        <h3 class="card-title">管理儀表板</h3>
-                        <p class="card-desc">深色主題，數據視覺化與系統化管理介面</p>
-                    </div>
-                </a>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="card-tag">電商</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                            <h3 class="card-title">時尚電商首頁</h3>
+                            <p class="card-desc">明亮現代風格，大圖視覺與流暢購物體驗</p>
+                        </div>
+                    </a>
 
-                <!-- Boutique Brand -->
-                <a href="pages/boutique-brand/index.html" class="project-card">
-                    <div class="card-preview boutique-preview">
-                        <div class="preview-content">
-                            <span class="preview-icon">✨</span>
+                    <a href="pages/saas-dashboard/index.html" class="project-card">
+                        <div class="card-preview saas-preview">
+                            <span class="preview-num light">02</span>
                         </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-tag">品牌形象</span>
-                        <h3 class="card-title">精品品牌頁</h3>
-                        <p class="card-desc">極簡雜誌風，大圖橫幅與細膩排版</p>
-                    </div>
-                </a>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="card-tag">SaaS</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                            <h3 class="card-title">管理儀表板</h3>
+                            <p class="card-desc">深色主題，數據視覺化與系統化管理介面</p>
+                        </div>
+                    </a>
+
+                    <a href="pages/boutique-brand/index.html" class="project-card">
+                        <div class="card-preview boutique-preview">
+                            <span class="preview-num">03</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="card-tag">品牌形象</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                            <h3 class="card-title">精品品牌頁</h3>
+                            <p class="card-desc">極簡雜誌風，大圖橫幅與細膩排版</p>
+                        </div>
+                    </a>
+
+                </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <p>DesignVault © 2026 — LinGaOscar</p>
+        <div class="container footer-inner">
+            <span>DesignVault</span>
+            <span class="footer-copy">© 2026 LinGaOscar</span>
         </div>
     </footer>
 
