@@ -35,16 +35,7 @@ DesignVault/
 - **HTML5 / CSS3 / Vanilla JavaScript**（無框架、無套件管理器）
 - CSS Grid + Flexbox 響應式排版
 - Google Fonts（Playfair Display、Cormorant Garamond、Inter）
-- 無建置流程，直接以瀏覽器開啟即可
 
-## 本地啟動
+## 本地開啟
 
-```bash
-# Python
-python3 -m http.server 8080
-
-# 或 Node
-npx serve .
-```
-
-開啟 `http://localhost:8080` 即可瀏覽首頁。
+直接用瀏覽器開啟根目錄的 `index.html` 即可。
