@@ -1,5 +1,7 @@
 # CLAUDE.md — DesignVault
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Project Overview
 
 DesignVault is a **static front-end portfolio** showcasing three web design demos. There is no build process, no backend, no dependencies, and no package manager. Everything is plain HTML5, CSS3, and vanilla JavaScript.
@@ -141,15 +143,6 @@ All pages share the same breakpoint ladder (applied via `@media` blocks inside e
 
 ## Git Conventions
 
-### Branch Strategy
-
-| Branch | Purpose |
-|---|---|
-| `main` | Production / stable |
-| `claude/<slug>` | AI-assisted feature or documentation branches |
-
-Active development branch: `claude/add-claude-documentation-7haFu`
-
 ### Commit Style
 
 Follow the existing convention: `feat:`, `fix:`, `docs:` prefixes with a concise imperative description.
@@ -159,6 +152,10 @@ feat: add contact form to boutique-brand page
 fix: correct grid collapse on 768px breakpoint in saas-dashboard
 docs: update CLAUDE.md with new page conventions
 ```
+
+### Cache Busting
+
+When modifying `css/style.css` or `js/main.js`, update the version query string in `index.html` (e.g. `?v=20260526`) to force browser cache invalidation.
 
 ---
 
