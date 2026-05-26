@@ -119,6 +119,7 @@ a { text-decoration: none; color: inherit; }
 .fashion-preview  { background: #ece4d9; }
 .saas-preview     { background: #0f1923; }
 .boutique-preview { background: #edeae4; }
+.space-preview    { background: #060b14; }
 
 .preview-num {
     font-family: 'DM Serif Display', Georgia, serif;
