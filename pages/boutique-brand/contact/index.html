@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯繫 | AURÈLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f9f8f6;
+            --white: #ffffff;
+            --text: #1a1a1a;
+            --muted: #9a9888;
+            --border: rgba(0,0,0,0.08);
+            --border-solid: #e6e2db;
+            --gold: #b8965a;
+            --gold-light: #c9a96e;
+            --cream: #f0ece4;
+            --dark: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ====== DesignVault 返回連結 ====== */
+        .designvault-link {
+            position: fixed;
+            top: 18px;
+            left: 20px;
+            z-index: 200;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            color: rgba(26,26,26,0.35);
+            transition: color 0.3s;
+        }
+        .designvault-link:hover { color: var(--gold); }
+
+        /* ====== Navigation ====== */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 80px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s, padding 0.3s, border-color 0.4s;
+            border-bottom: 1px solid transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(249,248,246,0.96);
+            backdrop-filter: blur(12px);
+            padding: 18px 80px;
+            border-bottom-color: var(--border-solid);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 44px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--gold); }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--text);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-action-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-action-btn:hover { color: var(--gold); }
+
+        /* ====== 返回 AURÈLE ====== */
+        .back-bar {
+            padding-top: 108px;
+            padding-bottom: 20px;
+            padding-left: 80px;
+            padding-right: 80px;
+            border-bottom: 1px solid var(--border-solid);
+            background: var(--bg);
+        }
+
+        .back-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--gold); }
+
+        /* ====== Appointment Intro ====== */
+        .appt-intro {
+            background: var(--dark);
+            color: var(--white);
+            padding: 100px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .appt-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 24px;
+        }
+
+        .appt-title {
+            font-size: 3.25rem;
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 32px;
+        }
+
+        .appt-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .appt-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.95;
+        }
+
+        .appt-promises {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .appt-promise {
+            padding-left: 24px;
+            border-left: 1px solid rgba(184,150,90,0.4);
+        }
+
+        .appt-promise-title {
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .appt-promise-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.8;
+        }
+
+        /* ====== Contact Layout ====== */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 0;
+            background: var(--bg);
+            border-top: 1px solid var(--border-solid);
+        }
+
+        /* ====== Form ====== */
+        .form-section {
+            padding: 80px;
+            border-right: 1px solid var(--border-solid);
+        }
+
+        .form-heading {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .form-title {
+            font-size: 2.25rem;
+            font-weight: 300;
+            margin-bottom: 48px;
+        }
+
+        .form-group {
+            margin-bottom: 36px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--border-solid);
+            padding: 10px 0;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--text);
+            transition: border-color 0.3s;
+            outline: none;
+            appearance: none;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder { color: var(--muted); font-style: italic; }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus { border-bottom-color: var(--gold); }
+
+        .form-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239a9888'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            padding-right: 20px;
+        }
+
+        .form-select option { font-family: 'Inter', sans-serif; }
+
+        .form-textarea {
+            resize: none;
+            line-height: 1.8;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .form-note {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        .form-submit {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--dark);
+            border: none;
+            padding: 18px 52px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-submit:hover { background: var(--gold); }
+
+        /* ====== Info Panel ====== */
+        .info-section {
+            padding: 80px 64px;
+        }
+
+        .info-block {
+            margin-bottom: 56px;
+        }
+
+        .info-block:last-child { margin-bottom: 0; }
+
+        .info-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .info-atelier-name {
+            font-size: 1.35rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .info-addr {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-bottom: 16px;
+        }
+
+        .info-hours {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.9;
+        }
+
+        .info-divider {
+            width: 32px;
+            height: 1px;
+            background: var(--border-solid);
+            margin: 32px 0;
+        }
+
+        /* ====== World Locations ====== */
+        .locations {
+            background: var(--white);
+            border-top: 1px solid var(--border-solid);
+            padding: 80px;
+        }
+
+        .locations-header {
+            margin-bottom: 56px;
+        }
+
+        .section-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 300;
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border: 1px solid var(--border-solid);
+        }
+
+        .location-item {
+            padding: 52px 48px;
+            border-right: 1px solid var(--border-solid);
+            transition: background 0.2s;
+        }
+
+        .location-item:last-child { border-right: none; }
+        .location-item:hover { background: var(--bg); }
+
+        .location-city {
+            font-size: 2rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .location-name {
+            font-size: 1.15rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .location-addr {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .location-hours {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--muted);
+        }
+
+        .location-phone {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--gold);
+            margin-top: 12px;
+            display: block;
+        }
+
+        /* ====== Success Message ====== */
+        .form-success {
+            display: none;
+            padding: 20px;
+            background: rgba(184,150,90,0.08);
+            border: 1px solid rgba(184,150,90,0.3);
+            margin-top: 24px;
+        }
+
+        .form-success p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--gold);
+        }
+
+        /* ====== Footer ====== */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 80px 80px 48px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand-name {
+            font-size: 1.25rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.38);
+            line-height: 1.85;
+            font-weight: 300;
+            max-width: 260px;
+        }
+
+        .footer-col-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            padding-top: 36px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* ====== Responsive ====== */
+        @media (max-width: 1024px) {
+            .nav { padding: 20px 40px; }
+            .nav.scrolled { padding: 16px 40px; }
+            .back-bar { padding-left: 40px; padding-right: 40px; }
+            .appt-intro { padding: 80px 40px; grid-template-columns: 1fr; gap: 56px; }
+            .appt-title { font-size: 2.5rem; }
+            .contact-layout { grid-template-columns: 1fr; }
+            .form-section { padding: 60px 40px; border-right: none; border-bottom: 1px solid var(--border-solid); }
+            .info-section { padding: 60px 40px; }
+            .locations { padding: 60px 40px; }
+            .locations-grid { grid-template-columns: 1fr; }
+            .location-item { border-right: none; border-bottom: 1px solid var(--border-solid); }
+            .location-item:last-child { border-bottom: none; }
+            .footer { padding: 60px 40px 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 18px 24px; }
+            .nav.scrolled { padding: 14px 24px; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(249,248,246,0.98);
+                flex-direction: column;
+                gap: 0;
+                border-top: 1px solid var(--border-solid);
+                padding: 8px 24px;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border-solid); }
+            .nav-links li:last-child a { border-bottom: none; }
+            .nav-actions { display: none; }
+            .nav-toggle { display: flex; }
+            .back-bar { padding-left: 24px; padding-right: 24px; }
+            .appt-intro { padding: 60px 24px; }
+            .appt-title { font-size: 2rem; }
+            .form-section { padding: 48px 24px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .form-title { font-size: 1.875rem; }
+            .info-section { padding: 48px 24px; }
+            .locations { padding: 48px 24px; }
+            .location-item { padding: 36px 28px; }
+            .footer { padding: 48px 24px 32px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+            .footer-bottom { flex-direction: column; gap: 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .appt-title { font-size: 1.75rem; }
+            .section-title { font-size: 1.875rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../../../index.html" class="designvault-link">← DesignVault</a>
+
+    <nav class="nav" id="nav">
+        <a href="../" class="nav-logo">Aurèle</a>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="../story/">品牌故事</a></li>
+            <li><a href="../collections/">系列</a></li>
+            <li><a href="../works/">作品</a></li>
+            <li><a href="../store/">店鋪</a></li>
+            <li><a href="../contact/" class="active">聯繫</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="nav-action-btn">搜尋</button>
+            <button class="nav-action-btn">購物</button>
+        </div>
+    </nav>
+
+    <div class="back-bar">
+        <a href="../" class="back-link">← 返回 AURÈLE</a>
+    </div>
+
+    <!-- 預約簡介 -->
+    <section class="appt-intro">
+        <div>
+            <p class="appt-eyebrow">Rendez-vous Privé</p>
+            <h1 class="appt-title">私人<em>預約</em><br>體驗</h1>
+            <p class="appt-desc">在 AURÈLE，每一次與客人的相遇都是一場私密的對話。我們不設立開放式門市，只以預約制接待訪客，為的是確保每一位來訪者都能獲得我們完整的注意力與時間。你的每一個需求、每一個疑問，都值得被認真傾聽。請以下方表單告知你的期望，我們將在四十八小時內以私信回覆，共同安排最適合的時段。</p>
+        </div>
+        <div class="appt-promises">
+            <div class="appt-promise">
+                <h3 class="appt-promise-title">一對一顧問服務</h3>
+                <p class="appt-promise-desc">每次預約皆配備一位專屬顧問，深入了解你的品味、場合與需求，不設時間限制。</p>
+            </div>
+            <div class="appt-promise">
+                <h3 class="appt-promise-title">私密試穿空間</h3>
+                <p class="appt-promise-desc">我們的試衣間寬敞而安靜，備有全身鏡與充足的自然光，讓你在最舒適的狀態下做出決定。</p>
+            </div>
+            <div class="appt-promise">
+                <h3 class="appt-promise-title">無壓力的陪伴</h3>
+                <p class="appt-promise-desc">我們相信真正好的服務不在於推銷，而在於讓你感受到被理解。你可以什麼都不買，那次相遇本身就是禮物。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 表單 + 資訊 -->
+    <div class="contact-layout">
+        <div class="form-section">
+            <p class="form-heading">Formulaire de Réservation</p>
+            <h2 class="form-title">填寫預約資料</h2>
+            <form id="apptForm" onsubmit="handleSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="name">姓名</label>
+                        <input class="form-input" type="text" id="name" placeholder="您的全名" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contact">聯絡方式</label>
+                        <input class="form-input" type="text" id="contact" placeholder="電話或電子郵件" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="location">偏好地點</label>
+                    <select class="form-select" id="location" required>
+                        <option value="" disabled selected>請選擇城市</option>
+                        <option value="taipei">臺北 — 仁愛路工作室</option>
+                        <option value="paris">巴黎 — 聖日耳曼德佩</option>
+                        <option value="tokyo">東京 — 南青山</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="timeslot">偏好時段</label>
+                    <select class="form-select" id="timeslot" required>
+                        <option value="" disabled selected>請選擇偏好時段</option>
+                        <option value="morning">上午 10:00 — 12:00</option>
+                        <option value="afternoon">下午 14:00 — 17:00</option>
+                        <option value="evening">傍晚 17:00 — 19:00（需提前確認）</option>
+                        <option value="weekend">週末（需提前兩週預約）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="purpose">此行目的</label>
+                    <select class="form-select" id="purpose">
+                        <option value="" disabled selected>請選擇</option>
+                        <option value="couture">高級訂製服諮詢</option>
+                        <option value="leather">皮革系列選購</option>
+                        <option value="jewelry">珠寶配飾</option>
+                        <option value="gift">禮品挑選</option>
+                        <option value="explore">純粹探訪品牌</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="note">備註</label>
+                    <textarea class="form-textarea" id="note" rows="4" placeholder="任何關於你的期望、特殊需求、或你想讓我們提前準備的，請在此告知。"></textarea>
+                </div>
+                <p class="form-note">所有提交之資料僅用於本次預約安排，我們嚴格遵守個人資料保護法，不作任何商業用途。</p>
+                <button class="form-submit" type="submit">送出預約申請</button>
+                <div class="form-success" id="formSuccess">
+                    <p>感謝您的預約申請。我們的顧問將於四十八小時內以您留下的聯絡方式與您確認細節。期待與您相會。</p>
+                </div>
+            </form>
+        </div>
+        <div class="info-section">
+            <div class="info-block">
+                <p class="info-label">臺北工作室</p>
+                <h3 class="info-atelier-name">Aurèle Taipei Atelier</h3>
+                <p class="info-addr">
+                    臺北市大安區仁愛路四段 101 號<br>
+                    （近捷運信義安和站，4 號出口）
+                </p>
+                <div class="info-divider"></div>
+                <p class="info-hours">
+                    <strong>開放時段（僅限預約）</strong><br>
+                    週二至週六　10:00 — 19:00<br>
+                    週一、週日　休館<br>
+                    國定假日　另行公告
+                </p>
+            </div>
+            <div class="info-block">
+                <p class="info-label">聯絡方式</p>
+                <p class="info-addr">
+                    電子郵件：atelier@aurele.com<br>
+                    電話：+886 2 2700-8765<br>
+                    Line 官方帳號：@aurele_taipei
+                </p>
+            </div>
+            <div class="info-block">
+                <p class="info-label">注意事項</p>
+                <p class="info-addr">
+                    預約確認後如需取消，請於三十六小時前通知，以便我們安排其他訪客。每次預約時長約六十至九十分鐘，請預留充裕時間。工作室提供輕食茶飲，請放鬆來訪。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全球據點 -->
+    <section class="locations">
+        <div class="locations-header">
+            <p class="section-eyebrow">Nos Maisons</p>
+            <h2 class="section-title">全球三個據點</h2>
+        </div>
+        <div class="locations-grid">
+            <div class="location-item">
+                <p class="location-city">Paris</p>
+                <h3 class="location-name">Aurèle Maison Paris</h3>
+                <p class="location-addr">
+                    12 Rue de l'Abbaye<br>
+                    75006 Saint-Germain-des-Prés<br>
+                    Paris, France
+                </p>
+                <p class="location-hours">Mardi–Samedi　11:00–18:30（sur rendez-vous）</p>
+                <span class="location-phone">+33 1 4325 9870</span>
+            </div>
+            <div class="location-item">
+                <p class="location-city">Tokyo</p>
+                <h3 class="location-name">Aurèle Tokyo Atelier</h3>
+                <p class="location-addr">
+                    東京都港区南青山 5-3-10<br>
+                    Minami-Aoyama, Minato-ku<br>
+                    Tokyo 107-0062, Japan
+                </p>
+                <p class="location-hours">火～土　11:00–19:00（完全予約制）</p>
+                <span class="location-phone">+81 3 5774 2310</span>
+            </div>
+            <div class="location-item">
+                <p class="location-city">Taipei</p>
+                <h3 class="location-name">Aurèle Taipei Atelier</h3>
+                <p class="location-addr">
+                    臺北市大安區仁愛路四段 101 號<br>
+                    Da'an District, Taipei City<br>
+                    Taiwan 106
+                </p>
+                <p class="location-hours">週二至週六　10:00–19:00（僅限預約）</p>
+                <span class="location-phone">+886 2 2700 8765</span>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <h3 class="footer-brand-name">Aurèle</h3>
+                <p class="footer-brand-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
+            </div>
+            <div>
+                <h4 class="footer-col-title">系列</h4>
+                <ul class="footer-links">
+                    <li><a href="../collections/">高級訂製</a></li>
+                    <li><a href="../collections/">皮革系列</a></li>
+                    <li><a href="../collections/">珠寶配飾</a></li>
+                    <li><a href="../collections/">限定款</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">品牌</h4>
+                <ul class="footer-links">
+                    <li><a href="../story/">品牌故事</a></li>
+                    <li><a href="../works/">作品</a></li>
+                    <li><a href="../store/">門市</a></li>
+                    <li><a href="../contact/">聯繫我們</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">關注</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LINE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 AURÈLE. All rights reserved.</span>
+            <span>Taiwan · Privacy · Terms</span>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            document.getElementById('formSuccess').style.display = 'block';
+            document.getElementById('apptForm').querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true);
+        }
+    </script>
+</body>
+</html>

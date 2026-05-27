@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通訊頻道 | NEXUS VOID</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #040810;
+            --surface: #080f1a;
+            --panel: rgba(0, 200, 255, 0.04);
+            --text: #e0f0ff;
+            --muted: rgba(160, 200, 240, 0.5);
+            --cyan: #00c8ff;
+            --cyan-dim: rgba(0, 200, 255, 0.15);
+            --cyan-glow: 0 0 20px rgba(0, 200, 255, 0.4);
+            --border: rgba(0, 200, 255, 0.15);
+            --green: #00ff88;
+            --red: #ff3860;
+            --yellow: #ffd700;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        #starfield { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        .designvault-back {
+            position: fixed; top: 10px; left: 80px; z-index: 200;
+            font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 2.5px;
+            color: rgba(0, 200, 255, 0.55); transition: color 0.2s, text-shadow 0.2s;
+        }
+        .designvault-back:hover { color: var(--cyan); text-shadow: 0 0 10px rgba(0, 200, 255, 0.6); }
+
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 24px 80px;
+            background: rgba(4, 8, 16, 0.92); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-left { display: flex; align-items: center; gap: 24px; }
+        .nav-back { font-family: 'Orbitron', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--muted); transition: color 0.2s; }
+        .nav-back:hover { color: var(--cyan); }
+        .nav-logo { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 6px; color: var(--cyan); text-shadow: var(--cyan-glow); }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+        .nav-status { font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); opacity: 0.7; }
+        .nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+        .nav-toggle span { display: block; width: 22px; height: 1px; background: var(--cyan); }
+
+        .page-content { position: relative; z-index: 1; padding-top: 100px; }
+
+        /* 頁首 */
+        .page-hero {
+            padding: 80px 80px 60px; border-bottom: 1px solid var(--border);
+            position: relative; overflow: hidden;
+        }
+        .page-hero::before {
+            content: 'SIGNAL';
+            position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+            font-family: 'Orbitron', monospace; font-size: 10rem; font-weight: 900;
+            color: rgba(0, 200, 255, 0.04); letter-spacing: 10px;
+            pointer-events: none; white-space: nowrap;
+        }
+        .page-tag { font-size: 0.62rem; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; opacity: 0.8; }
+        .page-title { font-family: 'Orbitron', monospace; font-size: 3rem; font-weight: 900; margin-bottom: 16px; }
+        .page-desc { font-size: 0.875rem; color: var(--muted); max-width: 600px; line-height: 1.9; }
+
+        /* 訊號強度指示器 */
+        .signal-status-bar {
+            display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;
+        }
+        .sig-status {
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'Orbitron', monospace; font-size: 0.6rem; letter-spacing: 2px;
+        }
+        .sig-bars {
+            display: flex; align-items: flex-end; gap: 2px; height: 16px;
+        }
+        .sig-bar {
+            width: 4px; background: var(--cyan);
+            box-shadow: 0 0 4px var(--cyan);
+        }
+        .sig-bar:nth-child(1) { height: 4px; }
+        .sig-bar:nth-child(2) { height: 7px; }
+        .sig-bar:nth-child(3) { height: 10px; }
+        .sig-bar:nth-child(4) { height: 13px; }
+        .sig-bar:nth-child(5) { height: 16px; }
+        .sig-bar.inactive { background: rgba(0,200,255,0.2); box-shadow: none; }
+        .sig-label { color: var(--muted); }
+        .sig-val { color: var(--cyan); }
+
+        /* 主要版面 — 左右分欄 */
+        .main-layout {
+            padding: 60px 80px;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* 頻道選擇器 */
+        .channel-selector-wrap { margin-bottom: 28px; }
+        .channel-label {
+            font-family: 'Orbitron', monospace; font-size: 0.58rem;
+            letter-spacing: 3px; color: var(--muted); margin-bottom: 10px;
+        }
+        .channel-tabs {
+            display: flex; gap: 2px;
+            background: var(--border); border: 1px solid var(--border); padding: 1px;
+        }
+        .channel-tab {
+            flex: 1;
+            font-family: 'Orbitron', monospace; font-size: 0.58rem;
+            letter-spacing: 1.5px; padding: 10px 12px; text-align: center;
+            background: transparent; color: var(--muted); border: none; cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .channel-tab:hover { background: var(--cyan-dim); color: var(--cyan); }
+        .channel-tab.active { background: var(--cyan-dim); color: var(--cyan); }
+
+        /* 加密標籤 */
+        .encrypt-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Orbitron', monospace; font-size: 0.55rem;
+            letter-spacing: 2px; color: var(--green); margin-left: 12px;
+        }
+        .encrypt-badge::before {
+            content: '🔒'; font-size: 0.65rem;
+        }
+
+        /* 傳訊列表 */
+        .transmissions-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px;
+        }
+        .trans-title {
+            font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 3px;
+        }
+        .trans-count { font-size: 0.62rem; letter-spacing: 2px; color: var(--muted); }
+        .transmissions-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+        .trans-item {
+            background: var(--surface); padding: 24px 28px;
+            cursor: pointer; transition: background 0.2s; position: relative;
+        }
+        .trans-item:hover { background: var(--panel); }
+        .trans-item.unread::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);
+        }
+        .trans-item.critical::before { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        .trans-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .trans-sender {
+            font-family: 'Orbitron', monospace; font-size: 0.8rem; font-weight: 700; color: var(--text);
+        }
+        .trans-time { font-size: 0.62rem; color: var(--muted); letter-spacing: 1px; white-space: nowrap; margin-left: 16px; }
+        .trans-meta {
+            display: flex; gap: 16px; align-items: center; margin-bottom: 10px;
+        }
+        .trans-freq {
+            font-family: 'Orbitron', monospace; font-size: 0.58rem;
+            letter-spacing: 2px; color: var(--cyan); opacity: 0.7;
+        }
+        .trans-strength {
+            display: flex; align-items: flex-end; gap: 1.5px; height: 12px;
+        }
+        .ts-bar { width: 3px; }
+        .ts-bar:nth-child(1) { height: 3px; }
+        .ts-bar:nth-child(2) { height: 5px; }
+        .ts-bar:nth-child(3) { height: 8px; }
+        .ts-bar:nth-child(4) { height: 10px; }
+        .ts-bar:nth-child(5) { height: 12px; }
+        .strength-5 .ts-bar { background: var(--green); }
+        .strength-4 .ts-bar:nth-child(-n+4) { background: var(--green); }
+        .strength-4 .ts-bar:nth-child(5) { background: rgba(0,200,255,0.2); }
+        .strength-3 .ts-bar:nth-child(-n+3) { background: var(--cyan); }
+        .strength-3 .ts-bar:nth-child(n+4) { background: rgba(0,200,255,0.2); }
+        .strength-2 .ts-bar:nth-child(-n+2) { background: var(--yellow); }
+        .strength-2 .ts-bar:nth-child(n+3) { background: rgba(0,200,255,0.2); }
+        .strength-1 .ts-bar:nth-child(1) { background: var(--red); }
+        .strength-1 .ts-bar:nth-child(n+2) { background: rgba(0,200,255,0.2); }
+        .trans-preview {
+            font-size: 0.78rem; color: var(--muted); line-height: 1.7;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .trans-preview strong { color: var(--text); }
+        .trans-priority {
+            display: inline-block; margin-top: 8px;
+            font-family: 'Orbitron', monospace; font-size: 0.52rem;
+            letter-spacing: 2px; padding: 2px 8px; border: 1px solid;
+        }
+        .priority-high { color: var(--red); border-color: rgba(255,56,96,0.4); }
+        .priority-med { color: var(--yellow); border-color: rgba(255,215,0,0.4); }
+        .priority-low { color: var(--cyan); border-color: rgba(0,200,255,0.3); }
+
+        /* 右側：撰寫訊息 + 頻道狀態 */
+        .right-panel { display: flex; flex-direction: column; gap: 24px; }
+
+        /* 撰寫訊息表單 */
+        .compose-panel {
+            border: 1px solid var(--border); background: var(--surface);
+        }
+        .compose-header {
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            font-family: 'Orbitron', monospace; font-size: 0.7rem;
+            letter-spacing: 3px; color: var(--cyan);
+        }
+        .compose-body { padding: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            font-family: 'Orbitron', monospace; font-size: 0.55rem;
+            letter-spacing: 2px; color: var(--muted); margin-bottom: 6px; display: block;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%; background: var(--bg); border: 1px solid var(--border);
+            color: var(--text); font-family: 'Orbitron', monospace; font-size: 0.7rem;
+            letter-spacing: 1px; padding: 10px 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none; appearance: none;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--cyan); box-shadow: 0 0 12px rgba(0,200,255,0.15);
+        }
+        .form-select option { background: var(--surface); }
+        .form-textarea { resize: vertical; min-height: 100px; font-family: 'Inter', sans-serif; font-size: 0.78rem; letter-spacing: 0; line-height: 1.7; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .encrypt-toggle {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.7rem; color: var(--muted); cursor: pointer;
+            padding: 10px 14px; border: 1px solid var(--border); background: var(--bg);
+        }
+        .toggle-switch {
+            width: 32px; height: 16px; background: rgba(0,200,255,0.2);
+            border: 1px solid var(--border); position: relative; cursor: pointer; flex-shrink: 0;
+        }
+        .toggle-switch::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 10px; height: 10px; background: var(--cyan);
+            box-shadow: 0 0 6px var(--cyan); transition: left 0.2s;
+        }
+        .toggle-switch.on::after { left: 18px; }
+        .btn-send {
+            width: 100%; padding: 14px;
+            font-family: 'Orbitron', monospace; font-size: 0.7rem; letter-spacing: 2.5px;
+            background: var(--cyan); color: var(--bg); border: none; cursor: pointer;
+            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+            transition: box-shadow 0.3s; margin-top: 4px;
+        }
+        .btn-send:hover { box-shadow: var(--cyan-glow); }
+
+        /* 頻道狀態面板 */
+        .channel-status-panel {
+            border: 1px solid var(--border); background: var(--surface);
+        }
+        .channel-status-header {
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            font-family: 'Orbitron', monospace; font-size: 0.7rem; letter-spacing: 3px; color: var(--cyan);
+        }
+        .channel-status-list { }
+        .ch-item {
+            padding: 16px 24px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .ch-item:last-child { border-bottom: none; }
+        .ch-name { font-family: 'Orbitron', monospace; font-size: 0.65rem; letter-spacing: 2px; }
+        .ch-freq { font-size: 0.62rem; color: var(--muted); margin-top: 2px; }
+        .ch-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .ch-online { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .ch-busy { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+        .ch-offline { background: rgba(160,200,240,0.3); }
+        .ch-encrypted { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); animation: encPulse 2s ease-in-out infinite; }
+        @keyframes encPulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+        /* 頻率圖 */
+        .freq-grid {
+            padding: 60px 80px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .section-title { font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; letter-spacing: 3px; margin-bottom: 32px; }
+        .freq-display {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+        }
+        .freq-card {
+            border: 1px solid var(--border); background: var(--bg);
+            padding: 24px 20px; position: relative; overflow: hidden;
+        }
+        .freq-card-name { font-family: 'Orbitron', monospace; font-size: 0.65rem; letter-spacing: 2px; color: var(--muted); margin-bottom: 4px; }
+        .freq-card-hz { font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; color: var(--cyan); margin-bottom: 12px; }
+        .freq-mini-wave { display: flex; align-items: center; gap: 1.5px; height: 28px; margin-bottom: 10px; }
+        .fmw-bar {
+            width: 3px; border-radius: 1px; flex-shrink: 0;
+            animation: miniWave var(--d, 0.6s) ease-in-out infinite alternate;
+        }
+        @keyframes miniWave { from { height: var(--a,4px); } to { height: var(--b,20px); } }
+        .fmw-cyan { background: var(--cyan); box-shadow: 0 0 3px var(--cyan); }
+        .fmw-green { background: var(--green); box-shadow: 0 0 3px var(--green); }
+        .fmw-yellow { background: var(--yellow); box-shadow: 0 0 3px var(--yellow); }
+        .freq-card-status { font-size: 0.62rem; letter-spacing: 1.5px; color: var(--muted); }
+
+        /* Footer */
+        .footer { padding: 60px 80px 40px; border-top: 1px solid var(--border); background: var(--bg); position: relative; z-index: 1; }
+        .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+        .footer-logo { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--cyan); letter-spacing: 6px; margin-bottom: 16px; }
+        .footer-brand-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.85; max-width: 240px; }
+        .footer-col-title { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; opacity: 0.7; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text); }
+        .footer-bottom { padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); opacity: 0.6; }
+
+        /* RWD */
+        @media (max-width: 1200px) {
+            .main-layout { grid-template-columns: 1fr 380px; }
+        }
+        @media (max-width: 1024px) {
+            .designvault-back { left: 40px; }
+            .nav { padding: 20px 40px; }
+            .page-hero { padding: 80px 40px 60px; }
+            .main-layout { padding: 60px 40px; grid-template-columns: 1fr; }
+            .right-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+            .freq-grid { padding: 60px 40px; }
+            .footer { padding: 48px 40px 32px; }
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            .designvault-back { left: 24px; top: 8px; }
+            .nav { padding: 18px 24px; }
+            .nav-links { display: none; }
+            .nav-links.active { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: rgba(4,8,16,0.98); border-top: 1px solid var(--border); padding: 8px 24px; gap: 0; }
+            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border); }
+            .nav-status { display: none; }
+            .nav-toggle { display: flex; }
+            .page-hero { padding: 60px 24px 40px; }
+            .page-title { font-size: 2rem; }
+            .signal-status-bar { gap: 16px; }
+            .main-layout { padding: 40px 24px; }
+            .right-panel { grid-template-columns: 1fr; }
+            .freq-grid { padding: 48px 24px; }
+            .freq-display { grid-template-columns: 1fr 1fr; }
+            .footer { padding: 40px 24px 28px; }
+            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .page-title { font-size: 1.6rem; }
+            .channel-tabs { flex-wrap: wrap; }
+            .freq-display { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <a href="../../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <a href="../" class="nav-back">← NEXUS VOID</a>
+            <div class="nav-logo">SIGNAL</div>
+        </div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="../missions/">任務</a></li>
+            <li><a href="../telemetry/">遙測</a></li>
+            <li><a href="../fleet/">艦隊</a></li>
+            <li><a href="../signal/" class="active">通訊</a></li>
+        </ul>
+        <span class="nav-status">COMM ONLINE ▮</span>
+    </nav>
+
+    <main class="page-content">
+        <!-- 頁首 -->
+        <section class="page-hero">
+            <p class="page-tag">QUANTUM COMM NETWORK / ENCRYPTED</p>
+            <h1 class="page-title">通訊頻道</h1>
+            <p class="page-desc">NEXUS VOID 全艦隊量子加密通訊中樞。接收來自深空的傳訊，向各艦發送指令，並監控所有頻道狀態。延遲 0.003 秒，覆蓋範圍 9,800 光年。</p>
+            <div class="signal-status-bar">
+                <div class="sig-status">
+                    <div class="sig-bars">
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                    </div>
+                    <span class="sig-label">ALPHA BAND</span>
+                    <span class="sig-val">100%</span>
+                </div>
+                <div class="sig-status">
+                    <div class="sig-bars">
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar inactive"></div>
+                    </div>
+                    <span class="sig-label">BETA BAND</span>
+                    <span class="sig-val">87%</span>
+                </div>
+                <div class="sig-status">
+                    <div class="sig-bars">
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar inactive"></div>
+                        <div class="sig-bar inactive"></div>
+                    </div>
+                    <span class="sig-label">GAMMA BAND</span>
+                    <span class="sig-val">64%</span>
+                </div>
+                <div class="sig-status">
+                    <div class="sig-bars">
+                        <div class="sig-bar"></div>
+                        <div class="sig-bar inactive"></div>
+                        <div class="sig-bar inactive"></div>
+                        <div class="sig-bar inactive"></div>
+                        <div class="sig-bar inactive"></div>
+                    </div>
+                    <span class="sig-label">DELTA BAND</span>
+                    <span class="sig-val">22%</span>
+                </div>
+                <div class="sig-status" style="color:var(--green);">
+                    <span class="encrypt-badge">ENCRYPTED</span>
+                    <span style="font-size:0.58rem; letter-spacing:1.5px; color:var(--green);">AES-4096-Q</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 主版面 -->
+        <section class="main-layout" style="position:relative; z-index:1;">
+            <!-- 左側：傳訊列表 -->
+            <div>
+                <!-- 頻道選擇器 -->
+                <div class="channel-selector-wrap">
+                    <div class="channel-label">加密頻道選擇 / ENCRYPTED CHANNEL</div>
+                    <div class="channel-tabs">
+                        <button class="channel-tab active" onclick="selectChannel(this)">ALL BANDS</button>
+                        <button class="channel-tab" onclick="selectChannel(this)">CH-ALPHA</button>
+                        <button class="channel-tab" onclick="selectChannel(this)">CH-BETA</button>
+                        <button class="channel-tab" onclick="selectChannel(this)">CH-GAMMA</button>
+                        <button class="channel-tab" onclick="selectChannel(this)">CH-DELTA</button>
+                        <button class="channel-tab" onclick="selectChannel(this)">CH-SECURE</button>
+                    </div>
+                </div>
+
+                <div class="transmissions-header">
+                    <div class="trans-title">[ INCOMING TRANSMISSIONS ]</div>
+                    <span class="trans-count">8 MESSAGES</span>
+                </div>
+                <div class="transmissions-list">
+                    <!-- 傳訊 1 — CRITICAL -->
+                    <div class="trans-item critical unread">
+                        <div class="trans-header">
+                            <span class="trans-sender">PHANTOM-3 / NXV-003</span>
+                            <span class="trans-time">03:47:22 UTC</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 7.3 Hz / CH-SECURE</span>
+                            <div class="trans-strength strength-2">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[緊急] 訊號源已確認位置</strong> — 偵測到規律性電磁脈衝，方位角 274.3°，距離 1.2AU。疑似人工來源，建議立即升級任務等級。艦體完整，乘員安全，隱匿護盾維持。</div>
+                        <span class="trans-priority priority-high">PRIORITY: CRITICAL</span>
+                    </div>
+                    <!-- 傳訊 2 -->
+                    <div class="trans-item unread">
+                        <div class="trans-header">
+                            <span class="trans-sender">NEXUS-01 / NXV-001</span>
+                            <span class="trans-time">03:12:08 UTC</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 2.4 GHz / CH-ALPHA</span>
+                            <div class="trans-strength strength-5">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[定期報告 #47]</strong> 引力波感測器第七次校準完成，精確度提升 18%。已成功穿越 Sgr A* 外層磁場，時空曲率數據異常。請求指揮中心批准進入 Level-6 探索模式。</div>
+                        <span class="trans-priority priority-med">PRIORITY: HIGH</span>
+                    </div>
+                    <!-- 傳訊 3 -->
+                    <div class="trans-item">
+                        <div class="trans-header">
+                            <span class="trans-sender">PULSE ARRAY RELAY-37</span>
+                            <span class="trans-time">02:55:44 UTC</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: QUANTUM-Q / CH-BETA</span>
+                            <div class="trans-strength strength-5">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[自動報告]</strong> 第 37 號量子中繼站部署完成，延遲降至 0.003s，覆蓋範圍延伸至 9,800 光年。MIS-003 任務進度 91%，預計本月完成。</div>
+                        <span class="trans-priority priority-low">PRIORITY: NORMAL</span>
+                    </div>
+                    <!-- 傳訊 4 -->
+                    <div class="trans-item unread">
+                        <div class="trans-header">
+                            <span class="trans-sender">TITAN-X / NXV-010</span>
+                            <span class="trans-time">01:30:19 UTC</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 1.8 GHz / CH-ALPHA</span>
+                            <div class="trans-strength strength-4">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[警告] 結構異常報告</strong> — C 模組對接口形變 2.1mm，超出容許公差。工程組已啟動應急焊接，請批准暫停 Kepler-452b 軌道站建設 4 小時。</div>
+                        <span class="trans-priority priority-med">PRIORITY: HIGH</span>
+                    </div>
+                    <!-- 傳訊 5 -->
+                    <div class="trans-item">
+                        <div class="trans-header">
+                            <span class="trans-sender">AURORA-7 / NXV-007</span>
+                            <span class="trans-time">2157.08.13 / 22:08:55</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 5.8 GHz / CH-BETA</span>
+                            <div class="trans-strength strength-5">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[好消息]</strong> Wolf 1061c 大氣改造超前進度！氧氣濃度達 19.2%，Phase-3 種子播種完成。預計 Phase-4（水域生態）可提前 3 個標準月啟動。</div>
+                        <span class="trans-priority priority-low">PRIORITY: NORMAL</span>
+                    </div>
+                    <!-- 傳訊 6 -->
+                    <div class="trans-item">
+                        <div class="trans-header">
+                            <span class="trans-sender">SUPPLY-9 / NXV-009</span>
+                            <span class="trans-time">2157.08.13 / 18:44:31</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 2.4 GHz / CH-GAMMA</span>
+                            <div class="trans-strength strength-5">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[補給確認]</strong> SUPPLY-9 已於 NEXUS 基地 PORT-3 完成裝載，燃料、食物及備用零件滿載。已排定 72 小時後出發前往 Kepler-452b，為 TITAN-X 提供補給。</div>
+                        <span class="trans-priority priority-low">PRIORITY: NORMAL</span>
+                    </div>
+                    <!-- 傳訊 7 -->
+                    <div class="trans-item">
+                        <div class="trans-header">
+                            <span class="trans-sender">VEGA-5 / NXV-005</span>
+                            <span class="trans-time">2157.08.13 / 15:22:17</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 3.5 GHz / CH-ALPHA</span>
+                            <div class="trans-strength strength-3">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[採礦報告]</strong> Ceres 帶本週作業完成，累計採集稀土元素 4,720 公噸。FORGE-2 加工艦已滿載返回。要求下週繼續作業許可，預計新發現礦脈在 Sector-C4。</div>
+                        <span class="trans-priority priority-low">PRIORITY: NORMAL</span>
+                    </div>
+                    <!-- 傳訊 8 -->
+                    <div class="trans-item">
+                        <div class="trans-header">
+                            <span class="trans-sender">HERALD-2 / NXV-002</span>
+                            <span class="trans-time">2157.08.13 / 09:11:03</span>
+                        </div>
+                        <div class="trans-meta">
+                            <span class="trans-freq">FREQ: 1.2 GHz / CH-BETA</span>
+                            <div class="trans-strength strength-2">
+                                <div class="ts-bar"></div><div class="ts-bar"></div>
+                                <div class="ts-bar"></div><div class="ts-bar"></div><div class="ts-bar"></div>
+                            </div>
+                        </div>
+                        <div class="trans-preview"><strong>[燃料警告]</strong> HERALD-2 燃料儲量降至 43%，位於獵戶臂外緣訊號較弱。請求緊急補給排程，預計 96 小時可維持目前速度巡航。</div>
+                        <span class="trans-priority priority-med">PRIORITY: HIGH</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側面板 -->
+            <div class="right-panel">
+                <!-- 撰寫訊息 -->
+                <div class="compose-panel">
+                    <div class="compose-header">[ COMPOSE TRANSMISSION ]</div>
+                    <div class="compose-body">
+                        <div class="form-group">
+                            <label class="form-label">收件艦艇 / RECIPIENT VESSEL</label>
+                            <select class="form-select">
+                                <option>ALL VESSELS (廣播)</option>
+                                <option>NEXUS-01 / NXV-001</option>
+                                <option>AURORA-7 / NXV-007</option>
+                                <option>TITAN-X / NXV-010</option>
+                                <option>PHANTOM-3 / NXV-003 [SECURE]</option>
+                                <option>VEGA-5 / NXV-005</option>
+                                <option>HERALD-2 / NXV-002</option>
+                                <option>FORGE-2 / NXV-012</option>
+                                <option>SUPPLY-9 / NXV-009</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">頻道 / CHANNEL</label>
+                                <select class="form-select">
+                                    <option>CH-ALPHA (2.4 GHz)</option>
+                                    <option>CH-BETA (5.8 GHz)</option>
+                                    <option>CH-GAMMA (3.5 GHz)</option>
+                                    <option>CH-DELTA (1.2 GHz)</option>
+                                    <option>CH-SECURE (量子加密)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">優先級 / PRIORITY</label>
+                                <select class="form-select">
+                                    <option>NORMAL</option>
+                                    <option>HIGH</option>
+                                    <option>CRITICAL</option>
+                                    <option>EMERGENCY</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">訊息主旨 / SUBJECT</label>
+                            <input type="text" class="form-input" placeholder="COMMAND ORDER #...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">訊息內容 / MESSAGE BODY</label>
+                            <textarea class="form-textarea" placeholder="輸入指令內容…"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="encrypt-toggle" onclick="this.querySelector('.toggle-switch').classList.toggle('on')">
+                                <div class="toggle-switch on"></div>
+                                <span>量子加密傳輸 (AES-4096-Q)</span>
+                            </div>
+                        </div>
+                        <button class="btn-send">▶ TRANSMIT SIGNAL</button>
+                    </div>
+                </div>
+
+                <!-- 頻道狀態 -->
+                <div class="channel-status-panel">
+                    <div class="channel-status-header">[ CHANNEL STATUS ]</div>
+                    <div class="channel-status-list">
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">CH-ALPHA</div>
+                                <div class="ch-freq">2.4 GHz · 5 CONNECTIONS</div>
+                            </div>
+                            <div class="ch-dot ch-online"></div>
+                        </div>
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">CH-BETA</div>
+                                <div class="ch-freq">5.8 GHz · 3 CONNECTIONS</div>
+                            </div>
+                            <div class="ch-dot ch-online"></div>
+                        </div>
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">CH-GAMMA</div>
+                                <div class="ch-freq">3.5 GHz · 1 CONNECTION</div>
+                            </div>
+                            <div class="ch-dot ch-busy"></div>
+                        </div>
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">CH-DELTA</div>
+                                <div class="ch-freq">1.2 GHz · 低功率模式</div>
+                            </div>
+                            <div class="ch-dot ch-offline"></div>
+                        </div>
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">CH-SECURE</div>
+                                <div class="ch-freq">QUANTUM-Q · 加密傳輸中</div>
+                            </div>
+                            <div class="ch-dot ch-encrypted"></div>
+                        </div>
+                        <div class="ch-item">
+                            <div>
+                                <div class="ch-name">RELAY NETWORK</div>
+                                <div class="ch-freq">37 NODES · 9,800 LY 覆蓋</div>
+                            </div>
+                            <div class="ch-dot ch-online"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 頻率圖 -->
+        <section class="freq-grid" style="position:relative; z-index:1;">
+            <p class="page-tag">ACTIVE FREQUENCY BANDS</p>
+            <h2 class="section-title">[ 活躍通訊頻率 ]</h2>
+            <div class="freq-display">
+                <div class="freq-card">
+                    <div class="freq-card-name">CH-ALPHA / PRIMARY</div>
+                    <div class="freq-card-hz">2.4 GHz</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:6px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.5s; --a:8px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:4px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.6s; --a:10px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:6px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.5s; --a:8px; --b:16px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:4px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.6s; --a:10px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:6px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.5s; --a:8px; --b:24px;"></div>
+                    </div>
+                    <div class="freq-card-status">5 艦連線中 · 訊號強度 100%</div>
+                </div>
+                <div class="freq-card">
+                    <div class="freq-card-name">CH-BETA / SECONDARY</div>
+                    <div class="freq-card-hz">5.8 GHz</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar fmw-green" style="--d:0.5s; --a:5px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.4s; --a:7px; --b:16px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.6s; --a:4px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.3s; --a:9px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.5s; --a:5px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.4s; --a:7px; --b:14px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.6s; --a:4px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.3s; --a:9px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.5s; --a:5px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.4s; --a:7px; --b:22px;"></div>
+                    </div>
+                    <div class="freq-card-status">3 艦連線中 · 訊號強度 87%</div>
+                </div>
+                <div class="freq-card">
+                    <div class="freq-card-name">CH-GAMMA / AUXILIARY</div>
+                    <div class="freq-card-hz">3.5 GHz</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar fmw-yellow" style="--d:0.7s; --a:4px; --b:14px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.6s; --a:6px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.8s; --a:4px; --b:12px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.7s; --a:8px; --b:16px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.6s; --a:4px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.8s; --a:6px; --b:14px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.7s; --a:4px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.6s; --a:8px; --b:12px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.8s; --a:4px; --b:16px;"></div>
+                        <div class="fmw-bar fmw-yellow" style="--d:0.7s; --a:6px; --b:20px;"></div>
+                    </div>
+                    <div class="freq-card-status">1 艦連線中 · 訊號強度 64% (忙線)</div>
+                </div>
+                <div class="freq-card" style="border-color: rgba(0,200,255,0.3);">
+                    <div class="freq-card-name">CH-SECURE / QUANTUM-Q</div>
+                    <div class="freq-card-hz" style="color: var(--green);">QUANTUM</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar fmw-green" style="--d:0.2s; --a:10px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.3s; --a:8px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.2s; --a:12px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.25s; --a:8px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.2s; --a:10px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.3s; --a:8px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.2s; --a:12px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.25s; --a:8px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.2s; --a:10px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-green" style="--d:0.3s; --a:8px; --b:26px;"></div>
+                    </div>
+                    <div class="freq-card-status" style="color: var(--green);">加密傳輸中 · AES-4096-Q</div>
+                </div>
+                <div class="freq-card" style="opacity: 0.5;">
+                    <div class="freq-card-name">CH-DELTA / LOW-POWER</div>
+                    <div class="freq-card-hz" style="color: var(--muted);">1.2 GHz</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar" style="background:var(--muted); --d:2s; --a:3px; --b:6px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2.2s; --a:3px; --b:5px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:1.8s; --a:3px; --b:7px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2s; --a:3px; --b:6px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2.4s; --a:3px; --b:5px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2s; --a:3px; --b:7px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:1.8s; --a:3px; --b:6px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2.2s; --a:3px; --b:5px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2s; --a:3px; --b:7px;"></div>
+                        <div class="fmw-bar" style="background:var(--muted); --d:2.4s; --a:3px; --b:6px;"></div>
+                    </div>
+                    <div class="freq-card-status">離線 · 低功率待機</div>
+                </div>
+                <div class="freq-card">
+                    <div class="freq-card-name">RELAY NETWORK / 37 NODES</div>
+                    <div class="freq-card-hz">9,800 LY</div>
+                    <div class="freq-mini-wave">
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:8px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:6px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:10px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.5s; --a:8px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:6px; --b:18px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:10px; --b:24px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:8px; --b:26px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.5s; --a:6px; --b:20px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.3s; --a:10px; --b:22px;"></div>
+                        <div class="fmw-bar fmw-cyan" style="--d:0.4s; --a:8px; --b:24px;"></div>
+                    </div>
+                    <div class="freq-card-status">37 節點在線 · 延遲 0.003s</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">NEXUS VOID</div>
+                <p class="footer-brand-desc">人類最遠的眼睛。我們相信宇宙的每一個角落都值得被探索，每一個謎題都值得被解開。</p>
+            </div>
+            <div>
+                <h4 class="footer-col-title">任務</h4>
+                <ul class="footer-links">
+                    <li><a href="../missions/">任務中心</a></li>
+                    <li><a href="../missions/">Deep Horizon</a></li>
+                    <li><a href="../missions/">Orbit Genesis</a></li>
+                    <li><a href="../missions/">Pulse Array</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">艦隊</h4>
+                <ul class="footer-links">
+                    <li><a href="../fleet/">艦隊登錄</a></li>
+                    <li><a href="../telemetry/">遙測數據</a></li>
+                    <li><a href="../signal/">通訊頻道</a></li>
+                    <li><a href="../fleet/">技術規格</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">指揮中心</h4>
+                <ul class="footer-links">
+                    <li><a href="../signal/">發送訊號</a></li>
+                    <li><a href="../telemetry/">系統狀態</a></li>
+                    <li><a href="../missions/">任務日誌</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2157 NEXUS VOID CORP. All rights reserved.</span>
+            <span>SECTOR-7 · Signal Encrypted · Uptime 99.7%</span>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function initStars() {
+            stars = Array.from({ length: 200 }, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.2, a: Math.random(), speed: 0.002 + Math.random() * 0.003
+            }));
+        }
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.a += s.speed;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(200, 230, 255, ${Math.abs(Math.sin(s.a))})`; ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+        resize(); initStars(); drawStars();
+        window.addEventListener('resize', () => { resize(); initStars(); });
+
+        // 頻道 tab 切換
+        function selectChannel(btn) {
+            document.querySelectorAll('.channel-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

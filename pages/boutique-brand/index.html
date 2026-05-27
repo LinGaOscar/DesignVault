@@ -618,9 +618,27 @@
             .story-title { font-size: 1.75rem; }
             .contact-title { font-size: 1.875rem; }
         }
+
+        /* ====== DesignVault 返回連結 ====== */
+        .designvault-link {
+            position: fixed;
+            top: 18px;
+            left: 20px;
+            z-index: 200;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            color: rgba(26,26,26,0.35);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .designvault-link:hover { color: var(--gold); }
     </style>
 </head>
 <body>
+
+    <a href="../../index.html" class="designvault-link">← DesignVault</a>
 
     <nav class="nav" id="nav">
         <div class="nav-logo">Aurèle</div>
@@ -628,11 +646,11 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
-            <li><a href="#">品牌故事</a></li>
-            <li><a href="#">系列</a></li>
-            <li><a href="#">作品</a></li>
-            <li><a href="#">店鋪</a></li>
-            <li><a href="#">聯繫</a></li>
+            <li><a href="story/">品牌故事</a></li>
+            <li><a href="collections/">系列</a></li>
+            <li><a href="works/">作品</a></li>
+            <li><a href="store/">店鋪</a></li>
+            <li><a href="contact/">聯繫</a></li>
         </ul>
         <div class="nav-actions">
             <button class="nav-action-btn">搜尋</button>
@@ -696,7 +714,7 @@
             <p class="story-eyebrow">我們的故事</p>
             <h2 class="story-title">始於追求<br>極致的工匠精神</h2>
             <p class="story-text">1998年，品牌創辦人從巴黎回到台北，帶回的不只是設計理念，更是一種對工藝的執著。每一件 AURÈLE 的作品，都承載著我們對美的追求與對細節的堅持。從素材挑選到最後一道工序，我們拒絕任何妥協。</p>
-            <a href="#" class="story-cta">深入了解 →</a>
+            <a href="story/" class="story-cta">深入了解 →</a>
         </div>
     </section>
 
@@ -744,7 +762,7 @@
     <section class="contact">
         <h2 class="contact-title">預約來店體驗</h2>
         <p class="contact-desc">我們的專業顧問將為你提供一對一的服務，歡迎預約來店，探索 AURÈLE 的世界。</p>
-        <a href="#" class="contact-cta">立即預約</a>
+        <a href="contact/" class="contact-cta">立即預約</a>
     </section>
 
     <footer class="footer">
@@ -756,19 +774,19 @@
             <div>
                 <h4 class="footer-col-title">系列</h4>
                 <ul class="footer-links">
-                    <li><a href="#">高級訂製</a></li>
-                    <li><a href="#">皮革系列</a></li>
-                    <li><a href="#">珠寶配飾</a></li>
-                    <li><a href="#">限定款</a></li>
+                    <li><a href="collections/">高級訂製</a></li>
+                    <li><a href="collections/">皮革系列</a></li>
+                    <li><a href="collections/">珠寶配飾</a></li>
+                    <li><a href="collections/">限定款</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="footer-col-title">服務</h4>
+                <h4 class="footer-col-title">品牌</h4>
                 <ul class="footer-links">
-                    <li><a href="#">量身訂製</a></li>
-                    <li><a href="#">保養維修</a></li>
-                    <li><a href="#">包裝禮品</a></li>
-                    <li><a href="#">會員專區</a></li>
+                    <li><a href="story/">品牌故事</a></li>
+                    <li><a href="works/">作品</a></li>
+                    <li><a href="store/">門市</a></li>
+                    <li><a href="contact/">聯繫我們</a></li>
                 </ul>
             </div>
             <div>

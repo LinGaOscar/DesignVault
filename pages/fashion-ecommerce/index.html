@@ -513,9 +513,29 @@
             .section-title { font-size: 1.75rem; }
             .category-card { height: 240px; }
         }
+
+        /* ====== DesignVault 返回列 ====== */
+        .dv-bar {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 7px 60px;
+        }
+        .dv-bar a {
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: var(--muted);
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .dv-bar a:hover { color: var(--text); }
+
+        @media (max-width: 768px) { .dv-bar { padding: 7px 24px; } }
     </style>
 </head>
 <body>
+
+    <div class="dv-bar"><a href="../../index.html">← DesignVault</a></div>
 
     <nav class="nav">
         <div class="nav-logo">Maison Noir</div>
@@ -523,11 +543,11 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
-            <li><a href="#">首頁</a></li>
-            <li><a href="#">女性</a></li>
-            <li><a href="#">男性</a></li>
-            <li><a href="#">配件</a></li>
-            <li><a href="#">關於</a></li>
+            <li><a href="./">首頁</a></li>
+            <li><a href="womens/">女性</a></li>
+            <li><a href="mens/">男性</a></li>
+            <li><a href="accessories/">配件</a></li>
+            <li><a href="about/">關於</a></li>
         </ul>
         <div class="nav-right">
             <button class="nav-btn">搜尋</button>
@@ -636,10 +656,10 @@
             <div>
                 <h4 class="footer-col-title">購物</h4>
                 <ul class="footer-links">
-                    <li><a href="#">女裝</a></li>
-                    <li><a href="#">男裝</a></li>
-                    <li><a href="#">配件</a></li>
-                    <li><a href="#">新品上市</a></li>
+                    <li><a href="womens/">女裝</a></li>
+                    <li><a href="mens/">男裝</a></li>
+                    <li><a href="accessories/">配件</a></li>
+                    <li><a href="womens/">新品上市</a></li>
                 </ul>
             </div>
             <div>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>艦隊登錄 | NEXUS VOID</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #040810;
+            --surface: #080f1a;
+            --panel: rgba(0, 200, 255, 0.04);
+            --text: #e0f0ff;
+            --muted: rgba(160, 200, 240, 0.5);
+            --cyan: #00c8ff;
+            --cyan-dim: rgba(0, 200, 255, 0.15);
+            --cyan-glow: 0 0 20px rgba(0, 200, 255, 0.4);
+            --border: rgba(0, 200, 255, 0.15);
+            --green: #00ff88;
+            --red: #ff3860;
+            --yellow: #ffd700;
+            --purple: #c084fc;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        #starfield {
+            position: fixed;
+            inset: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .designvault-back {
+            position: fixed;
+            top: 10px;
+            left: 80px;
+            z-index: 200;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 2.5px;
+            color: rgba(0, 200, 255, 0.55);
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+        .designvault-back:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.6);
+        }
+
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 80px;
+            background: rgba(4, 8, 16, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-left { display: flex; align-items: center; gap: 24px; }
+        .nav-back {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--cyan); }
+        .nav-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--cyan);
+            text-shadow: var(--cyan-glow);
+        }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+        .nav-status { font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); opacity: 0.7; }
+        .nav-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer;
+        }
+        .nav-toggle span { display: block; width: 22px; height: 1px; background: var(--cyan); }
+
+        .page-content { position: relative; z-index: 1; padding-top: 100px; }
+
+        /* 頁首 */
+        .page-hero {
+            padding: 80px 80px 60px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: 'FLEET';
+            position: absolute;
+            right: -20px; top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Orbitron', monospace;
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(0, 200, 255, 0.04);
+            letter-spacing: 10px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .page-tag {
+            font-size: 0.62rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+        .page-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+            max-width: 600px;
+            line-height: 1.9;
+        }
+
+        /* 概觀統計 */
+        .fleet-overview {
+            padding: 60px 80px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                        var(--border) border-box;
+        }
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+        .overview-stat {
+            background: var(--surface);
+            padding: 48px 40px;
+            text-align: center;
+            transition: background 0.3s;
+        }
+        .overview-stat:hover { background: var(--panel); }
+        .stat-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--cyan);
+            text-shadow: var(--cyan-glow);
+            display: block;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* 篩選 tabs */
+        .fleet-section { padding: 60px 80px 0; }
+        .filter-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 32px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            padding: 1px;
+            width: fit-content;
+        }
+        .filter-tab {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            background: transparent;
+            color: var(--muted);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .filter-tab.active, .filter-tab:hover {
+            background: var(--cyan-dim);
+            color: var(--cyan);
+        }
+
+        /* 艦隊表格 */
+        .fleet-table-wrap {
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            margin-bottom: 80px;
+        }
+        .fleet-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        .fleet-table thead tr {
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .fleet-table th {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            opacity: 0.7;
+            padding: 18px 24px;
+            text-align: left;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+        .fleet-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .fleet-table tbody tr:last-child { border-bottom: none; }
+        .fleet-table tbody tr:hover { background: var(--panel); }
+        .fleet-table td { padding: 20px 24px; vertical-align: middle; }
+        .td-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .td-code {
+            font-size: 0.65rem;
+            color: var(--cyan);
+            opacity: 0.7;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+        .td-class {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+        .td-captain {
+            font-size: 0.75rem;
+            color: var(--text);
+        }
+        .td-location {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        /* 狀態標籤 */
+        .status-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .status-dot::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .status-deployed { color: var(--green); }
+        .status-deployed::before { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .status-docked { color: var(--cyan); }
+        .status-docked::before { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+        .status-maintenance { color: var(--yellow); }
+        .status-maintenance::before { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+        .status-standby { color: var(--muted); }
+        .status-standby::before { background: var(--muted); }
+
+        /* 燃料條 */
+        .fuel-bar-wrap { min-width: 100px; }
+        .fuel-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .fuel-bar {
+            height: 3px;
+            background: rgba(0,200,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .fuel-fill {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+        }
+        .fuel-high { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .fuel-mid { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+        .fuel-low { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+        /* 船艦卡片展示區 */
+        .ship-cards-section { padding: 0 80px 120px; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+        .ship-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .ship-card {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .ship-card:hover { border-color: rgba(0,200,255,0.4); }
+        .ship-card-corner {
+            position: absolute;
+            top: 0; right: 0;
+            width: 0; height: 0;
+            border-left: 32px solid transparent;
+            border-top: 32px solid rgba(0,200,255,0.15);
+        }
+        .ship-card-id {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+        .ship-card-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.35rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+        .ship-card-class {
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+        .ship-specs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 16px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .ship-spec-val {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cyan);
+            display: block;
+        }
+        .ship-spec-lbl {
+            font-size: 0.58rem;
+            letter-spacing: 1px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+        .ship-card-desc {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 80px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+            position: relative;
+            z-index: 1;
+        }
+        .footer-inner {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 48px;
+        }
+        .footer-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            letter-spacing: 6px;
+            margin-bottom: 16px;
+        }
+        .footer-brand-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.85; max-width: 240px; }
+        .footer-col-title { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; opacity: 0.7; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text); }
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--muted);
+            opacity: 0.6;
+        }
+
+        /* RWD */
+        @media (max-width: 1200px) {
+            .ship-cards { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 1024px) {
+            .designvault-back { left: 40px; }
+            .nav { padding: 20px 40px; }
+            .page-hero { padding: 80px 40px 60px; }
+            .fleet-section { padding: 60px 40px 0; }
+            .ship-cards-section { padding: 0 40px 80px; }
+            .footer { padding: 48px 40px 32px; }
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            .designvault-back { left: 24px; top: 8px; }
+            .nav { padding: 18px 24px; }
+            .nav-links { display: none; }
+            .nav-links.active {
+                display: flex; position: absolute; top: 100%; left: 0; right: 0;
+                flex-direction: column; background: rgba(4,8,16,0.98);
+                border-top: 1px solid var(--border); padding: 8px 24px; gap: 0;
+            }
+            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border); }
+            .nav-status { display: none; }
+            .nav-toggle { display: flex; }
+            .page-hero { padding: 60px 24px 40px; }
+            .page-title { font-size: 2rem; }
+            .fleet-section { padding: 40px 24px 0; }
+            .filter-tabs { width: 100%; flex-wrap: wrap; }
+            .overview-stats { grid-template-columns: repeat(2, 1fr); }
+            .stat-num { font-size: 2rem; }
+            .ship-cards-section { padding: 0 24px 60px; }
+            .ship-specs { grid-template-columns: repeat(2, 1fr); }
+            .footer { padding: 40px 24px 28px; }
+            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .page-title { font-size: 1.6rem; }
+            .overview-stats { grid-template-columns: 1fr 1fr; }
+            .stat-num { font-size: 1.6rem; }
+            .overview-stat { padding: 32px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <a href="../../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <a href="../" class="nav-back">← NEXUS VOID</a>
+            <div class="nav-logo">FLEET</div>
+        </div>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="../missions/">任務</a></li>
+            <li><a href="../telemetry/">遙測</a></li>
+            <li><a href="../fleet/" class="active">艦隊</a></li>
+            <li><a href="../signal/">通訊</a></li>
+        </ul>
+        <span class="nav-status">FLEET ONLINE ▮</span>
+    </nav>
+
+    <main class="page-content">
+        <!-- 頁首 -->
+        <section class="page-hero">
+            <p class="page-tag">FLEET REGISTRY / NEXUS VOID COMMAND</p>
+            <h1 class="page-title">艦隊登錄</h1>
+            <p class="page-desc">NEXUS VOID 星際艦隊完整資料庫。所有艦艇實時追蹤，包含位置、燃料、任務狀態與艦長資訊。目前共有 10 艘艦艇在冊。</p>
+        </section>
+
+        <!-- 概觀統計 -->
+        <div style="padding: 0 80px; position: relative; z-index: 1;">
+            <div class="overview-stats">
+                <div class="overview-stat">
+                    <span class="stat-num">10</span>
+                    <span class="stat-label">總艦艇數</span>
+                </div>
+                <div class="overview-stat">
+                    <span class="stat-num">6</span>
+                    <span class="stat-label">執行任務中</span>
+                </div>
+                <div class="overview-stat">
+                    <span class="stat-num">2</span>
+                    <span class="stat-label">停靠中</span>
+                </div>
+                <div class="overview-stat">
+                    <span class="stat-num">2</span>
+                    <span class="stat-label">維修中</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 篩選 + 表格 -->
+        <section class="fleet-section">
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterFleet('all', this)">全部</button>
+                <button class="filter-tab" onclick="filterFleet('class-a', this)">CLASS-A</button>
+                <button class="filter-tab" onclick="filterFleet('class-b', this)">CLASS-B</button>
+                <button class="filter-tab" onclick="filterFleet('class-s', this)">CLASS-S</button>
+                <button class="filter-tab" onclick="filterFleet('class-x', this)">CLASS-X</button>
+            </div>
+            <div class="fleet-table-wrap">
+                <table class="fleet-table" id="fleet-table">
+                    <thead>
+                        <tr>
+                            <th>艦名 / 代號</th>
+                            <th>型號</th>
+                            <th>狀態</th>
+                            <th>艦長</th>
+                            <th>當前位置</th>
+                            <th>燃料儲量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-class="class-a">
+                            <td><div class="td-name">NEXUS-01</div><div class="td-code">NXV-001</div></td>
+                            <td><span class="td-class">CLASS-A 旗艦型</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 陳宇航 / Cdr. CHEN</span></td>
+                            <td><span class="td-location">銀河核心 / Sgr A* +3,200LY</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>82%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-high" style="width:82%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-b">
+                            <td><div class="td-name">AURORA-7</div><div class="td-code">NXV-007</div></td>
+                            <td><span class="td-class">CLASS-B 偵察型</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 林雅琪 / Cdr. LIN</span></td>
+                            <td><span class="td-location">Wolf 1061c 軌道</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>91%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-high" style="width:91%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-s">
+                            <td><div class="td-name">TITAN-X</div><div class="td-code">NXV-010</div></td>
+                            <td><span class="td-class">CLASS-S 超重型建設</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 王大衛 / Cdr. WANG</span></td>
+                            <td><span class="td-location">Kepler-452b 軌道</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>68%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-mid" style="width:68%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-x">
+                            <td><div class="td-name">PHANTOM-3</div><div class="td-code">NXV-003</div></td>
+                            <td><span class="td-class">CLASS-X 隱匿特種型</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 機密 / Cdr. [REDACTED]</span></td>
+                            <td><span class="td-location">[位置保密]</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>74%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-mid" style="width:74%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-b">
+                            <td><div class="td-name">VEGA-5</div><div class="td-code">NXV-005</div></td>
+                            <td><span class="td-class">CLASS-B 偵察型</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 張明德 / Cdr. ZHANG</span></td>
+                            <td><span class="td-location">Ceres 小行星帶軌道</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>55%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-mid" style="width:55%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-a">
+                            <td><div class="td-name">HERALD-2</div><div class="td-code">NXV-002</div></td>
+                            <td><span class="td-class">CLASS-A 旗艦型</span></td>
+                            <td><span class="status-dot status-deployed">DEPLOYED</span></td>
+                            <td><span class="td-captain">艦長 吳靜儀 / Cdr. WU</span></td>
+                            <td><span class="td-location">獵戶座臂外緣</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>43%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-mid" style="width:43%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-s">
+                            <td><div class="td-name">FORGE-2</div><div class="td-code">NXV-012</div></td>
+                            <td><span class="td-class">CLASS-S 礦石加工型</span></td>
+                            <td><span class="status-dot status-docked">DOCKED</span></td>
+                            <td><span class="td-captain">艦長 黃振宇 / Cdr. HUANG</span></td>
+                            <td><span class="td-location">Ceres 補給站</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>97%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-high" style="width:97%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-b">
+                            <td><div class="td-name">SUPPLY-9</div><div class="td-code">NXV-009</div></td>
+                            <td><span class="td-class">CLASS-B 補給型</span></td>
+                            <td><span class="status-dot status-docked">DOCKED</span></td>
+                            <td><span class="td-captain">艦長 李佳蓉 / Cdr. LEE</span></td>
+                            <td><span class="td-location">NEXUS 基地 PORT-3</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>100%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-high" style="width:100%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-a">
+                            <td><div class="td-name">SENTINEL-4</div><div class="td-code">NXV-004</div></td>
+                            <td><span class="td-class">CLASS-A 防衛旗艦型</span></td>
+                            <td><span class="status-dot status-maintenance">MAINTENANCE</span></td>
+                            <td><span class="td-captain">艦長 趙天佑 / Cdr. ZHAO</span></td>
+                            <td><span class="td-location">修船塢 DOCK-7</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>28%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-low" style="width:28%"></div></div></div></td>
+                        </tr>
+                        <tr data-class="class-x">
+                            <td><div class="td-name">WRAITH-0</div><div class="td-code">NXV-000</div></td>
+                            <td><span class="td-class">CLASS-X 原型試驗型</span></td>
+                            <td><span class="status-dot status-maintenance">MAINTENANCE</span></td>
+                            <td><span class="td-captain">首席工程師 劉博士 / Dr. LIU</span></td>
+                            <td><span class="td-location">R&amp;D 研發艙 LAB-α</span></td>
+                            <td><div class="fuel-bar-wrap"><div class="fuel-label"><span>燃料</span><span>15%</span></div><div class="fuel-bar"><div class="fuel-fill fuel-low" style="width:15%"></div></div></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 主力艦詳細規格卡 -->
+        <section class="ship-cards-section">
+            <div class="section-header">
+                <div>
+                    <p class="page-tag">SHIP TECHNICAL SPECS</p>
+                    <h2 class="section-title">[ 主力艦規格 ]</h2>
+                </div>
+            </div>
+            <div class="ship-cards">
+                <div class="ship-card">
+                    <div class="ship-card-corner"></div>
+                    <div class="ship-card-id">NXV-001 / CLASS-A FLAGSHIP</div>
+                    <div class="ship-card-name">NEXUS-01</div>
+                    <div class="ship-card-class">旗艦級星際探索艦 · 量子躍遷引擎</div>
+                    <div class="ship-specs">
+                        <div><span class="ship-spec-val">2,400</span><span class="ship-spec-lbl">最大乘員</span></div>
+                        <div><span class="ship-spec-val">12.4C</span><span class="ship-spec-lbl">最高速度</span></div>
+                        <div><span class="ship-spec-val">QD-VII</span><span class="ship-spec-lbl">驅動引擎</span></div>
+                        <div><span class="ship-spec-val">4,800m</span><span class="ship-spec-lbl">艦體全長</span></div>
+                        <div><span class="ship-spec-val">A-MAT</span><span class="ship-spec-lbl">能源核心</span></div>
+                        <div><span class="ship-spec-val">CLASS-A</span><span class="ship-spec-lbl">護盾等級</span></div>
+                    </div>
+                    <p class="ship-card-desc">旗艦級星際探索艦，配備第七代量子躍遷引擎與全息指揮中樞，最大乘員 2,400 名。反物質能源核心提供 200 年理論壽命，七層波動護盾可抵禦任何已知武器及宇宙射線威脅。</p>
+                </div>
+                <div class="ship-card">
+                    <div class="ship-card-corner"></div>
+                    <div class="ship-card-id">NXV-010 / CLASS-S HEAVY BUILDER</div>
+                    <div class="ship-card-name">TITAN-X</div>
+                    <div class="ship-card-class">超重型建設艦 · 反物質反應爐</div>
+                    <div class="ship-specs">
+                        <div><span class="ship-spec-val">3,800</span><span class="ship-spec-lbl">最大乘員</span></div>
+                        <div><span class="ship-spec-val">4.2C</span><span class="ship-spec-lbl">最高速度</span></div>
+                        <div><span class="ship-spec-val">A-MAT-X</span><span class="ship-spec-lbl">能源核心</span></div>
+                        <div><span class="ship-spec-val">9,600m</span><span class="ship-spec-lbl">艦體全長</span></div>
+                        <div><span class="ship-spec-val">120組</span><span class="ship-spec-lbl">居住模組</span></div>
+                        <div><span class="ship-spec-val">CLASS-S</span><span class="ship-spec-lbl">護盾等級</span></div>
+                    </div>
+                    <p class="ship-card-desc">超重型建設艦，承擔軌道站建造與星際補給任務。攜帶 120 組模組化居住艙，反物質反應爐驅動的超強磁場推進系統可牽引重達 50 萬噸的太空結構件。</p>
+                </div>
+                <div class="ship-card">
+                    <div class="ship-card-corner"></div>
+                    <div class="ship-card-id">NXV-007 / CLASS-B SCOUT</div>
+                    <div class="ship-card-name">AURORA-7</div>
+                    <div class="ship-card-class">輕型偵察艦 · 高機動設計</div>
+                    <div class="ship-specs">
+                        <div><span class="ship-spec-val">320</span><span class="ship-spec-lbl">最大乘員</span></div>
+                        <div><span class="ship-spec-val">18.7C</span><span class="ship-spec-lbl">最高速度</span></div>
+                        <div><span class="ship-spec-val">FUSION-9</span><span class="ship-spec-lbl">能源核心</span></div>
+                        <div><span class="ship-spec-val">1,200m</span><span class="ship-spec-lbl">艦體全長</span></div>
+                        <div><span class="ship-spec-val">9.8x</span><span class="ship-spec-lbl">機動倍率</span></div>
+                        <div><span class="ship-spec-val">CLASS-B</span><span class="ship-spec-lbl">護盾等級</span></div>
+                    </div>
+                    <p class="ship-card-desc">輕型偵察艦，高機動性設計，專為前線探索與數據採集任務打造。配備最先進感測器陣列，可在 0.3 秒內完成全頻譜掃描，量子隱身技術讓偵測概率降至 0.2%。</p>
+                </div>
+                <div class="ship-card">
+                    <div class="ship-card-corner"></div>
+                    <div class="ship-card-id">NXV-003 / CLASS-X SPECOPS</div>
+                    <div class="ship-card-name">PHANTOM-3</div>
+                    <div class="ship-card-class">隱匿級特種艦 · 暗物質護盾</div>
+                    <div class="ship-specs">
+                        <div><span class="ship-spec-val">48</span><span class="ship-spec-lbl">最大乘員</span></div>
+                        <div><span class="ship-spec-val">[機密]</span><span class="ship-spec-lbl">最高速度</span></div>
+                        <div><span class="ship-spec-val">DARK-Ω</span><span class="ship-spec-lbl">能源核心</span></div>
+                        <div><span class="ship-spec-val">[機密]</span><span class="ship-spec-lbl">艦體全長</span></div>
+                        <div><span class="ship-spec-val">暗物質</span><span class="ship-spec-lbl">護盾類型</span></div>
+                        <div><span class="ship-spec-val">CLASS-X</span><span class="ship-spec-lbl">護盾等級</span></div>
+                    </div>
+                    <p class="ship-card-desc">隱匿級特種艦，搭載暗物質護盾，執行高風險深空滲透與未知訊號溯源任務。艦體材料為跨維度複合材料，在任何已知感測器面前完全不可見。詳細規格列為最高機密。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">NEXUS VOID</div>
+                <p class="footer-brand-desc">人類最遠的眼睛。我們相信宇宙的每一個角落都值得被探索，每一個謎題都值得被解開。</p>
+            </div>
+            <div>
+                <h4 class="footer-col-title">任務</h4>
+                <ul class="footer-links">
+                    <li><a href="../missions/">任務中心</a></li>
+                    <li><a href="../missions/">Deep Horizon</a></li>
+                    <li><a href="../missions/">Orbit Genesis</a></li>
+                    <li><a href="../missions/">Pulse Array</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">艦隊</h4>
+                <ul class="footer-links">
+                    <li><a href="../fleet/">艦隊登錄</a></li>
+                    <li><a href="../telemetry/">遙測數據</a></li>
+                    <li><a href="../signal/">通訊頻道</a></li>
+                    <li><a href="../fleet/">技術規格</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">指揮中心</h4>
+                <ul class="footer-links">
+                    <li><a href="../signal/">發送訊號</a></li>
+                    <li><a href="../telemetry/">系統狀態</a></li>
+                    <li><a href="../missions/">任務日誌</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2157 NEXUS VOID CORP. All rights reserved.</span>
+            <span>SECTOR-7 · Signal Encrypted · Uptime 99.7%</span>
+        </div>
+    </footer>
+
+    <script>
+        // 星空粒子
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function initStars() {
+            stars = Array.from({ length: 200 }, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.2, a: Math.random(), speed: 0.002 + Math.random() * 0.003
+            }));
+        }
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.a += s.speed;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(200, 230, 255, ${Math.abs(Math.sin(s.a))})`; ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+        resize(); initStars(); drawStars();
+        window.addEventListener('resize', () => { resize(); initStars(); });
+
+        // 艦隊篩選
+        function filterFleet(cls, btn) {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('#fleet-table tbody tr').forEach(row => {
+                row.style.display = (cls === 'all' || row.dataset.class === cls) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -642,6 +642,26 @@
             .stat-value { font-size: 1.5rem; }
             .card-head { flex-direction: column; gap: 12px; align-items: flex-start; }
         }
+
+        /* DesignVault 返回連結：放在 sidebar 最頂部 */
+        .dv-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            transition: color 0.15s;
+            letter-spacing: 0.2px;
+        }
+
+        .dv-back:hover { color: var(--text-dim); }
+
+        .dv-back-arrow {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -649,6 +669,9 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="dv-back">
+            <span class="dv-back-arrow">←</span>DesignVault
+        </a>
         <div class="sidebar-header">
             <div class="sidebar-logo">NexusFlow</div>
             <div class="sidebar-plan">Enterprise</div>
@@ -656,38 +679,29 @@
 
         <div class="nav-section">
             <p class="nav-section-label">主頁</p>
-            <div class="nav-item active">
+            <a class="nav-item active" href="#">
                 <span class="nav-dot"></span>儀表板
-            </div>
-            <div class="nav-item">
+            </a>
+            <a class="nav-item" href="analytics/">
                 <span class="nav-dot"></span>分析
-            </div>
-            <div class="nav-item">
-                <span class="nav-dot"></span>報表
-            </div>
+            </a>
         </div>
 
         <div class="nav-section">
             <p class="nav-section-label">管理</p>
-            <div class="nav-item">
+            <a class="nav-item" href="users/">
                 <span class="nav-dot"></span>用戶
-            </div>
-            <div class="nav-item">
-                <span class="nav-dot"></span>專案
-            </div>
-            <div class="nav-item">
-                <span class="nav-dot"></span>任務
-            </div>
+            </a>
+            <a class="nav-item" href="orders/">
+                <span class="nav-dot"></span>訂單
+            </a>
         </div>
 
         <div class="nav-section">
             <p class="nav-section-label">系統</p>
-            <div class="nav-item">
+            <a class="nav-item" href="settings/">
                 <span class="nav-dot"></span>設定
-            </div>
-            <div class="nav-item">
-                <span class="nav-dot"></span>通知
-            </div>
+            </a>
         </div>
     </aside>
 

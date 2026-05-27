@@ -94,6 +94,25 @@
             height: 1px;
             background: var(--cyan);
         }
+        /* DesignVault 返回連結 — 漂浮在 nav 上方 */
+        .designvault-back {
+            position: fixed;
+            top: 10px;
+            left: 80px;
+            z-index: 200;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 2.5px;
+            color: rgba(0, 200, 255, 0.55);
+            text-decoration: none;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+        .designvault-back:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.6);
+        }
+        @media (max-width: 1024px) { .designvault-back { left: 40px; } }
+        @media (max-width: 768px) { .designvault-back { left: 24px; top: 8px; } }
         .hero {
             position: relative;
             z-index: 1;
@@ -511,16 +530,17 @@
 </head>
 <body>
     <canvas id="starfield"></canvas>
+    <a href="../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
     <nav class="nav" id="nav">
         <div class="nav-logo">NEXUS VOID</div>
         <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
-            <li><a href="#missions">任務</a></li>
-            <li><a href="#telemetry">遙測</a></li>
-            <li><a href="#fleet">艦隊</a></li>
-            <li><a href="#signal">通訊</a></li>
+            <li><a href="missions/">任務</a></li>
+            <li><a href="telemetry/">遙測</a></li>
+            <li><a href="fleet/">艦隊</a></li>
+            <li><a href="signal/">通訊</a></li>
         </ul>
         <span class="nav-status">SYS: ONLINE ▮</span>
     </nav>
@@ -649,27 +669,27 @@
             <div>
                 <h4 class="footer-col-title">任務</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Deep Horizon</a></li>
-                    <li><a href="#">Orbit Genesis</a></li>
-                    <li><a href="#">Pulse Array</a></li>
-                    <li><a href="#">任務資料庫</a></li>
+                    <li><a href="missions/">任務中心</a></li>
+                    <li><a href="missions/">Deep Horizon</a></li>
+                    <li><a href="missions/">Orbit Genesis</a></li>
+                    <li><a href="missions/">Pulse Array</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="footer-col-title">艦隊</h4>
                 <ul class="footer-links">
-                    <li><a href="#">艦艇登錄</a></li>
-                    <li><a href="#">技術規格</a></li>
-                    <li><a href="#">維修紀錄</a></li>
-                    <li><a href="#">新型號預告</a></li>
+                    <li><a href="fleet/">艦隊登錄</a></li>
+                    <li><a href="telemetry/">遙測數據</a></li>
+                    <li><a href="signal/">通訊頻道</a></li>
+                    <li><a href="fleet/">技術規格</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="footer-col-title">指揮中心</h4>
                 <ul class="footer-links">
-                    <li><a href="#">加入我們</a></li>
-                    <li><a href="#">技術文件</a></li>
-                    <li><a href="#">通訊頻道</a></li>
+                    <li><a href="signal/">發送訊號</a></li>
+                    <li><a href="telemetry/">系統狀態</a></li>
+                    <li><a href="missions/">任務日誌</a></li>
                 </ul>
             </div>
         </div>

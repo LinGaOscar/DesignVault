@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品 | AURÈLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f9f8f6;
+            --white: #ffffff;
+            --text: #1a1a1a;
+            --muted: #9a9888;
+            --border: rgba(0,0,0,0.08);
+            --border-solid: #e6e2db;
+            --gold: #b8965a;
+            --gold-light: #c9a96e;
+            --cream: #f0ece4;
+            --dark: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ====== DesignVault 返回連結 ====== */
+        .designvault-link {
+            position: fixed;
+            top: 18px;
+            left: 20px;
+            z-index: 200;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            color: rgba(26,26,26,0.35);
+            transition: color 0.3s;
+        }
+        .designvault-link:hover { color: var(--gold); }
+
+        /* ====== Navigation ====== */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 80px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s, padding 0.3s, border-color 0.4s;
+            border-bottom: 1px solid transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(249,248,246,0.96);
+            backdrop-filter: blur(12px);
+            padding: 18px 80px;
+            border-bottom-color: var(--border-solid);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 44px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--gold); }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--text);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-action-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-action-btn:hover { color: var(--gold); }
+
+        /* ====== 返回 AURÈLE ====== */
+        .back-bar {
+            padding-top: 108px;
+            padding-bottom: 20px;
+            padding-left: 80px;
+            padding-right: 80px;
+            border-bottom: 1px solid var(--border-solid);
+            background: var(--bg);
+        }
+
+        .back-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--gold); }
+
+        /* ====== Page Hero ====== */
+        .page-hero {
+            padding: 80px 80px 80px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-solid);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            gap: 60px;
+        }
+
+        .page-hero-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .page-hero-title {
+            font-size: 4.5rem;
+            font-weight: 300;
+            line-height: 1.05;
+        }
+
+        .page-hero-lead {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.9;
+            max-width: 480px;
+            align-self: end;
+        }
+
+        /* ====== Filter Bar ====== */
+        .filter-bar {
+            padding: 28px 80px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border-solid);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .filter-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .filter-btns {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: none;
+            border: 1px solid transparent;
+            padding: 6px 16px;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: var(--text);
+            border-color: var(--border-solid);
+        }
+
+        .filter-btn.active {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* ====== Works Gallery — Editorial Masonry ====== */
+        .works-section {
+            padding: 80px;
+            background: var(--bg);
+        }
+
+        /* CSS columns 模擬瀑布流 */
+        .works-masonry {
+            columns: 3;
+            column-gap: 28px;
+        }
+
+        .work-item {
+            break-inside: avoid;
+            margin-bottom: 28px;
+            background: var(--white);
+            border: 1px solid var(--border-solid);
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .work-item:hover {
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+
+        .work-img {
+            overflow: hidden;
+        }
+
+        .work-img img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .work-item:hover .work-img img {
+            transform: scale(1.04);
+        }
+
+        .work-info {
+            padding: 28px 28px 32px;
+        }
+
+        .work-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .work-year {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+        }
+
+        .work-medium {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .work-title {
+            font-size: 1.35rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+            line-height: 1.25;
+        }
+
+        .work-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* tall 與 wide 樣式控制圖片高度 */
+        .work-item.tall .work-img img { height: 520px; object-fit: cover; object-position: center top; }
+        .work-item.short .work-img img { height: 280px; object-fit: cover; object-position: center top; }
+        .work-item.medium .work-img img { height: 380px; object-fit: cover; object-position: center top; }
+
+        /* ====== Featured Quote ====== */
+        .feature-quote {
+            padding: 120px 80px;
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .feature-quote blockquote {
+            font-size: 2rem;
+            font-weight: 300;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.65;
+        }
+
+        .feature-quote cite {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            font-style: normal;
+        }
+
+        /* ====== Footer ====== */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 80px 80px 48px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand-name {
+            font-size: 1.25rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.38);
+            line-height: 1.85;
+            font-weight: 300;
+            max-width: 260px;
+        }
+
+        .footer-col-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            padding-top: 36px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* hidden for filter JS */
+        .work-item.hidden { display: none; }
+
+        /* ====== Responsive ====== */
+        @media (max-width: 1200px) {
+            .works-masonry { columns: 2; }
+        }
+
+        @media (max-width: 1024px) {
+            .nav { padding: 20px 40px; }
+            .nav.scrolled { padding: 16px 40px; }
+            .back-bar { padding-left: 40px; padding-right: 40px; }
+            .page-hero { padding: 60px 40px; grid-template-columns: 1fr; gap: 28px; }
+            .page-hero-title { font-size: 3.25rem; }
+            .filter-bar { padding: 24px 40px; gap: 24px; flex-wrap: wrap; }
+            .works-section { padding: 60px 40px; }
+            .feature-quote { padding: 80px 40px; }
+            .footer { padding: 60px 40px 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 18px 24px; }
+            .nav.scrolled { padding: 14px 24px; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(249,248,246,0.98);
+                flex-direction: column;
+                gap: 0;
+                border-top: 1px solid var(--border-solid);
+                padding: 8px 24px;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border-solid); }
+            .nav-links li:last-child a { border-bottom: none; }
+            .nav-actions { display: none; }
+            .nav-toggle { display: flex; }
+            .back-bar { padding-left: 24px; padding-right: 24px; }
+            .page-hero { padding: 48px 24px; }
+            .page-hero-title { font-size: 2.5rem; }
+            .filter-bar { padding: 20px 24px; }
+            .works-section { padding: 48px 24px; }
+            .works-masonry { columns: 1; }
+            .feature-quote { padding: 60px 24px; }
+            .feature-quote blockquote { font-size: 1.5rem; }
+            .footer { padding: 48px 24px 32px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+            .footer-bottom { flex-direction: column; gap: 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .page-hero-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../../../index.html" class="designvault-link">← DesignVault</a>
+
+    <nav class="nav" id="nav">
+        <a href="../" class="nav-logo">Aurèle</a>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="../story/">品牌故事</a></li>
+            <li><a href="../collections/">系列</a></li>
+            <li><a href="../works/" class="active">作品</a></li>
+            <li><a href="../store/">店鋪</a></li>
+            <li><a href="../contact/">聯繫</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="nav-action-btn">搜尋</button>
+            <button class="nav-action-btn">購物</button>
+        </div>
+    </nav>
+
+    <div class="back-bar">
+        <a href="../" class="back-link">← 返回 AURÈLE</a>
+    </div>
+
+    <section class="page-hero">
+        <div>
+            <p class="page-hero-eyebrow">Portfolio — Œuvres Sélectionnées</p>
+            <h1 class="page-hero-title">作品選輯</h1>
+        </div>
+        <p class="page-hero-lead">這裡收錄 AURÈLE 三十餘年來最具代表性的創作。每一件作品都是一個時代的回聲，一段與特定光線、特定季節、特定情感之間的對話。它們不只是服裝或配件，它們是我們相信美的方式的具體體現。</p>
+    </section>
+
+    <!-- 年份篩選 -->
+    <div class="filter-bar">
+        <span class="filter-label">依年份篩選</span>
+        <div class="filter-btns">
+            <button class="filter-btn active" data-year="all">全部</button>
+            <button class="filter-btn" data-year="2026">2026</button>
+            <button class="filter-btn" data-year="2025">2025</button>
+            <button class="filter-btn" data-year="2024">2024</button>
+            <button class="filter-btn" data-year="2022">2022</button>
+            <button class="filter-btn" data-year="2020">2020</button>
+            <button class="filter-btn" data-year="2018">2018</button>
+        </div>
+    </div>
+
+    <!-- 作品瀑布流 -->
+    <section class="works-section">
+        <div class="works-masonry" id="worksGrid">
+
+            <div class="work-item tall" data-year="2026">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=700&q=80" alt="晨曦">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2026</span>
+                        <span class="work-medium">高級訂製</span>
+                    </div>
+                    <h3 class="work-title">晨曦長袍</h3>
+                    <p class="work-desc">以意大利科摩雙層喬其紗裁成，前幅鬆垂如霧，背面則以細縫線勾勒脊背的弧度。在光線中移動時，它像一片游動的光。</p>
+                </div>
+            </div>
+
+            <div class="work-item short" data-year="2026">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80" alt="珠光耳環">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2026</span>
+                        <span class="work-medium">珠寶</span>
+                    </div>
+                    <h3 class="work-title">新月珍珠耳環</h3>
+                    <p class="work-desc">一顆南洋圓珠，以18K白金新月形底托懸掛。重量恰好讓耳垂感受到存在，卻不至於負擔。</p>
+                </div>
+            </div>
+
+            <div class="work-item medium" data-year="2025">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="旅行包">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2025</span>
+                        <span class="work-medium">皮革工藝</span>
+                    </div>
+                    <h3 class="work-title">Voyage 旅行包</h3>
+                    <p class="work-desc">為那些以行李衡量人生的人設計。採用佛羅倫斯頭層小牛皮，需歷時四十二小時手工縫製。提把的重量經精確計算，令長途旅行也能保持從容。</p>
+                </div>
+            </div>
+
+            <div class="work-item short" data-year="2025">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80" alt="高跟鞋">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2025</span>
+                        <span class="work-medium">鞋履</span>
+                    </div>
+                    <h3 class="work-title">Aube 晨光高跟鞋</h3>
+                    <p class="work-desc">鞋跟的角度經生物力學測試優化，讓八小時的穿著依然感到尊嚴。裸色的選擇讓腿部線條無限延伸。</p>
+                </div>
+            </div>
+
+            <div class="work-item tall" data-year="2024">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80" alt="手提包">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2024</span>
+                        <span class="work-medium">皮革工藝</span>
+                    </div>
+                    <h3 class="work-title">Solstice 至日包</h3>
+                    <p class="work-desc">靈感源自夏至正午的日影，包體以幾何形態構成，邊角處理精確到零點五毫米。內裡以古銅色絲緞製成，是只有使用者才能看見的秘密。現已成為 AURÈLE 最具代表性的作品之一。</p>
+                </div>
+            </div>
+
+            <div class="work-item medium" data-year="2024">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=600&q=80" alt="晚禮服">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2024</span>
+                        <span class="work-medium">高級訂製</span>
+                    </div>
+                    <h3 class="work-title">Éclipse 月蝕晚禮服</h3>
+                    <p class="work-desc">以純黑絲緞與深藍透視薄紗交疊。前幅嚴肅而後幅浪漫，如同一個人性格的兩面，都同樣真實。</p>
+                </div>
+            </div>
+
+            <div class="work-item short" data-year="2022">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80" alt="晚禮服">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2022</span>
+                        <span class="work-medium">高級訂製</span>
+                    </div>
+                    <h3 class="work-title">Silence 靜默禮服</h3>
+                    <p class="work-desc">疫情後第一件晚禮服作品。它拒絕一切裝飾，以純粹的白色和精確的肩線宣告：美，依然存在。</p>
+                </div>
+            </div>
+
+            <div class="work-item medium" data-year="2022">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80" alt="圍巾">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2022</span>
+                        <span class="work-medium">配件</span>
+                    </div>
+                    <h3 class="work-title">Brume 薄霧圍巾</h3>
+                    <p class="work-desc">以法國里昂手工蕾絲工坊的最後一批傳統棉紗製成。那種工藝已後繼無人，這批圍巾因此成為不可複製的收藏品。全球限量八十件。</p>
+                </div>
+            </div>
+
+            <div class="work-item tall" data-year="2020">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80" alt="大衣">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2020</span>
+                        <span class="work-medium">高級訂製</span>
+                    </div>
+                    <h3 class="work-title">Gravité 重力大衣</h3>
+                    <p class="work-desc">以澳洲塔斯馬尼亞超細美麗諾羊毛精紡，厚度足以抵禦巴黎的冬天，卻輕盈得不像一件外套。版型的重心刻意下移，令穿著者彷彿永遠站在自己命運的中心。</p>
+                </div>
+            </div>
+
+            <div class="work-item short" data-year="2018">
+                <div class="work-img">
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80" alt="錢包">
+                </div>
+                <div class="work-info">
+                    <div class="work-meta">
+                        <span class="work-year">2018</span>
+                        <span class="work-medium">皮革工藝</span>
+                    </div>
+                    <h3 class="work-title">Origines 起源錢包</h3>
+                    <p class="work-desc">品牌三十周年紀念作品，以創辦人 1987 年第一張訂單的小牛皮配方重新復刻。它的樸素，是品牌最深沉的驕傲。</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 精神語錄 -->
+    <section class="feature-quote">
+        <blockquote>「每件作品完成的那一刻，我都會問它一個問題：三十年後，你還有話要說嗎？只有那些給出肯定答案的，才真正算完成了。」</blockquote>
+        <cite>— Aurèle Maison</cite>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <h3 class="footer-brand-name">Aurèle</h3>
+                <p class="footer-brand-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
+            </div>
+            <div>
+                <h4 class="footer-col-title">系列</h4>
+                <ul class="footer-links">
+                    <li><a href="../collections/">高級訂製</a></li>
+                    <li><a href="../collections/">皮革系列</a></li>
+                    <li><a href="../collections/">珠寶配飾</a></li>
+                    <li><a href="../collections/">限定款</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">品牌</h4>
+                <ul class="footer-links">
+                    <li><a href="../story/">品牌故事</a></li>
+                    <li><a href="../works/">作品</a></li>
+                    <li><a href="../store/">門市</a></li>
+                    <li><a href="../contact/">聯繫我們</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">關注</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LINE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 AURÈLE. All rights reserved.</span>
+            <span>Taiwan · Privacy · Terms</span>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        /* 年份篩選邏輯 */
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const year = this.dataset.year;
+                document.querySelectorAll('.work-item').forEach(item => {
+                    if (year === 'all' || item.dataset.year === year) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

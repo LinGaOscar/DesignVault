@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單管理 | NexusFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0c0e11;
+            --surface: #13161b;
+            --surface-2: #1a1e25;
+            --border: rgba(255,255,255,0.07);
+            --border-solid: #1f2430;
+            --text: #e2e4e9;
+            --text-muted: #5a6272;
+            --text-dim: #8892a0;
+            --accent: #5b8ef8;
+            --green: #34d399;
+            --red: #f87171;
+            --orange: #fb923c;
+            --purple: #a78bfa;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        /* ====== Sidebar ====== */
+        .sidebar {
+            width: 240px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dv-back {
+            display: flex; align-items: center; gap: 6px;
+            padding: 10px 20px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            transition: color 0.15s;
+            letter-spacing: 0.2px;
+        }
+        .dv-back:hover { color: var(--text-dim); }
+        .dv-back-arrow { font-size: 0.7rem; opacity: 0.7; }
+
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+
+        .sidebar-logo { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
+
+        .sidebar-plan {
+            display: inline-block; font-size: 0.65rem; font-weight: 500;
+            letter-spacing: 0.5px; color: var(--accent);
+            background: rgba(91,142,248,0.1);
+            padding: 2px 8px; border-radius: 3px; margin-top: 6px;
+        }
+
+        .nav-section { padding: 20px 0 8px; }
+
+        .nav-section-label {
+            font-size: 0.62rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--text-muted);
+            padding: 0 20px; margin-bottom: 4px;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 20px; font-size: 0.825rem; font-weight: 400;
+            color: var(--text-dim); cursor: pointer;
+            transition: background 0.15s, color 0.15s; position: relative;
+        }
+
+        .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+        .nav-item.active { color: var(--text); }
+
+        .nav-item.active::before {
+            content: ''; position: absolute; left: 0; top: 50%;
+            transform: translateY(-50%); width: 2px; height: 16px;
+            background: var(--accent); border-radius: 0 1px 1px 0;
+        }
+
+        .nav-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: transparent; border: 1px solid var(--text-muted);
+            flex-shrink: 0; transition: background 0.15s, border-color 0.15s;
+        }
+
+        .nav-item.active .nav-dot { background: var(--accent); border-color: var(--accent); }
+        .nav-item:hover .nav-dot { border-color: var(--text-dim); }
+
+        /* ====== Main ====== */
+        .main { flex: 1; margin-left: 240px; min-width: 0; }
+
+        /* ====== Topbar ====== */
+        .topbar {
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 0 32px; height: 56px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 50;
+        }
+
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+
+        .menu-toggle {
+            display: none; flex-direction: column; gap: 4px;
+            background: none; border: none; cursor: pointer; padding: 4px;
+        }
+
+        .menu-toggle span { display: block; width: 18px; height: 1px; background: var(--text-dim); }
+
+        .topbar-title { font-size: 0.875rem; font-weight: 500; color: var(--text); }
+
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+
+        .search-box {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg); border: 1px solid var(--border-solid);
+            border-radius: 6px; padding: 7px 14px;
+        }
+
+        .search-icon {
+            width: 14px; height: 14px; border: 1.5px solid var(--text-muted);
+            border-radius: 50%; position: relative; flex-shrink: 0;
+        }
+
+        .search-icon::after {
+            content: ''; position: absolute;
+            bottom: -4px; right: -4px; width: 5px; height: 1.5px;
+            background: var(--text-muted); transform: rotate(45deg);
+        }
+
+        .search-box input {
+            background: none; border: none; color: var(--text);
+            font-size: 0.8rem; font-family: inherit; outline: none; width: 180px;
+        }
+
+        .search-box input::placeholder { color: var(--text-muted); }
+
+        .notif-btn {
+            width: 32px; height: 32px; border-radius: 6px;
+            background: none; border: 1px solid var(--border-solid);
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: background 0.15s;
+        }
+
+        .notif-btn:hover { background: var(--surface-2); }
+
+        .notif-icon {
+            width: 12px; height: 13px; border: 1.5px solid var(--text-dim);
+            border-radius: 3px 3px 0 0; position: relative;
+        }
+
+        .notif-icon::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 50%; transform: translateX(-50%);
+            width: 6px; height: 3px; border: 1.5px solid var(--text-dim);
+            border-top: none; border-radius: 0 0 3px 3px;
+        }
+
+        .avatar {
+            width: 32px; height: 32px; border-radius: 6px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 600; cursor: pointer;
+        }
+
+        /* ====== Content ====== */
+        .content { padding: 28px 32px; }
+
+        .content-header { margin-bottom: 28px; }
+
+        .content-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+
+        .content-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ====== 訂單統計 ====== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .stat-top {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 16px;
+        }
+
+        .stat-label { font-size: 0.775rem; color: var(--text-muted); font-weight: 400; }
+
+        .stat-badge {
+            width: 28px; height: 28px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 600;
+        }
+
+        .stat-badge.blue  { background: rgba(91,142,248,0.12); color: var(--accent); }
+        .stat-badge.green { background: rgba(52,211,153,0.12); color: var(--green); }
+        .stat-badge.orange{ background: rgba(251,146,60,0.12); color: var(--orange); }
+        .stat-badge.red   { background: rgba(248,113,113,0.12); color: var(--red); }
+
+        .stat-value {
+            font-size: 1.75rem; font-weight: 600;
+            letter-spacing: -0.5px; margin-bottom: 6px;
+        }
+
+        .stat-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* ====== 工具列 ====== */
+        .toolbar {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
+        }
+
+        .toolbar-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+
+        .search-input-wrap {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border-solid);
+            border-radius: 7px; padding: 8px 14px;
+            flex: 1; max-width: 300px;
+            transition: border-color 0.15s;
+        }
+
+        .search-input-wrap:focus-within { border-color: var(--accent); }
+
+        .search-input-wrap input {
+            background: none; border: none; color: var(--text);
+            font-size: 0.825rem; font-family: inherit;
+            outline: none; width: 100%;
+        }
+
+        .search-input-wrap input::placeholder { color: var(--text-muted); }
+
+        .search-ic {
+            width: 13px; height: 13px;
+            border: 1.5px solid var(--text-muted);
+            border-radius: 50%; flex-shrink: 0; position: relative;
+        }
+
+        .search-ic::after {
+            content: ''; position: absolute;
+            bottom: -4px; right: -4px; width: 5px; height: 1.5px;
+            background: var(--text-muted); transform: rotate(45deg);
+        }
+
+        .filter-select {
+            background: var(--surface); border: 1px solid var(--border-solid);
+            border-radius: 7px; padding: 8px 12px;
+            font-size: 0.8rem; color: var(--text-dim);
+            font-family: inherit; cursor: pointer; outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .filter-select:focus { border-color: var(--accent); }
+
+        .btn-primary {
+            padding: 8px 16px; border-radius: 7px; font-size: 0.8rem;
+            font-weight: 500; cursor: pointer; border: none;
+            background: var(--accent); color: #fff;
+            font-family: inherit; transition: opacity 0.15s; white-space: nowrap;
+        }
+
+        .btn-primary:hover { opacity: 0.88; }
+
+        /* ====== Table Card ====== */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+        }
+
+        .card-title { font-size: 0.875rem; font-weight: 500; }
+        .card-count { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* ====== Table ====== */
+        .table-wrap { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th {
+            text-align: left; padding: 10px 20px;
+            font-size: 0.68rem; font-weight: 600; letter-spacing: 0.5px;
+            text-transform: uppercase; color: var(--text-muted);
+            border-bottom: 1px solid var(--border); white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 20px; font-size: 0.825rem;
+            color: var(--text-dim); border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .text-bold { color: var(--text); font-weight: 500; }
+        .text-mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; letter-spacing: 0.3px; }
+
+        .user-cell { display: flex; align-items: center; gap: 10px; }
+
+        .user-av {
+            width: 28px; height: 28px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 600; flex-shrink: 0;
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 9px; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 500;
+        }
+
+        .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+        .badge.success { background: rgba(52,211,153,0.1); color: var(--green); }
+        .badge.warning { background: rgba(251,146,60,0.1); color: var(--orange); }
+        .badge.error   { background: rgba(248,113,113,0.1); color: var(--red); }
+        .badge.info    { background: rgba(91,142,248,0.1); color: var(--accent); }
+        .badge.success .badge-dot { background: var(--green); }
+        .badge.warning .badge-dot { background: var(--orange); }
+        .badge.error   .badge-dot { background: var(--red); }
+        .badge.info    .badge-dot { background: var(--accent); }
+
+        .action-wrap { display: flex; gap: 6px; }
+
+        .action-btn {
+            padding: 4px 10px; border-radius: 5px; font-size: 0.72rem;
+            font-weight: 500; cursor: pointer;
+            border: 1px solid var(--border-solid);
+            background: transparent; color: var(--text-dim);
+            font-family: inherit; transition: all 0.15s;
+        }
+
+        .action-btn:hover { background: var(--surface-2); color: var(--text); }
+
+        .action-btn.primary {
+            border-color: rgba(91,142,248,0.3);
+            color: var(--accent);
+        }
+
+        .action-btn.primary:hover { background: rgba(91,142,248,0.08); }
+
+        /* ====== Pagination ====== */
+        .pagination {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px; border-top: 1px solid var(--border);
+        }
+
+        .pagination-info { font-size: 0.78rem; color: var(--text-muted); }
+
+        .pagination-btns { display: flex; gap: 4px; }
+
+        .page-btn {
+            width: 30px; height: 30px; border-radius: 6px; font-size: 0.78rem;
+            font-weight: 500; cursor: pointer; border: 1px solid var(--border-solid);
+            background: transparent; color: var(--text-dim);
+            font-family: inherit; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .page-btn:hover { background: var(--surface-2); color: var(--text); }
+
+        .page-btn.active {
+            background: rgba(91,142,248,0.12);
+            border-color: rgba(91,142,248,0.3);
+            color: var(--accent);
+        }
+
+        /* ====== Responsive ====== */
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .menu-toggle { display: flex; }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .content { padding: 20px 16px; }
+            .topbar { padding: 0 16px; }
+            .search-box { display: none; }
+            .toolbar { flex-direction: column; align-items: flex-start; }
+            .toolbar-left { width: 100%; }
+            .search-input-wrap { max-width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <a href="../../../index.html" class="dv-back">
+            <span class="dv-back-arrow">←</span>DesignVault
+        </a>
+        <div class="sidebar-header">
+            <div class="sidebar-logo">NexusFlow</div>
+            <div class="sidebar-plan">Enterprise</div>
+        </div>
+
+        <div class="nav-section">
+            <p class="nav-section-label">主頁</p>
+            <a class="nav-item" href="../">
+                <span class="nav-dot"></span>儀表板
+            </a>
+            <a class="nav-item" href="../analytics/">
+                <span class="nav-dot"></span>分析
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <p class="nav-section-label">管理</p>
+            <a class="nav-item" href="../users/">
+                <span class="nav-dot"></span>用戶
+            </a>
+            <a class="nav-item active" href="#">
+                <span class="nav-dot"></span>訂單
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <p class="nav-section-label">系統</p>
+            <a class="nav-item" href="../settings/">
+                <span class="nav-dot"></span>設定
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                    <span></span><span></span><span></span>
+                </button>
+                <span class="topbar-title">訂單管理</span>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <div class="search-icon"></div>
+                    <input type="text" placeholder="搜尋...">
+                </div>
+                <button class="notif-btn"><div class="notif-icon"></div></button>
+                <div class="avatar">JD</div>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="content-header">
+                <h1 class="content-title">訂單管理</h1>
+                <p class="content-subtitle">追蹤並管理所有客戶訂單與付款狀態</p>
+            </div>
+
+            <!-- 訂單統計 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p class="stat-label">總訂單</p>
+                        <div class="stat-badge blue">#</div>
+                    </div>
+                    <p class="stat-value">3,847</p>
+                    <p class="stat-sub">本月累計</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p class="stat-label">待處理</p>
+                        <div class="stat-badge orange">!</div>
+                    </div>
+                    <p class="stat-value">142</p>
+                    <p class="stat-sub">需要處理</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p class="stat-label">已完成</p>
+                        <div class="stat-badge green">✓</div>
+                    </div>
+                    <p class="stat-value">3,519</p>
+                    <p class="stat-sub">完成率 91.5%</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p class="stat-label">已取消</p>
+                        <div class="stat-badge red">✕</div>
+                    </div>
+                    <p class="stat-value">186</p>
+                    <p class="stat-sub">取消率 4.8%</p>
+                </div>
+            </div>
+
+            <!-- 工具列 -->
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <div class="search-input-wrap">
+                        <div class="search-ic"></div>
+                        <input type="text" placeholder="搜尋訂單號、客戶名稱...">
+                    </div>
+                    <select class="filter-select">
+                        <option>所有狀態</option>
+                        <option>待處理</option>
+                        <option>處理中</option>
+                        <option>已完成</option>
+                        <option>已取消</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>本月</option>
+                        <option>上月</option>
+                        <option>近3個月</option>
+                        <option>今年</option>
+                    </select>
+                </div>
+                <button class="btn-primary">匯出報表</button>
+            </div>
+
+            <!-- 訂單表格 -->
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title">訂單列表</span>
+                    <span class="card-count">共 3,847 筆訂單</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>訂單號</th>
+                                <th>客戶</th>
+                                <th>方案</th>
+                                <th>金額</th>
+                                <th>狀態</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3847</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(91,142,248,0.15);color:var(--accent)">王</div>
+                                        王志明
+                                    </div>
+                                </td>
+                                <td>企業版授權</td>
+                                <td class="text-bold">NT$128,000</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-26</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3846</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(52,211,153,0.15);color:var(--green)">李</div>
+                                        李雅婷
+                                    </div>
+                                </td>
+                                <td>專業版訂閱 (年繳)</td>
+                                <td class="text-bold">NT$24,000</td>
+                                <td><span class="badge info"><span class="badge-dot"></span>處理中</span></td>
+                                <td>2026-05-26</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">確認</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3845</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(167,139,250,0.15);color:var(--purple)">黃</div>
+                                        黃詩涵
+                                    </div>
+                                </td>
+                                <td>客製化開發套件</td>
+                                <td class="text-bold">NT$380,000</td>
+                                <td><span class="badge warning"><span class="badge-dot"></span>待處理</span></td>
+                                <td>2026-05-25</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">處理</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3844</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(248,113,113,0.15);color:var(--red)">張</div>
+                                        張淑芬
+                                    </div>
+                                </td>
+                                <td>標準版授權</td>
+                                <td class="text-bold">NT$48,000</td>
+                                <td><span class="badge error"><span class="badge-dot"></span>已取消</span></td>
+                                <td>2026-05-24</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">退款</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3843</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(251,146,60,0.15);color:var(--orange)">林</div>
+                                        林宥廷
+                                    </div>
+                                </td>
+                                <td>API 額外用量</td>
+                                <td class="text-bold">NT$8,400</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-24</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3842</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(91,142,248,0.12);color:var(--accent)">陳</div>
+                                        陳建宏
+                                    </div>
+                                </td>
+                                <td>企業版授權</td>
+                                <td class="text-bold">NT$128,000</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-23</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3841</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(52,211,153,0.12);color:var(--green)">劉</div>
+                                        劉品萱
+                                    </div>
+                                </td>
+                                <td>專業版訂閱 (月繳)</td>
+                                <td class="text-bold">NT$2,400</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-23</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3840</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(167,139,250,0.12);color:var(--purple)">吳</div>
+                                        吳俊賢
+                                    </div>
+                                </td>
+                                <td>標準版授權</td>
+                                <td class="text-bold">NT$48,000</td>
+                                <td><span class="badge warning"><span class="badge-dot"></span>待處理</span></td>
+                                <td>2026-05-22</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">處理</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3839</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(251,146,60,0.12);color:var(--orange)">蔡</div>
+                                        蔡明哲
+                                    </div>
+                                </td>
+                                <td>API 額外用量</td>
+                                <td class="text-bold">NT$3,200</td>
+                                <td><span class="badge error"><span class="badge-dot"></span>已取消</span></td>
+                                <td>2026-05-21</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">退款</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3838</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(248,113,113,0.12);color:var(--red)">許</div>
+                                        許雅文
+                                    </div>
+                                </td>
+                                <td>企業版授權</td>
+                                <td class="text-bold">NT$128,000</td>
+                                <td><span class="badge info"><span class="badge-dot"></span>處理中</span></td>
+                                <td>2026-05-21</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">確認</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3837</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(91,142,248,0.1);color:var(--accent)">趙</div>
+                                        趙君豪
+                                    </div>
+                                </td>
+                                <td>專業版訂閱 (年繳)</td>
+                                <td class="text-bold">NT$24,000</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-20</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold text-mono">#ORD-2026-3836</td>
+                                <td>
+                                    <div class="user-cell">
+                                        <div class="user-av" style="background:rgba(52,211,153,0.1);color:var(--green)">周</div>
+                                        周美玲
+                                    </div>
+                                </td>
+                                <td>客製化開發套件</td>
+                                <td class="text-bold">NT$420,000</td>
+                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
+                                <td>2026-05-19</td>
+                                <td>
+                                    <div class="action-wrap">
+                                        <button class="action-btn primary">查看</button>
+                                        <button class="action-btn">開票</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <span class="pagination-info">顯示第 1–12 筆，共 3,847 筆</span>
+                    <div class="pagination-btns">
+                        <button class="page-btn">‹</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">…</button>
+                        <button class="page-btn">321</button>
+                        <button class="page-btn">›</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+</body>
+</html>
