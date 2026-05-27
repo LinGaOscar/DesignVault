@@ -67,6 +67,7 @@ async function downloadTemplate(demoId) {
 
     await Promise.all(demo.files.map(async ([src, dest]) => {
       const res = await fetch(src);
+      if (!res.ok) throw new Error(`Failed to fetch ${src}: ${res.status}`);
       const html = await res.text();
       folder.file(dest, cleanHtml(html));
     }));

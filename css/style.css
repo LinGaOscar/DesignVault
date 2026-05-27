@@ -19,6 +19,9 @@ a { text-decoration: none; color: inherit; }
     color: inherit;
 }
 
+/* Hero section */
+.dv-hero { padding-top: 4rem; padding-bottom: 2.5rem; }
+
 /* Hero title */
 .dv-hero-title {
     font-family: 'DM Serif Display', Georgia, serif;
