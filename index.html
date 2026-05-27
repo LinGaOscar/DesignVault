@@ -3,100 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>DesignVault — 網頁設計作品集</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=20260527">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header class="header">
-        <div class="container header-inner">
+    <header class="border-bottom py-4">
+        <div class="container d-flex align-items-center justify-content-between">
             <a href="/" class="logo">DesignVault</a>
-            <span class="tagline">精選網頁設計作品展示</span>
+            <span class="small text-muted">精選網頁設計作品展示</span>
         </div>
     </header>
 
     <main>
-        <section class="hero">
-            <div class="container">
-                <h1 class="hero-title">探索網頁設計<br><em>的各種可能性</em></h1>
-                <p class="hero-desc">四種不同情境，四種獨特風格</p>
+        <section class="py-5">
+            <div class="container" style="padding-top: 3rem; padding-bottom: 2rem;">
+                <h1 class="dv-hero-title">探索網頁設計<br><em>的各種可能性</em></h1>
+                <p class="small text-muted">四種不同情境，四種獨特風格</p>
             </div>
         </section>
 
-        <section class="projects">
+        <section class="pb-5">
             <div class="container">
-                <div class="projects-grid">
+                <div class="row g-0 border">
 
-                    <div class="project-card" data-demo="fashion-ecommerce">
-                        <div class="card-preview">
-                            <iframe src="pages/fashion-ecommerce/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                    <div class="col-12 col-md-6 border-end border-bottom" data-demo="fashion-ecommerce">
+                        <div class="dv-preview">
+                            <iframe class="dv-frame" src="pages/fashion-ecommerce/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
                         </div>
-                        <div class="card-body">
-                            <div class="card-meta">
-                                <span class="card-tag">電商</span>
-                            </div>
-                            <h3 class="card-title">時尚電商首頁</h3>
-                            <p class="card-desc">明亮現代風格，大圖視覺與流暢購物體驗</p>
-                            <div class="card-actions">
-                                <a href="pages/fashion-ecommerce/index.html" class="btn-visit">前往範例</a>
-                                <button class="btn-dl" onclick="downloadTemplate('fashion-ecommerce')">下載模板</button>
+                        <div class="p-4 d-flex flex-column">
+                            <span class="text-uppercase small text-muted mb-2" style="letter-spacing:1.2px">電商</span>
+                            <h3 class="fs-6 fw-normal mb-2" style="letter-spacing:-0.2px">時尚電商首頁</h3>
+                            <p class="small text-muted flex-grow-1" style="line-height:1.65">明亮現代風格，大圖視覺與流暢購物體驗</p>
+                            <div class="d-flex gap-2 mt-auto" style="margin-top:20px">
+                                <a href="pages/fashion-ecommerce/index.html" class="btn btn-outline-dark btn-sm flex-fill">前往範例</a>
+                                <button class="btn btn-dark btn-sm flex-fill btn-dl" onclick="downloadTemplate('fashion-ecommerce')">下載模板</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="project-card" data-demo="saas-dashboard">
-                        <div class="card-preview">
-                            <iframe src="pages/saas-dashboard/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                    <div class="col-12 col-md-6 border-bottom" data-demo="saas-dashboard">
+                        <div class="dv-preview">
+                            <iframe class="dv-frame" src="pages/saas-dashboard/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
                         </div>
-                        <div class="card-body">
-                            <div class="card-meta">
-                                <span class="card-tag">SaaS</span>
-                            </div>
-                            <h3 class="card-title">管理儀表板</h3>
-                            <p class="card-desc">深色主題，數據視覺化與系統化管理介面</p>
-                            <div class="card-actions">
-                                <a href="pages/saas-dashboard/index.html" class="btn-visit">前往範例</a>
-                                <button class="btn-dl" onclick="downloadTemplate('saas-dashboard')">下載模板</button>
+                        <div class="p-4 d-flex flex-column">
+                            <span class="text-uppercase small text-muted mb-2" style="letter-spacing:1.2px">SaaS</span>
+                            <h3 class="fs-6 fw-normal mb-2" style="letter-spacing:-0.2px">管理儀表板</h3>
+                            <p class="small text-muted flex-grow-1" style="line-height:1.65">深色主題，數據視覺化與系統化管理介面</p>
+                            <div class="d-flex gap-2 mt-auto" style="margin-top:20px">
+                                <a href="pages/saas-dashboard/index.html" class="btn btn-outline-dark btn-sm flex-fill">前往範例</a>
+                                <button class="btn btn-dark btn-sm flex-fill btn-dl" onclick="downloadTemplate('saas-dashboard')">下載模板</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="project-card" data-demo="boutique-brand">
-                        <div class="card-preview">
-                            <iframe src="pages/boutique-brand/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                    <div class="col-12 col-md-6 border-end" data-demo="boutique-brand">
+                        <div class="dv-preview">
+                            <iframe class="dv-frame" src="pages/boutique-brand/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
                         </div>
-                        <div class="card-body">
-                            <div class="card-meta">
-                                <span class="card-tag">品牌形象</span>
-                            </div>
-                            <h3 class="card-title">精品品牌頁</h3>
-                            <p class="card-desc">極簡雜誌風，大圖橫幅與細膩排版</p>
-                            <div class="card-actions">
-                                <a href="pages/boutique-brand/index.html" class="btn-visit">前往範例</a>
-                                <button class="btn-dl" onclick="downloadTemplate('boutique-brand')">下載模板</button>
+                        <div class="p-4 d-flex flex-column">
+                            <span class="text-uppercase small text-muted mb-2" style="letter-spacing:1.2px">品牌形象</span>
+                            <h3 class="fs-6 fw-normal mb-2" style="letter-spacing:-0.2px">精品品牌頁</h3>
+                            <p class="small text-muted flex-grow-1" style="line-height:1.65">極簡雜誌風，大圖橫幅與細膩排版</p>
+                            <div class="d-flex gap-2 mt-auto" style="margin-top:20px">
+                                <a href="pages/boutique-brand/index.html" class="btn btn-outline-dark btn-sm flex-fill">前往範例</a>
+                                <button class="btn btn-dark btn-sm flex-fill btn-dl" onclick="downloadTemplate('boutique-brand')">下載模板</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="project-card" data-demo="space-scifi">
-                        <div class="card-preview">
-                            <iframe src="pages/space-scifi/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                    <div class="col-12 col-md-6" data-demo="space-scifi">
+                        <div class="dv-preview">
+                            <iframe class="dv-frame" src="pages/space-scifi/index.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
                         </div>
-                        <div class="card-body">
-                            <div class="card-meta">
-                                <span class="card-tag">科幻</span>
-                            </div>
-                            <h3 class="card-title">太空科幻介面</h3>
-                            <p class="card-desc">深宇宙暗色調，未來感艦隊管理系統</p>
-                            <div class="card-actions">
-                                <a href="pages/space-scifi/index.html" class="btn-visit">前往範例</a>
-                                <button class="btn-dl" onclick="downloadTemplate('space-scifi')">下載模板</button>
+                        <div class="p-4 d-flex flex-column">
+                            <span class="text-uppercase small text-muted mb-2" style="letter-spacing:1.2px">科幻</span>
+                            <h3 class="fs-6 fw-normal mb-2" style="letter-spacing:-0.2px">太空科幻介面</h3>
+                            <p class="small text-muted flex-grow-1" style="line-height:1.65">深宇宙暗色調，未來感艦隊管理系統</p>
+                            <div class="d-flex gap-2 mt-auto" style="margin-top:20px">
+                                <a href="pages/space-scifi/index.html" class="btn btn-outline-dark btn-sm flex-fill">前往範例</a>
+                                <button class="btn btn-dark btn-sm flex-fill btn-dl" onclick="downloadTemplate('space-scifi')">下載模板</button>
                             </div>
                         </div>
                     </div>
@@ -106,14 +96,15 @@
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="container footer-inner">
+    <footer class="border-top py-3">
+        <div class="container d-flex justify-content-between small">
             <span>DesignVault</span>
-            <span class="footer-copy">© 2026 LinGaOscar</span>
+            <span class="text-muted">© 2026 LinGaOscar</span>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="js/main.js?v=20260527"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

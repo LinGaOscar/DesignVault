@@ -2,6 +2,7 @@ const DEMOS = {
   'fashion-ecommerce': {
     folder: 'maison-noir-template',
     files: [
+      ['pages/fashion-ecommerce/custom.css',            'custom.css'],
       ['pages/fashion-ecommerce/index.html',            'index.html'],
       ['pages/fashion-ecommerce/womens/index.html',     'womens/index.html'],
       ['pages/fashion-ecommerce/mens/index.html',       'mens/index.html'],
@@ -12,6 +13,7 @@ const DEMOS = {
   'saas-dashboard': {
     folder: 'nexusflow-template',
     files: [
+      ['pages/saas-dashboard/custom.css',           'custom.css'],
       ['pages/saas-dashboard/index.html',           'index.html'],
       ['pages/saas-dashboard/analytics/index.html', 'analytics/index.html'],
       ['pages/saas-dashboard/users/index.html',     'users/index.html'],
@@ -22,6 +24,7 @@ const DEMOS = {
   'boutique-brand': {
     folder: 'aurele-template',
     files: [
+      ['pages/boutique-brand/custom.css',             'custom.css'],
       ['pages/boutique-brand/index.html',             'index.html'],
       ['pages/boutique-brand/story/index.html',       'story/index.html'],
       ['pages/boutique-brand/collections/index.html', 'collections/index.html'],
@@ -32,6 +35,7 @@ const DEMOS = {
   'space-scifi': {
     folder: 'nexus-void-template',
     files: [
+      ['pages/space-scifi/custom.css',           'custom.css'],
       ['pages/space-scifi/index.html',           'index.html'],
       ['pages/space-scifi/missions/index.html',  'missions/index.html'],
       ['pages/space-scifi/fleet/index.html',     'fleet/index.html'],
