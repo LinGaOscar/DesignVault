@@ -3,762 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品牌故事 | MAISON NOIR</title>
+    <title>關於 — MAISON NOIR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #faf9f7;
-            --white: #ffffff;
-            --text: #111111;
-            --muted: #a0a0a0;
-            --border: #e4dfd9;
-            --accent: #b8956a;
-            --accent-dark: #9a7a50;
-            --warm: #f0e8de;
-            --dark: #111111;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            font-weight: 300;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* ====== DesignVault 返回列 ====== */
-        .dv-bar {
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            padding: 7px 60px;
-        }
-        .dv-bar a {
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 1px;
-            color: var(--muted);
-            text-transform: uppercase;
-            transition: color 0.2s;
-        }
-        .dv-bar a:hover { color: var(--text); }
-
-        /* ====== Navigation ====== */
-        .nav {
-            height: 68px;
-            padding: 0 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active { color: var(--text); }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .nav-btn {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-            transition: color 0.2s;
-        }
-
-        .nav-btn:hover { color: var(--text); }
-
-        .nav-btn-cart {
-            border: 1px solid var(--border);
-            padding: 8px 18px;
-            color: var(--text);
-            transition: border-color 0.2s, background 0.2s, color 0.2s;
-        }
-
-        .nav-btn-cart:hover {
-            border-color: var(--text);
-            background: var(--text);
-            color: var(--white);
-        }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--text);
-        }
-
-        /* ====== 返回品牌首頁 ====== */
-        .back-bar {
-            padding: 12px 60px;
-            background: var(--warm);
-            border-bottom: 1px solid var(--border);
-        }
-        .back-bar a {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            color: var(--accent-dark);
-            text-transform: uppercase;
-            transition: color 0.2s;
-        }
-        .back-bar a:hover { color: var(--text); }
-
-        /* ====== 品牌故事 Hero ====== */
-        .about-hero {
-            background: var(--dark);
-            color: var(--white);
-            padding: 120px 60px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 裝飾性大字背景，增加視覺層次感 */
-        .about-hero::before {
-            content: 'MAISON';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Playfair Display', serif;
-            font-size: 18rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.03);
-            letter-spacing: 8px;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        .about-hero-inner { position: relative; z-index: 1; }
-
-        .about-hero-year {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 24px;
-        }
-
-        .about-hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            font-weight: 600;
-            line-height: 1.05;
-            margin-bottom: 32px;
-            letter-spacing: -0.5px;
-        }
-
-        .about-hero-desc {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.5);
-            max-width: 540px;
-            margin: 0 auto;
-            line-height: 1.85;
-        }
-
-        /* ====== 品牌創立故事 ====== */
-        .founding {
-            padding: 100px 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .founding-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 80px;
-            align-items: start;
-        }
-
-        .founding-sticky {
-            position: sticky;
-            top: 100px;
-        }
-
-        .founding-year {
-            font-family: 'Playfair Display', serif;
-            font-size: 7rem;
-            font-weight: 700;
-            color: var(--border);
-            line-height: 1;
-            margin-bottom: 24px;
-        }
-
-        .founding-eyebrow {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-
-        .founding-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        .founding-content {}
-
-        .founding-p {
-            font-size: 0.9rem;
-            color: var(--muted);
-            line-height: 2;
-            margin-bottom: 28px;
-        }
-
-        .founding-p strong {
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .founding-img {
-            height: 320px;
-            overflow: hidden;
-            margin: 40px 0;
-        }
-
-        .founding-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        /* ====== 品牌理念 ====== */
-        .philosophy {
-            padding: 100px 60px;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .philosophy-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-head {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .section-eyebrow {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 14px;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.25rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-        }
-
-        /* ====== 設計價值觀 — 3欄 ====== */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .value-card {
-            background: var(--white);
-            padding: 48px 40px;
-        }
-
-        .value-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--border);
-            line-height: 1;
-            margin-bottom: 24px;
-        }
-
-        .value-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .value-desc {
-            font-size: 0.85rem;
-            color: var(--muted);
-            line-height: 1.85;
-        }
-
-        /* ====== 團隊成員 ====== */
-        .team {
-            padding: 100px 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .team-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 32px;
-        }
-
-        .team-card {}
-
-        .team-portrait {
-            height: 280px;
-            background: var(--warm);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .team-portrait img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-        }
-
-        /* 無圖時顯示姓名首字母作為佔位符 */
-        .team-portrait-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--warm);
-        }
-
-        .team-portrait-placeholder span {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 600;
-            color: var(--border);
-        }
-
-        .team-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .team-role {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-
-        .team-bio {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.75;
-        }
-
-        /* ====== 結語引言 ====== */
-        .closing-quote {
-            padding: 120px 60px;
-            background: var(--dark);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .quote-mark {
-            font-family: 'Playfair Display', serif;
-            font-size: 8rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.06);
-            line-height: 0.6;
-            margin-bottom: 40px;
-        }
-
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 400;
-            font-style: italic;
-            line-height: 1.5;
-            max-width: 680px;
-            margin: 0 auto 32px;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .quote-author {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--accent);
-        }
-
-        /* ====== Footer ====== */
-        .footer {
-            background: var(--white);
-            padding: 80px 60px 40px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto 60px;
-        }
-
-        .footer-brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .footer-brand-desc {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.8;
-            max-width: 260px;
-        }
-
-        .footer-col-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a { font-size: 0.8rem; color: var(--muted); transition: color 0.2s; }
-        .footer-links a:hover { color: var(--text); }
-
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--muted);
-        }
-
-        /* ====== Responsive ====== */
-        @media (max-width: 1200px) {
-            .team-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 1024px) {
-            .about-hero-title { font-size: 3.5rem; }
-            .founding-inner { grid-template-columns: 1fr; gap: 48px; }
-            .founding-sticky { position: static; }
-            .founding-year { font-size: 5rem; }
-            .values-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-
-        @media (max-width: 768px) {
-            .dv-bar { padding: 7px 24px; }
-            .nav { padding: 0 24px; }
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 68px;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                flex-direction: column;
-                gap: 0;
-                border-bottom: 1px solid var(--border);
-                padding: 8px 24px;
-            }
-            .nav-links.active { display: flex; }
-            .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
-            .nav-links li:last-child a { border-bottom: none; }
-            .nav-btn { display: none; }
-            .nav-toggle { display: flex; }
-            .back-bar { padding: 12px 24px; }
-            .about-hero { padding: 80px 24px; }
-            .about-hero::before { font-size: 8rem; }
-            .about-hero-title { font-size: 2.75rem; }
-            .founding { padding: 60px 24px; }
-            .philosophy { padding: 60px 24px; }
-            .values-grid { grid-template-columns: 1fr; }
-            .team { padding: 60px 24px; }
-            .team-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-            .closing-quote { padding: 80px 24px; }
-            .quote-text { font-size: 1.5rem; }
-            .footer { padding: 60px 24px 32px; }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
-        }
-
-        @media (max-width: 480px) {
-            .about-hero-title { font-size: 2.25rem; }
-            .team-grid { grid-template-columns: 1fr; }
-            .team-portrait { height: 240px; }
-            .quote-text { font-size: 1.25rem; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
 </head>
 <body>
 
-    <div class="dv-bar"><a href="../../../index.html">← DesignVault</a></div>
+    <div class="dv-bar"><div class="container"><a href="../../../index.html">← DesignVault</a></div></div>
 
-    <nav class="nav">
-        <div class="nav-logo">Maison Noir</div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="../">首頁</a></li>
-            <li><a href="../womens/">女性</a></li>
-            <li><a href="../mens/">男性</a></li>
-            <li><a href="../accessories/">配件</a></li>
-            <li><a href="../about/" class="active">關於</a></li>
-        </ul>
-        <div class="nav-right">
-            <button class="nav-btn">搜尋</button>
-            <button class="nav-btn">收藏</button>
-            <button class="nav-btn nav-btn-cart">購物袋</button>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../">MAISON NOIR</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mnNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mnNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="../">首頁</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../womens/">女性</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../mens/">男性</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../accessories/">配件</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">關於</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="back-bar"><a href="../index.html">← 返回 MAISON NOIR</a></div>
-
-    <!-- Hero -->
-    <section class="about-hero">
-        <div class="about-hero-inner">
-            <p class="about-hero-year">創立於 2009 年 · 巴黎</p>
-            <h1 class="about-hero-title">我們相信，<br>時尚是一種對話。</h1>
-            <p class="about-hero-desc">MAISON NOIR 不只販售服裝，我們販售一種信念：每個人都有權利穿出屬於自己的故事。</p>
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="back-bar mb-3"><a href="../">← 返回 MAISON NOIR</a></div>
+            <p class="section-tag mb-2">About</p>
+            <h1 class="page-title mb-3">關於我們</h1>
         </div>
     </section>
 
-    <!-- 品牌創立故事 -->
-    <section class="founding">
-        <div class="founding-inner">
-            <div class="founding-sticky">
-                <div class="founding-year">2009</div>
-                <p class="founding-eyebrow">品牌起源</p>
-                <h2 class="founding-title">從一間巴黎閣樓<br>開始的夢想</h2>
-            </div>
-            <div class="founding-content">
-                <p class="founding-p">
-                    2009 年秋天，<strong>創辦人 Élise Moreau</strong> 在巴黎第十一區一間昏黃的閣樓工作室裡，用一台老舊的縫紉機和對時尚近乎執念的熱情，縫製出第一件 MAISON NOIR 的作品。那是一件黑色羊毛外套，剪裁簡潔卻有著不可思議的重量感。
-                </p>
-                <p class="founding-p">
-                    「我厭倦了那些為了快速消費而生產的衣服，」Élise 說，「我想做的是<strong>能被珍惜、能被傳承的東西</strong>。」這個想法成為 MAISON NOIR 最根本的 DNA。
-                </p>
-                <div class="founding-img">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80" alt="品牌創立故事">
-                </div>
-                <p class="founding-p">
-                    品牌在創立後的第三年登上巴黎時裝周，獲得《Vogue France》的首次報導，隨即引起全球買手的注意。2015 年，MAISON NOIR 正式進入亞洲市場，在東京和首爾設立旗艦店，並於 2018 年將亞太總部移至台北。
-                </p>
-                <p class="founding-p">
-                    如今，MAISON NOIR 在全球 18 個城市擁有門市，但仍堅持<strong>小批量生產、拒絕過度折扣</strong>的核心原則。每一季的系列都由 Élise 親自監督，確保品牌初心從未動搖。
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 品牌理念 -->
-    <section class="philosophy">
-        <div class="philosophy-inner">
-            <div class="section-head">
-                <p class="section-eyebrow">設計哲學</p>
-                <h2 class="section-title">我們相信的三件事</h2>
-            </div>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-number">01</div>
-                    <h3 class="value-title">極致的材質誠意</h3>
-                    <p class="value-desc">我們只使用通過道德認證的天然纖維，拒絕快時尚的妥協。每塊布料都來自與我們合作超過十年的供應商，他們對品質的要求和我們一樣嚴苛。好的材質，穿在身上才是真正的奢華。</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-number">02</div>
-                    <h3 class="value-title">跨越季節的設計</h3>
-                    <p class="value-desc">MAISON NOIR 不追趕潮流，我們創造能夠超越時間的美感。我們的設計語言根植於建築式的結構與有機的流動感，在這兩種極端之間找到令人著迷的平衡點。</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-number">03</div>
-                    <h3 class="value-title">對地球的責任</h3>
-                    <p class="value-desc">永續發展不是口號，而是我們每個決策的起點。2023 年起，我們的所有包裝改用 100% 可回收材料；2025 年，生產碳排放較創立初期減少了 62%。我們相信，美麗不應該以破壞為代價。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 團隊成員 -->
-    <section class="team">
-        <div class="team-inner">
-            <div class="section-head">
-                <p class="section-eyebrow">核心團隊</p>
-                <h2 class="section-title">打造 MAISON NOIR 的人們</h2>
-            </div>
-            <div class="team-grid">
-                <div class="team-card">
-                    <div class="team-portrait">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Élise Moreau">
+    <!-- Brand Story -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <p class="section-tag mb-4">Our Story</p>
+                    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:400;" class="mb-4">源於對純粹美學的追求</h2>
+                    <p class="text-muted mb-4" style="line-height:1.9;">MAISON NOIR 創立於 2018 年，以「極簡之美」為核心理念，致力於打造都市時裝的新典範。我們相信，真正的優雅不在於繁複的裝飾，而在於對每一塊面料、每一道剪裁的極致追求。</p>
+                    <p class="text-muted mb-4" style="line-height:1.9;">我們的設計師來自世界各地，他們帶著對不同文化的深刻理解與熱情，共同編織出屬於 MAISON NOIR 的獨特語彙——簡約而不失溫度，當代而不忘根源。</p>
+                    <p class="text-muted mb-5" style="line-height:1.9;">每一件 MAISON NOIR 的作品，都是對可持續時尚的承諾。我們使用經認證的環保材料，與公平貿易工廠合作，確保每一道工序都符合我們對人與地球的責任。</p>
+                    <div class="row g-4 border-top pt-4">
+                        <div class="col-4 text-center">
+                            <p class="fs-4 fw-light" style="font-family:'Playfair Display',serif;">2018</p>
+                            <p class="small text-muted">創立年份</p>
+                        </div>
+                        <div class="col-4 text-center">
+                            <p class="fs-4 fw-light" style="font-family:'Playfair Display',serif;">288+</p>
+                            <p class="small text-muted">精選商品</p>
+                        </div>
+                        <div class="col-4 text-center">
+                            <p class="fs-4 fw-light" style="font-family:'Playfair Display',serif;">32</p>
+                            <p class="small text-muted">合作工廠</p>
+                        </div>
                     </div>
-                    <h3 class="team-name">Élise Moreau</h3>
-                    <p class="team-role">創辦人 · 創意總監</p>
-                    <p class="team-bio">畢業於巴黎時裝學院，曾任職 Maison Margiela 設計部門。以對黑色的深刻詮釋聞名業界。</p>
-                </div>
-                <div class="team-card">
-                    <div class="team-portrait">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" alt="Thomas Chen">
-                    </div>
-                    <h3 class="team-name">Thomas Chen</h3>
-                    <p class="team-role">亞太區執行長</p>
-                    <p class="team-bio">台灣出生，哈佛 MBA。曾帶領多個國際奢侈品牌進入東亞市場，深諳亞洲消費者的美學語言。</p>
-                </div>
-                <div class="team-card">
-                    <div class="team-portrait">
-                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Yuki Tanaka">
-                    </div>
-                    <h3 class="team-name">Yuki Tanaka</h3>
-                    <p class="team-role">首席設計師</p>
-                    <p class="team-bio">東京藝術大學畢業，專攻服裝結構設計。擅長將日本傳統工藝元素融入現代極簡美學。</p>
-                </div>
-                <div class="team-card">
-                    <div class="team-portrait">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Marc Dubois">
-                    </div>
-                    <h3 class="team-name">Marc Dubois</h3>
-                    <p class="team-role">材料研究總監</p>
-                    <p class="team-bio">紡織工程博士，深耕永續材料開發逾 15 年。主導品牌碳中和計畫，獲得多項國際環境設計獎項。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 結語引言 -->
-    <section class="closing-quote">
-        <div class="quote-mark">"</div>
-        <p class="quote-text">時尚是一種語言，而我們希望每一件 MAISON NOIR 的作品，都能幫助你說出那些無法用言語表達的事。</p>
-        <p class="quote-author">— Élise Moreau，創辦人</p>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <h3 class="footer-brand-name">Maison Noir</h3>
-                <p class="footer-brand-desc">致力於為你帶來最精緻的時尚體驗。從設計到每一個細節，我們只挑選最好的。</p>
+    <!-- Footer -->
+    <footer class="mn-footer py-4">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-md-3">
+                    <p class="mb-2" style="font-family:'Playfair Display',serif;letter-spacing:2px;">MAISON NOIR</p>
+                    <p class="small" style="color:rgba(255,255,255,0.5);">都市極簡時裝</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">品類</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="../womens/">女裝</a>
+                        <a href="../mens/">男裝</a>
+                        <a href="../accessories/">配件</a>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">品牌</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="./">關於我們</a>
+                        <a href="#">永續理念</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">客服</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="#">聯絡我們</a>
+                        <a href="#">退換貨政策</a>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4 class="footer-col-title">購物</h4>
-                <ul class="footer-links">
-                    <li><a href="../womens/">女裝</a></li>
-                    <li><a href="../mens/">男裝</a></li>
-                    <li><a href="../accessories/">配件</a></li>
-                    <li><a href="../womens/">新品上市</a></li>
-                </ul>
+            <div class="border-top mt-4 pt-3 d-flex justify-content-between small" style="border-color:rgba(255,255,255,0.1)!important;color:rgba(255,255,255,0.4);">
+                <span>© 2026 MAISON NOIR</span>
+                <span>All rights reserved</span>
             </div>
-            <div>
-                <h4 class="footer-col-title">幫助</h4>
-                <ul class="footer-links">
-                    <li><a href="#">常見問題</a></li>
-                    <li><a href="#">物流配送</a></li>
-                    <li><a href="#">退換貨政策</a></li>
-                    <li><a href="#">聯絡我們</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">關注</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">LINE</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>© 2026 MAISON NOIR. All rights reserved.</span>
-            <span>Taiwan · Privacy · Terms</span>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

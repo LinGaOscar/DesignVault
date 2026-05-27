@@ -4,687 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAISON NOIR — 時尚電商</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #faf9f7;
-            --white: #ffffff;
-            --text: #111111;
-            --muted: #a0a0a0;
-            --border: #e4dfd9;
-            --accent: #b8956a;
-            --accent-dark: #9a7a50;
-            --warm: #f0e8de;
-            --dark: #111111;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            font-weight: 300;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* ====== Navigation ====== */
-        .nav {
-            height: 68px;
-            padding: 0 60px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: var(--text); }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .nav-btn {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-            transition: color 0.2s;
-        }
-
-        .nav-btn:hover { color: var(--text); }
-
-        .nav-btn-cart {
-            border: 1px solid var(--border);
-            padding: 8px 18px;
-            color: var(--text);
-            transition: border-color 0.2s, background 0.2s, color 0.2s;
-        }
-
-        .nav-btn-cart:hover {
-            border-color: var(--text);
-            background: var(--text);
-            color: var(--white);
-        }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--text);
-        }
-
-        /* ====== Hero ====== */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 80vh;
-        }
-
-        .hero-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 80px 80px 80px 60px;
-            background: var(--white);
-            border-right: 1px solid var(--border);
-        }
-
-        .hero-eyebrow {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 28px;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 600;
-            line-height: 1.08;
-            letter-spacing: -0.5px;
-            margin-bottom: 28px;
-        }
-
-        .hero-desc {
-            font-size: 0.875rem;
-            color: var(--muted);
-            line-height: 1.85;
-            max-width: 340px;
-            margin-bottom: 48px;
-        }
-
-        .hero-cta {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--white);
-            background: var(--dark);
-            padding: 16px 40px;
-            transition: background 0.25s;
-            width: fit-content;
-        }
-
-        .hero-cta:hover { background: var(--accent); }
-
-        .hero-visual {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-        }
-
-        .hero-season {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: rgba(0,0,0,0.25);
-        }
-
-        /* ====== Section Header ====== */
-        .section-head {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-
-        .section-eyebrow {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 14px;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.25rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-        }
-
-        /* ====== Categories ====== */
-        .categories {
-            padding: 100px 60px;
-            background: var(--white);
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .category-card {
-            height: 420px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .category-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.08) 55%, transparent 100%);
-            z-index: 1;
-        }
-
-        .cat-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            transition: transform 0.6s ease;
-        }
-
-        .category-card:hover .cat-img { transform: scale(1.05); }
-
-        .cat-info { position: relative; z-index: 2; padding: 36px; }
-
-        .cat-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--white);
-        }
-
-        .cat-count {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.7);
-        }
-
-        /* ====== Products ====== */
-        .featured {
-            padding: 100px 60px;
-            background: var(--bg);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background: var(--white);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .product-card:hover { background: var(--bg); }
-
-        .product-img {
-            height: 300px;
-            overflow: hidden;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            transition: transform 0.4s ease;
-        }
-
-        .product-card:hover .product-img img { transform: scale(1.04); }
-
-        .product-body { padding: 20px; }
-
-        .product-cat {
-            font-size: 0.63rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-
-        .product-name {
-            font-size: 0.9rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-
-        .product-price { font-size: 0.9rem; font-weight: 500; }
-
-        .product-price-old {
-            font-size: 0.8rem;
-            color: var(--muted);
-            text-decoration: line-through;
-            margin-left: 8px;
-            font-weight: 300;
-        }
-
-        /* ====== Banner ====== */
-        .banner {
-            padding: 120px 60px;
-            background: var(--dark);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .banner-eyebrow {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
-            margin-bottom: 28px;
-        }
-
-        .banner-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
-
-        .banner-desc {
-            font-size: 0.875rem;
-            color: rgba(255,255,255,0.45);
-            max-width: 440px;
-            margin: 0 auto 48px;
-            line-height: 1.85;
-        }
-
-        .banner-cta {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--dark);
-            background: var(--white);
-            padding: 16px 44px;
-            transition: background 0.25s, color 0.25s;
-        }
-
-        .banner-cta:hover { background: var(--accent); color: var(--white); }
-
-        /* ====== Footer ====== */
-        .footer {
-            background: var(--white);
-            padding: 80px 60px 40px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto 60px;
-        }
-
-        .footer-brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .footer-brand-desc {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.8;
-            max-width: 260px;
-        }
-
-        .footer-col-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a { font-size: 0.8rem; color: var(--muted); transition: color 0.2s; }
-        .footer-links a:hover { color: var(--text); }
-
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--muted);
-        }
-
-        /* ====== Responsive ====== */
-        @media (max-width: 1200px) {
-            .products-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        @media (max-width: 1024px) {
-            .hero { grid-template-columns: 1fr; min-height: auto; }
-            .hero-content { padding: 80px 40px; border-right: none; border-bottom: 1px solid var(--border); }
-            .hero-visual { height: 50vh; }
-            .hero-title { font-size: 3rem; }
-            .categories-grid { grid-template-columns: repeat(2, 1fr); }
-            .category-card { height: 340px; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-
-        @media (max-width: 768px) {
-            .nav { padding: 0 24px; }
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 68px;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                flex-direction: column;
-                gap: 0;
-                border-bottom: 1px solid var(--border);
-                padding: 8px 24px;
-            }
-            .nav-links.active { display: flex; }
-            .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
-            .nav-links li:last-child a { border-bottom: none; }
-            .nav-btn { display: none; }
-            .nav-toggle { display: flex; }
-            .hero-content { padding: 60px 24px; }
-            .hero-title { font-size: 2.25rem; }
-            .hero-visual { height: 40vh; }
-            .hero-bg-letter { font-size: 16rem; }
-            .categories { padding: 60px 24px; }
-            .categories-grid { grid-template-columns: 1fr; }
-            .category-card { height: 280px; }
-            .cat-bg-letter { font-size: 10rem; }
-            .featured { padding: 60px 24px; }
-            .products-grid { grid-template-columns: 1fr; }
-            .product-img { height: 260px; }
-            .banner { padding: 80px 24px; }
-            .banner-title { font-size: 2rem; }
-            .footer { padding: 60px 24px 32px; }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title { font-size: 1.875rem; }
-            .section-title { font-size: 1.75rem; }
-            .category-card { height: 240px; }
-        }
-
-        /* ====== DesignVault 返回列 ====== */
-        .dv-bar {
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            padding: 7px 60px;
-        }
-        .dv-bar a {
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 1px;
-            color: var(--muted);
-            text-transform: uppercase;
-            transition: color 0.2s;
-        }
-        .dv-bar a:hover { color: var(--text); }
-
-        @media (max-width: 768px) { .dv-bar { padding: 7px 24px; } }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="custom.css">
 </head>
 <body>
 
-    <div class="dv-bar"><a href="../../index.html">← DesignVault</a></div>
+    <!-- DesignVault back bar (will be stripped in download) -->
+    <div class="dv-bar">
+        <div class="container">
+            <a href="../../index.html">← DesignVault</a>
+        </div>
+    </div>
 
-    <nav class="nav">
-        <div class="nav-logo">Maison Noir</div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="./">首頁</a></li>
-            <li><a href="womens/">女性</a></li>
-            <li><a href="mens/">男性</a></li>
-            <li><a href="accessories/">配件</a></li>
-            <li><a href="about/">關於</a></li>
-        </ul>
-        <div class="nav-right">
-            <button class="nav-btn">搜尋</button>
-            <button class="nav-btn">收藏</button>
-            <button class="nav-btn nav-btn-cart">購物袋</button>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="./">MAISON NOIR</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mnNav" aria-controls="mnNav" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mnNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="./">首頁</a></li>
+                    <li class="nav-item"><a class="nav-link" href="womens/">女性</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mens/">男性</a></li>
+                    <li class="nav-item"><a class="nav-link" href="accessories/">配件</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about/">關於</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <p class="hero-eyebrow">2026 春夏系列</p>
-            <h1 class="hero-title">探索時尚<br>定義自我</h1>
-            <p class="hero-desc">精選高端時尚單品，為你打造獨特風格。從日常到正式場合，每一刻都值得被看見。</p>
-            <a href="#" class="hero-cta">立即選購</a>
-        </div>
-        <div class="hero-visual">
-            <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=80" alt="">
-            <span class="hero-season">SS 2026</span>
-        </div>
-    </section>
-
-    <section class="categories">
-        <div class="section-head">
-            <p class="section-eyebrow">探索系列</p>
-            <h2 class="section-title">精選品類</h2>
-        </div>
-        <div class="categories-grid">
-            <div class="category-card">
-                <img class="cat-img" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=80" alt="">
-                <div class="cat-info">
-                    <h3 class="cat-name">女裝</h3>
-                    <p class="cat-count">128 件商品</p>
+    <!-- Hero -->
+    <section class="mn-hero">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-12 col-lg-5 py-5 py-lg-0">
+                    <p class="section-tag mb-3">New Collection 2026</p>
+                    <h1 class="mn-hero-title mb-4">極簡之美<br><em>無聲的優雅</em></h1>
+                    <p class="text-muted mb-4" style="font-size:0.875rem;line-height:1.8;">精選頂級面料，以簡馭繁的設計哲學，呈現都市時裝的純粹輪廓。</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="womens/" class="btn-mn">探索女裝</a>
+                        <a href="mens/" class="btn-mn-outline">探索男裝</a>
+                    </div>
                 </div>
-            </div>
-            <div class="category-card">
-                <img class="cat-img" src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=80" alt="">
-                <div class="cat-info">
-                    <h3 class="cat-name">男裝</h3>
-                    <p class="cat-count">96 件商品</p>
-                </div>
-            </div>
-            <div class="category-card">
-                <img class="cat-img" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80" alt="">
-                <div class="cat-info">
-                    <h3 class="cat-name">配件</h3>
-                    <p class="cat-count">64 件商品</p>
+                <div class="col-12 col-lg-7">
+                    <div class="mn-hero-img">✦</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="featured">
-        <div class="section-head">
-            <p class="section-eyebrow">熱銷商品</p>
-            <h2 class="section-title">本月精選</h2>
-        </div>
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-img"><img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500&q=80" alt="絲綢印花長洋裝"></div>
-                <div class="product-body">
-                    <p class="product-cat">女裝</p>
-                    <h3 class="product-name">絲綢印花長洋裝</h3>
-                    <p class="product-price">NT$4,280</p>
+    <!-- Categories -->
+    <section class="py-5">
+        <div class="container">
+            <p class="section-tag mb-4">精選品類</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <a href="womens/" class="d-block text-decoration-none text-dark category-card">
+                        <div class="category-img mb-3">👗</div>
+                        <p class="product-name text-uppercase mb-1">女裝</p>
+                        <p class="small text-muted mb-0">128 件商品</p>
+                    </a>
                 </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=500&q=80" alt="經典真皮手提包"></div>
-                <div class="product-body">
-                    <p class="product-cat">配件</p>
-                    <h3 class="product-name">經典真皮手提包</h3>
-                    <p class="product-price">NT$6,800</p>
+                <div class="col-12 col-md-4">
+                    <a href="mens/" class="d-block text-decoration-none text-dark category-card">
+                        <div class="category-img mb-3">🧥</div>
+                        <p class="product-name text-uppercase mb-1">男裝</p>
+                        <p class="small text-muted mb-0">96 件商品</p>
+                    </a>
                 </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img"><img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=500&q=80" alt="義大利皮革高跟鞋"></div>
-                <div class="product-body">
-                    <p class="product-cat">女裝</p>
-                    <h3 class="product-name">義大利皮革高跟鞋</h3>
-                    <p class="product-price">NT$3,600 <span class="product-price-old">NT$4,200</span></p>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=500&q=80" alt="喀什米爾羊毛大衣"></div>
-                <div class="product-body">
-                    <p class="product-cat">男裝</p>
-                    <h3 class="product-name">喀什米爾羊毛大衣</h3>
-                    <p class="product-price">NT$8,900</p>
+                <div class="col-12 col-md-4">
+                    <a href="accessories/" class="d-block text-decoration-none text-dark category-card">
+                        <div class="category-img mb-3">👜</div>
+                        <p class="product-name text-uppercase mb-1">配件</p>
+                        <p class="small text-muted mb-0">64 件商品</p>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="banner">
-        <p class="banner-eyebrow">會員限定</p>
-        <h2 class="banner-title">會員限定優惠</h2>
-        <p class="banner-desc">加入會員即享首筆訂單 95 折優惠，以及不定時的獨家活動與搶先看新品資訊。</p>
-        <a href="#" class="banner-cta">加入會員</a>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <h3 class="footer-brand-name">Maison Noir</h3>
-                <p class="footer-brand-desc">致力於為你帶來最精緻的時尚體驗。從設計到每一個細節，我們只挑選最好的。</p>
-            </div>
-            <div>
-                <h4 class="footer-col-title">購物</h4>
-                <ul class="footer-links">
-                    <li><a href="womens/">女裝</a></li>
-                    <li><a href="mens/">男裝</a></li>
-                    <li><a href="accessories/">配件</a></li>
-                    <li><a href="womens/">新品上市</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">幫助</h4>
-                <ul class="footer-links">
-                    <li><a href="#">常見問題</a></li>
-                    <li><a href="#">物流配送</a></li>
-                    <li><a href="#">退換貨政策</a></li>
-                    <li><a href="#">聯絡我們</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">關注</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">LINE</a></li>
-                </ul>
+    <!-- Featured Products -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <p class="section-tag mb-2">本季精選</p>
+            <h2 class="fs-4 fw-normal mb-4" style="font-family:'Playfair Display',serif;">精選單品</h2>
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                <div class="col"><div class="product-card"><div class="product-img">👗</div><div class="mt-3"><p class="product-name mb-1">修身連身裙</p><p class="product-price mb-0">NT$ 6,800</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">🧥</div><div class="mt-3"><p class="product-name mb-1">經典大衣</p><p class="product-price mb-0">NT$ 12,800</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">👔</div><div class="mt-3"><p class="product-name mb-1">純棉西裝褲</p><p class="product-price mb-0">NT$ 4,200</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">👜</div><div class="mt-3"><p class="product-name mb-1">皮質托特包</p><p class="product-price mb-0">NT$ 9,800</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">🥻</div><div class="mt-3"><p class="product-name mb-1">絲質上衣</p><p class="product-price mb-0">NT$ 3,600</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">🧣</div><div class="mt-3"><p class="product-name mb-1">羊絨圍巾</p><p class="product-price mb-0">NT$ 2,800</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">👞</div><div class="mt-3"><p class="product-name mb-1">皮革牛津鞋</p><p class="product-price mb-0">NT$ 7,200</p></div></div></div>
+                <div class="col"><div class="product-card"><div class="product-img">🧤</div><div class="mt-3"><p class="product-name mb-1">皮革手套</p><p class="product-price mb-0">NT$ 1,800</p></div></div></div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2026 MAISON NOIR. All rights reserved.</span>
-            <span>Taiwan · Privacy · Terms</span>
+    </section>
+
+    <!-- Membership CTA -->
+    <section class="mn-cta py-5">
+        <div class="container text-center py-3">
+            <p class="section-tag mb-3" style="color:rgba(255,255,255,0.5);">會員專屬</p>
+            <h2 class="mb-3" style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:400;">加入 NOIR 會員</h2>
+            <p class="text-muted mb-4" style="font-size:0.875rem;">享受首購八折優惠、優先搶購新品及專屬穿搭顧問服務</p>
+            <a href="#" class="btn-mn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4);">立即加入</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mn-footer py-4">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-md-3">
+                    <p class="mb-2" style="font-family:'Playfair Display',serif;letter-spacing:2px;">MAISON NOIR</p>
+                    <p class="small" style="color:rgba(255,255,255,0.5);">都市極簡時裝</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">品類</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="womens/">女裝</a>
+                        <a href="mens/">男裝</a>
+                        <a href="accessories/">配件</a>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">品牌</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="about/">關於我們</a>
+                        <a href="#">永續理念</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <p class="small text-uppercase mb-2" style="color:rgba(255,255,255,0.4);letter-spacing:1px;">客服</p>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="#">聯絡我們</a>
+                        <a href="#">退換貨政策</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top mt-4 pt-3 d-flex justify-content-between small" style="border-color:rgba(255,255,255,0.1)!important;color:rgba(255,255,255,0.4);">
+                <span>© 2026 MAISON NOIR</span>
+                <span>All rights reserved</span>
+            </div>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,71 @@
+/* === MAISON NOIR — Bootstrap Overrides === */
+:root {
+    --mn-bg: #faf8f5;
+    --mn-text: #1a1a1a;
+    --mn-gold: #c9a96e;
+    --mn-border: #e8e0d5;
+    --bs-body-bg: var(--mn-bg);
+    --bs-body-color: var(--mn-text);
+    --bs-border-color: var(--mn-border);
+    --bs-border-radius: 0;
+    --bs-border-radius-sm: 0;
+    --bs-btn-border-radius: 0;
+    --bs-nav-pills-border-radius: 0;
+    --bs-body-font-family: 'Inter', sans-serif;
+    --bs-body-font-weight: 300;
+}
+
+/* Navbar */
+.navbar { border-bottom: 1px solid var(--mn-border); background: var(--mn-bg) !important; }
+.navbar-brand { font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; letter-spacing: 2px; text-transform: uppercase; }
+.nav-link { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--mn-text) !important; }
+.nav-link:hover { color: var(--mn-gold) !important; }
+
+/* DesignVault back bar */
+.dv-bar { background: #f5f2ee; padding: 8px 0; font-size: 0.7rem; }
+.dv-bar a { color: #999; text-decoration: none; letter-spacing: 0.5px; }
+
+/* Back to demo link */
+.back-bar { background: var(--mn-bg); padding: 10px 0; border-bottom: 1px solid var(--mn-border); font-size: 0.75rem; }
+.back-bar a { color: #999; text-decoration: none; }
+
+/* Hero */
+.mn-hero { background: #f5f0ea; min-height: 80vh; display: flex; align-items: center; }
+.mn-hero-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; }
+.mn-hero-img { background: #e8dfd4; display: flex; align-items: center; justify-content: center; min-height: 400px; font-family: 'Playfair Display', serif; font-size: 8rem; color: rgba(0,0,0,0.08); }
+
+/* Section headings */
+.section-tag { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--mn-gold); }
+
+/* Product cards */
+.product-card { background: var(--mn-bg); transition: transform 0.2s; }
+.product-card:hover { transform: translateY(-4px); }
+.product-img { background: #ece4d9; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+.product-name { font-size: 0.875rem; letter-spacing: 0.5px; }
+.product-price { color: var(--mn-gold); font-size: 0.875rem; }
+
+/* Category cards */
+.category-img { aspect-ratio: 4/3; background: #ece4d9; display: flex; align-items: center; justify-content: center; font-size: 4rem; overflow: hidden; transition: transform 0.3s; }
+.category-card:hover .category-img { transform: scale(1.04); }
+
+/* Buttons */
+.btn-mn { background: var(--mn-text); color: #fff; border: none; border-radius: 0; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; padding: 12px 32px; }
+.btn-mn:hover { background: var(--mn-gold); color: #fff; }
+.btn-mn-outline { background: transparent; color: var(--mn-text); border: 1px solid var(--mn-text); border-radius: 0; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; padding: 12px 32px; }
+.btn-mn-outline:hover { background: var(--mn-text); color: #fff; }
+
+/* Nav pills filter */
+.nav-pills .nav-link { color: var(--mn-text); background: transparent; border-bottom: 2px solid transparent; padding: 8px 16px; border-radius: 0; }
+.nav-pills .nav-link.active { background: transparent; border-bottom-color: var(--mn-gold); color: var(--mn-gold); }
+
+/* Membership CTA */
+.mn-cta { background: var(--mn-text); color: #fff; }
+
+/* Footer */
+.mn-footer { background: var(--mn-text); color: #fff; }
+.mn-footer a { color: rgba(255,255,255,0.6); font-size: 0.8rem; text-decoration: none; }
+.mn-footer a:hover { color: #fff; }
+
+/* Page header for subpages */
+.page-header { border-bottom: 1px solid var(--mn-border); padding: 48px 0 32px; }
+.page-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; }
