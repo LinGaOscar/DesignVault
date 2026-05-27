@@ -3,756 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系列 | AURÈLE</title>
+    <title>系列 — AURÈLE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #f9f8f6;
-            --white: #ffffff;
-            --text: #1a1a1a;
-            --muted: #9a9888;
-            --border: rgba(0,0,0,0.08);
-            --border-solid: #e6e2db;
-            --gold: #b8965a;
-            --gold-light: #c9a96e;
-            --cream: #f0ece4;
-            --dark: #1a1a1a;
-        }
-
-        body {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* ====== DesignVault 返回連結 ====== */
-        .designvault-link {
-            position: fixed;
-            top: 18px;
-            left: 20px;
-            z-index: 200;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 300;
-            letter-spacing: 1.5px;
-            color: rgba(26,26,26,0.35);
-            transition: color 0.3s;
-        }
-        .designvault-link:hover { color: var(--gold); }
-
-        /* ====== Navigation ====== */
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 28px 80px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-            transition: background 0.4s, padding 0.3s, border-color 0.4s;
-            border-bottom: 1px solid transparent;
-        }
-
-        .nav.scrolled {
-            background: rgba(249,248,246,0.96);
-            backdrop-filter: blur(12px);
-            padding: 18px 80px;
-            border-bottom-color: var(--border-solid);
-        }
-
-        .nav-logo {
-            font-size: 1.5rem;
-            font-weight: 400;
-            letter-spacing: 10px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 44px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text);
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--gold);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after { width: 100%; }
-        .nav-links a.active { color: var(--gold); }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--text);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .nav-action-btn {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text);
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .nav-action-btn:hover { color: var(--gold); }
-
-        /* ====== 返回 AURÈLE ====== */
-        .back-bar {
-            padding-top: 108px;
-            padding-bottom: 20px;
-            padding-left: 80px;
-            padding-right: 80px;
-            border-bottom: 1px solid var(--border-solid);
-            background: var(--bg);
-        }
-
-        .back-link {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: var(--gold); }
-
-        /* ====== Season Intro ====== */
-        .season-intro {
-            background: var(--dark);
-            color: var(--white);
-            padding: 100px 80px;
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 80px;
-            align-items: center;
-        }
-
-        .season-eyebrow {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            margin-bottom: 24px;
-        }
-
-        .season-title {
-            font-size: 3.75rem;
-            font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 32px;
-        }
-
-        .season-title em {
-            font-style: italic;
-            color: var(--gold);
-        }
-
-        .season-desc {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.95;
-        }
-
-        .season-visual {
-            position: relative;
-        }
-
-        .season-img {
-            width: 100%;
-            height: 480px;
-            object-fit: cover;
-            object-position: center top;
-        }
-
-        .season-tag {
-            position: absolute;
-            bottom: 24px;
-            left: 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-            background: rgba(0,0,0,0.4);
-            padding: 6px 12px;
-        }
-
-        /* ====== Collections Grid ====== */
-        .collections-section {
-            padding: 100px 80px;
-            background: var(--bg);
-        }
-
-        .collections-head {
-            margin-bottom: 72px;
-        }
-
-        .section-eyebrow {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 2.75rem;
-            font-weight: 300;
-        }
-
-        .collections-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-        }
-
-        .collection-card {
-            cursor: pointer;
-        }
-
-        .collection-img-wrap {
-            overflow: hidden;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .collection-img-wrap img {
-            width: 100%;
-            height: 520px;
-            object-fit: cover;
-            object-position: center top;
-            transition: transform 0.7s ease;
-            display: block;
-        }
-
-        .collection-card:hover .collection-img-wrap img {
-            transform: scale(1.04);
-        }
-
-        .collection-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .collection-card:hover .collection-overlay { opacity: 1; }
-
-        .collection-label {
-            position: absolute;
-            bottom: 24px;
-            left: 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.8);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .collection-card:hover .collection-label { opacity: 1; }
-
-        .collection-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 8px;
-        }
-
-        .collection-name {
-            font-size: 1.35rem;
-            font-weight: 400;
-        }
-
-        .collection-season {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.62rem;
-            letter-spacing: 1.5px;
-            color: var(--gold);
-        }
-
-        .collection-desc {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: var(--muted);
-            line-height: 1.75;
-            margin-bottom: 16px;
-        }
-
-        .collection-link {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text);
-            border-bottom: 1px solid var(--border-solid);
-            padding-bottom: 4px;
-            transition: color 0.2s, border-color 0.2s;
-        }
-
-        .collection-link:hover { color: var(--gold); border-color: var(--gold); }
-
-        /* ====== Materials Highlight ====== */
-        .materials {
-            background: var(--white);
-            border-top: 1px solid var(--border-solid);
-            border-bottom: 1px solid var(--border-solid);
-            padding: 100px 80px;
-        }
-
-        .materials-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-
-        .materials-content {
-        }
-
-        .materials-heading {
-            font-size: 2.5rem;
-            font-weight: 300;
-            line-height: 1.25;
-            margin-bottom: 32px;
-        }
-
-        .materials-text {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: var(--muted);
-            line-height: 1.95;
-            margin-bottom: 40px;
-        }
-
-        .materials-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .materials-list li {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: var(--muted);
-        }
-
-        .materials-list li::before {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 1px;
-            background: var(--gold);
-            flex-shrink: 0;
-        }
-
-        .materials-visual {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .mat-img {
-            overflow: hidden;
-        }
-
-        .mat-img:first-child {
-            grid-row: 1 / 3;
-        }
-
-        .mat-img img {
-            width: 100%;
-            height: 100%;
-            min-height: 200px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .mat-img:hover img { transform: scale(1.04); }
-
-        /* ====== Footer ====== */
-        .footer {
-            background: var(--dark);
-            color: var(--white);
-            padding: 80px 80px 48px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 60px;
-        }
-
-        .footer-brand-name {
-            font-size: 1.25rem;
-            font-weight: 300;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .footer-brand-desc {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.38);
-            line-height: 1.85;
-            font-weight: 300;
-            max-width: 260px;
-        }
-
-        .footer-col-title {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.62rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            margin-bottom: 20px;
-        }
-
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.45);
-            font-weight: 300;
-            transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--white); }
-
-        .footer-bottom {
-            padding-top: 36px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.25);
-        }
-
-        /* ====== Responsive ====== */
-        @media (max-width: 1024px) {
-            .nav { padding: 20px 40px; }
-            .nav.scrolled { padding: 16px 40px; }
-            .back-bar { padding-left: 40px; padding-right: 40px; }
-            .season-intro { padding: 80px 40px; grid-template-columns: 1fr; gap: 48px; }
-            .season-title { font-size: 2.75rem; }
-            .season-img { height: 360px; }
-            .collections-section { padding: 80px 40px; }
-            .collections-grid { grid-template-columns: repeat(2, 1fr); }
-            .materials { padding: 80px 40px; }
-            .materials-layout { grid-template-columns: 1fr; }
-            .footer { padding: 60px 40px 40px; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-
-        @media (max-width: 768px) {
-            .nav { padding: 18px 24px; }
-            .nav.scrolled { padding: 14px 24px; }
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(249,248,246,0.98);
-                flex-direction: column;
-                gap: 0;
-                border-top: 1px solid var(--border-solid);
-                padding: 8px 24px;
-            }
-            .nav-links.active { display: flex; }
-            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border-solid); }
-            .nav-links li:last-child a { border-bottom: none; }
-            .nav-actions { display: none; }
-            .nav-toggle { display: flex; }
-            .back-bar { padding-left: 24px; padding-right: 24px; }
-            .season-intro { padding: 60px 24px; }
-            .season-title { font-size: 2.25rem; }
-            .collections-section { padding: 60px 24px; }
-            .collections-grid { grid-template-columns: 1fr; }
-            .collection-img-wrap img { height: 360px; }
-            .materials { padding: 60px 24px; }
-            .footer { padding: 48px 24px 32px; }
-            .footer-grid { grid-template-columns: 1fr; gap: 36px; }
-            .footer-bottom { flex-direction: column; gap: 8px; }
-        }
-
-        @media (max-width: 480px) {
-            .season-title { font-size: 1.875rem; }
-            .section-title { font-size: 2.25rem; }
-            .materials-heading { font-size: 2rem; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
 </head>
 <body>
-
     <a href="../../../index.html" class="designvault-link">← DesignVault</a>
 
-    <nav class="nav" id="nav">
-        <a href="../" class="nav-logo">Aurèle</a>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="../story/">品牌故事</a></li>
-            <li><a href="../collections/" class="active">系列</a></li>
-            <li><a href="../works/">作品</a></li>
-            <li><a href="../store/">店鋪</a></li>
-            <li><a href="../contact/">聯繫</a></li>
-        </ul>
-        <div class="nav-actions">
-            <button class="nav-action-btn">搜尋</button>
-            <button class="nav-action-btn">購物</button>
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="../">AURÈLE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#auNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="auNav">
+                <ul class="navbar-nav ms-auto gap-3">
+                    <li class="nav-item"><a class="nav-link" href="../story/">故事</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">系列</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../works/">作品</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../contact/">聯繫</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="back-bar">
-        <a href="../" class="back-link">← 返回 AURÈLE</a>
-    </div>
-
-    <!-- 2026 春夏季節介紹 -->
-    <section class="season-intro">
-        <div>
-            <p class="season-eyebrow">Collection — 2026 Printemps-Été</p>
-            <h1 class="season-title">光影之間<br>的<em>靜謐</em></h1>
-            <p class="season-desc">2026 春夏系列，我們凝視清晨第一道斜光落在亞麻布料上的剎那。那種柔軟而確定的光，告訴我們：奢華從不喧嚷，它只是光，只是觸感，只是那一刻的安靜。本季以「光的語法」為主題，探索透明與遮蔽、輕盈與分量之間永恆的對話，以六個系列，呈現 AURÈLE 對當代衣著哲學最完整的詮釋。</p>
-        </div>
-        <div class="season-visual">
-            <img class="season-img" src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80" alt="2026 春夏系列">
-            <span class="season-tag">Printemps-Été 2026</span>
+    <section class="au-page-header">
+        <div class="container">
+            <a href="../" class="back-link">← 返回 AURÈLE</a>
+            <p class="section-tag mt-3 mb-2">Collections</p>
+            <h1 class="section-title">系列總覽</h1>
         </div>
     </section>
 
-    <!-- 六個系列 -->
-    <section class="collections-section">
-        <div class="collections-head">
-            <p class="section-eyebrow">Les Collections</p>
-            <h2 class="section-title">本季六個章節</h2>
-        </div>
-        <div class="collections-grid">
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=700&q=80" alt="晨曦">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
+    <section class="py-5">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">🌿</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Éclat de Printemps</p>
+                            <p class="small" style="color:var(--au-muted);">春日光輝 · 2026 春季</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">一、晨曦</h3>
-                    <span class="collection-season">SS26</span>
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">🌊</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Profondeurs</p>
+                            <p class="small" style="color:var(--au-muted);">深邃之境 · 2025 秋冬</p>
+                        </div>
+                    </div>
                 </div>
-                <p class="collection-desc">以清晨六時的光線為靈感，薄如蟬翼的雙層喬其紗在身體的動態中呈現若隱若現的光感。每一件皆可作為日間的輕便外出服或夜晚的晚宴主角。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80" alt="靜物">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">🌙</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Nuit Éternelle</p>
+                            <p class="small" style="color:var(--au-muted);">永恆之夜 · 2025 春夏</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">二、靜物</h3>
-                    <span class="collection-season">SS26</span>
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">🍂</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Forêt d'Automne</p>
+                            <p class="small" style="color:var(--au-muted);">秋之森林 · 2024 秋冬</p>
+                        </div>
+                    </div>
                 </div>
-                <p class="collection-desc">致敬荷蘭黃金時代靜物畫中的克制之美。厚實的亞麻與精紡羊毛交織，強調肩線與腰部的建築感結構，在靜默中展現最有力的存在感。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80" alt="旅人">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">☁️</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Nuages Légers</p>
+                            <p class="small" style="color:var(--au-muted);">輕雲 · 2024 春夏</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">三、旅人</h3>
-                    <span class="collection-season">SS26</span>
-                </div>
-                <p class="collection-desc">為那些在世界各地移動的靈魂設計。百搭的中性色系與精確的剪裁，讓同一件衣物在從一個時區到另一個時區的旅途中，始終保有尊嚴與從容。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=700&q=80" alt="珠光">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
-                </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">四、珠光</h3>
-                    <span class="collection-season">SS26</span>
-                </div>
-                <p class="collection-desc">以南洋珍珠與18K 白金為核心的珠寶副線。每一顆珍珠都是自然孕育三至七年的結晶，我們的工匠以最簡約的金屬設定，讓珍珠本身的光澤成為唯一的主角。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80" alt="大地">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
-                </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">五、大地</h3>
-                    <span class="collection-season">SS26</span>
-                </div>
-                <p class="collection-desc">靈感源自法國南部的陶土與橄欖林。暖調的赭石、沙色與燒赤，以有機形態的手袋系列詮釋皮革工藝的極致。每一件均由佛羅倫斯工坊的資深皮革師手工完成。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-            <div class="collection-card">
-                <div class="collection-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=700&q=80" alt="私語">
-                    <div class="collection-overlay"></div>
-                    <span class="collection-label">探索系列 →</span>
-                </div>
-                <div class="collection-meta">
-                    <h3 class="collection-name">六、私語</h3>
-                    <span class="collection-season">SS26</span>
-                </div>
-                <p class="collection-desc">本季最私密的系列。以法式蕾絲與絲緞為素材，為那些只為自己而穿的時刻而設計。這是一封只有你自己才能讀懂的情書。限量發售，每件附手寫編號証書。</p>
-                <a href="#" class="collection-link">查看系列</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 材料亮點 -->
-    <section class="materials">
-        <div class="materials-layout">
-            <div class="materials-content">
-                <p class="section-eyebrow">Matières Premières</p>
-                <h2 class="materials-heading">我們對素材的<br>偏執與信仰</h2>
-                <p class="materials-text">每一個系列的誕生，始於對素材最嚴苛的篩選。我們的採購總監每年走訪義大利科摩湖畔的絲綢廠、法國里昂的蕾絲作坊、日本西陣的織物工坊，以及澳洲的美麗諾羊毛牧場。只有那些能通過我們「光透測試」與「觸感評量」的素材，才有資格成為 AURÈLE 作品的一部分。</p>
-                <ul class="materials-list">
-                    <li>義大利科摩湖畔 — 輕盈絲綢</li>
-                    <li>法國里昂老工坊 — 手工蕾絲</li>
-                    <li>日本西陣 — 精紡織錦</li>
-                    <li>澳洲塔斯馬尼亞 — 超細美麗諾</li>
-                    <li>南洋大溪地 — 圓形珍珠</li>
-                    <li>佛羅倫斯 — 頭層小牛皮</li>
-                </ul>
-            </div>
-            <div class="materials-visual">
-                <div class="mat-img">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=500&q=80" alt="素材">
-                </div>
-                <div class="mat-img">
-                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" alt="皮革">
-                </div>
-                <div class="mat-img">
-                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=400&q=80" alt="珠寶">
+                <div class="col">
+                    <div class="collection-card">
+                        <div class="collection-img">🌸</div>
+                        <div class="mt-3">
+                            <p class="collection-name mb-1">Fleurs Silencieuses</p>
+                            <p class="small" style="color:var(--au-muted);">靜默之花 · 2023 秋冬</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <h3 class="footer-brand-name">Aurèle</h3>
-                <p class="footer-brand-desc">致力於將法式優雅與東方細膩完美融合，為你呈現低調而不凡的奢華體驗。</p>
-            </div>
-            <div>
-                <h4 class="footer-col-title">系列</h4>
-                <ul class="footer-links">
-                    <li><a href="../collections/">高級訂製</a></li>
-                    <li><a href="../collections/">皮革系列</a></li>
-                    <li><a href="../collections/">珠寶配飾</a></li>
-                    <li><a href="../collections/">限定款</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">品牌</h4>
-                <ul class="footer-links">
-                    <li><a href="../story/">品牌故事</a></li>
-                    <li><a href="../works/">作品</a></li>
-                    <li><a href="../store/">門市</a></li>
-                    <li><a href="../contact/">聯繫我們</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">關注</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">LINE</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>© 2026 AURÈLE. All rights reserved.</span>
-            <span>Taiwan · Privacy · Terms</span>
+    <footer class="au-footer py-4">
+        <div class="container d-flex justify-content-between small">
+            <span style="font-family:'Cormorant Garamond',serif;letter-spacing:3px;color:#fff;">AURÈLE</span>
+            <span>© 2026</span>
         </div>
     </footer>
 
-    <script>
-        window.addEventListener('scroll', () => {
-            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>50);});</script>
 </body>
 </html>

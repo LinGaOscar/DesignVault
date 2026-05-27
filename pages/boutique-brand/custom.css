@@ -1,0 +1,86 @@
+/* === AURÈLE — Bootstrap Overrides === */
+:root {
+    --au-bg: #faf9f7;
+    --au-text: #1a1a1a;
+    --au-muted: #888;
+    --au-gold: #b8a898;
+    --au-border: rgba(0,0,0,0.08);
+    --bs-body-bg: var(--au-bg);
+    --bs-body-color: var(--au-text);
+    --bs-border-color: var(--au-border);
+    --bs-border-radius: 0;
+    --bs-btn-border-radius: 0;
+    --bs-body-font-family: 'Inter', sans-serif;
+    --bs-body-font-weight: 300;
+}
+
+/* DesignVault back link */
+.designvault-link {
+    position: fixed; top: 12px; left: 16px; z-index: 1100;
+    font-size: 0.65rem; letter-spacing: 0.5px; color: #bbb;
+    text-decoration: none; font-weight: 300;
+}
+.designvault-link:hover { color: var(--au-text); }
+
+/* Subpage back link */
+.back-link { font-size: 0.75rem; color: var(--au-muted); text-decoration: none; letter-spacing: 0.5px; }
+.back-link:hover { color: var(--au-text); }
+
+/* Navbar */
+.navbar { background: transparent !important; transition: background 0.3s; }
+.navbar.scrolled { background: rgba(250,249,247,0.95) !important; backdrop-filter: blur(8px); border-bottom: 1px solid var(--au-border); }
+.navbar-brand { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.5rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--au-text) !important; }
+.nav-link { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--au-text) !important; }
+.nav-link:hover { color: var(--au-gold) !important; }
+.navbar-toggler { border: none; }
+.navbar-toggler:focus { box-shadow: none; }
+
+/* Hero */
+.au-hero { min-height: 100vh; background: var(--au-bg); display: flex; align-items: center; padding-top: 80px; }
+.au-hero-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; line-height: 1.0; letter-spacing: -1px; }
+.au-hero-title em { font-style: italic; }
+.au-hero-img { background: #ede9e3; min-height: 60vh; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 10rem; color: rgba(0,0,0,0.06); }
+
+/* Section headings */
+.section-tag { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--au-gold); }
+.section-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; }
+
+/* Collection cards */
+.collection-card { overflow: hidden; }
+.collection-img { aspect-ratio: 3/4; background: #ede9e3; display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: transform 0.4s; overflow: hidden; }
+.collection-card:hover .collection-img { transform: scale(1.04); }
+.collection-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.1rem; letter-spacing: 1px; }
+
+/* Product cards */
+.au-product-img { aspect-ratio: 3/4; background: #edeae4; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+.au-product-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1rem; letter-spacing: 1px; }
+
+/* Works grid (masonry-style) */
+.works-grid { column-count: 3; column-gap: 1.5rem; }
+.works-item { break-inside: avoid; margin-bottom: 1.5rem; }
+.works-img { width: 100%; background: #ede9e3; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+@media (max-width: 768px) { .works-grid { column-count: 2; } }
+@media (max-width: 480px) { .works-grid { column-count: 1; } }
+
+/* Buttons */
+.btn-au { background: var(--au-text); color: #fff; border: none; border-radius: 0; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 32px; text-decoration: none; display: inline-block; }
+.btn-au:hover { background: var(--au-gold); color: #fff; }
+.btn-au-outline { background: transparent; border: 1px solid var(--au-text); color: var(--au-text); border-radius: 0; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 32px; text-decoration: none; display: inline-block; }
+.btn-au-outline:hover { background: var(--au-text); color: #fff; }
+
+/* Philosophy quote */
+.philosophy { border-top: 1px solid var(--au-border); border-bottom: 1px solid var(--au-border); padding: 64px 0; }
+.philosophy-quote { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 300; font-style: italic; line-height: 1.6; }
+
+/* Footer */
+.au-footer { background: #1a1a1a; color: rgba(255,255,255,0.6); }
+.au-footer a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; }
+.au-footer a:hover { color: #fff; }
+
+/* Forms */
+.au-input { background: transparent; border: none; border-bottom: 1px solid var(--au-border); border-radius: 0; padding: 12px 0; font-size: 0.875rem; color: var(--au-text); }
+.au-input:focus { box-shadow: none; border-bottom-color: var(--au-text); background: transparent; color: var(--au-text); outline: none; }
+.au-input::placeholder { color: var(--au-muted); }
+
+/* Page header for subpages */
+.au-page-header { padding: 120px 0 48px; }
