@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=20260526">
+    <link rel="stylesheet" href="css/style.css?v=20260527">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
         <section class="hero">
             <div class="container">
                 <h1 class="hero-title">探索網頁設計<br><em>的各種可能性</em></h1>
-                <p class="hero-desc">三種不同情境，三種獨特風格</p>
+                <p class="hero-desc">四種不同情境，四種獨特風格</p>
             </div>
         </section>
 
@@ -92,6 +92,77 @@
                 </div>
             </div>
         </section>
+        <section class="download">
+            <div class="container">
+                <div class="download-header">
+                    <h2 class="download-title">取用模板</h2>
+                    <p class="hero-desc">選擇喜歡的設計，下載完整 HTML / CSS 原始碼直接使用</p>
+                </div>
+                <div class="download-grid">
+
+                    <div class="download-card" data-demo="fashion-ecommerce">
+                        <div class="card-preview fashion-preview">
+                            <span class="preview-num">01</span>
+                        </div>
+                        <div class="dl-info">
+                            <div class="dl-meta">
+                                <span class="card-tag">電商</span>
+                                <span class="dl-count">5 個頁面</span>
+                            </div>
+                            <p class="dl-name">MAISON NOIR</p>
+                            <p class="dl-tech">HTML · CSS · 暖色調 · Playfair Display</p>
+                            <button class="dl-btn" onclick="downloadTemplate('fashion-ecommerce')">下載模板</button>
+                        </div>
+                    </div>
+
+                    <div class="download-card" data-demo="saas-dashboard">
+                        <div class="card-preview saas-preview">
+                            <span class="preview-num light">02</span>
+                        </div>
+                        <div class="dl-info">
+                            <div class="dl-meta">
+                                <span class="card-tag">SaaS</span>
+                                <span class="dl-count">5 個頁面</span>
+                            </div>
+                            <p class="dl-name">NexusFlow Enterprise</p>
+                            <p class="dl-tech">HTML · CSS · 深色主題 · Inter</p>
+                            <button class="dl-btn" onclick="downloadTemplate('saas-dashboard')">下載模板</button>
+                        </div>
+                    </div>
+
+                    <div class="download-card" data-demo="boutique-brand">
+                        <div class="card-preview boutique-preview">
+                            <span class="preview-num">03</span>
+                        </div>
+                        <div class="dl-info">
+                            <div class="dl-meta">
+                                <span class="card-tag">品牌形象</span>
+                                <span class="dl-count">5 個頁面</span>
+                            </div>
+                            <p class="dl-name">AURÈLE</p>
+                            <p class="dl-tech">HTML · CSS · 極簡奢華 · Cormorant Garamond</p>
+                            <button class="dl-btn" onclick="downloadTemplate('boutique-brand')">下載模板</button>
+                        </div>
+                    </div>
+
+                    <div class="download-card" data-demo="space-scifi">
+                        <div class="card-preview space-preview">
+                            <span class="preview-num light">04</span>
+                        </div>
+                        <div class="dl-info">
+                            <div class="dl-meta">
+                                <span class="card-tag">科幻</span>
+                                <span class="dl-count">5 個頁面</span>
+                            </div>
+                            <p class="dl-name">NEXUS VOID</p>
+                            <p class="dl-tech">HTML · CSS · 宇宙暗色 · 霓虹特效</p>
+                            <button class="dl-btn" onclick="downloadTemplate('space-scifi')">下載模板</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -101,6 +172,7 @@
         </div>
     </footer>
 
-    <script src="js/main.js?v=20260526"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/main.js?v=20260527"></script>
 </body>
 </html>
