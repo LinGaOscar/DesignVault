@@ -87,7 +87,7 @@ a { text-decoration: none; color: inherit; }
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -104,43 +104,34 @@ a { text-decoration: none; color: inherit; }
     background: var(--hover-bg);
 }
 
-.project-card:hover .card-arrow {
-    opacity: 1;
-    transform: translateX(4px);
-}
-
+/* iframe 縮圖預覽 */
 .card-preview {
-    height: 250px;
-    display: flex;
-    align-items: flex-end;
-    padding: 20px 24px;
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+    background: #f0f0f0;
 }
 
-.fashion-preview  { background: #ece4d9; }
-.saas-preview     { background: #0f1923; }
-.boutique-preview { background: #edeae4; }
-.space-preview    { background: #060b14; }
-
-.preview-num {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1rem;
-    font-style: italic;
-    color: rgba(0,0,0,0.18);
-}
-
-.preview-num.light {
-    color: rgba(255,255,255,0.18);
+.card-preview iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 900px;
+    transform: scale(0.44);
+    transform-origin: top left;
+    border: none;
+    pointer-events: none;
 }
 
 .card-body {
     padding: 24px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 12px;
 }
 
@@ -150,13 +141,6 @@ a { text-decoration: none; color: inherit; }
     letter-spacing: 1.2px;
     text-transform: uppercase;
     color: var(--text-muted);
-}
-
-.card-arrow {
-    font-size: 0.8rem;
-    color: var(--text);
-    opacity: 0;
-    transition: opacity 0.2s, transform 0.2s;
 }
 
 .card-title {
@@ -170,78 +154,36 @@ a { text-decoration: none; color: inherit; }
     font-size: 0.8rem;
     color: var(--text-muted);
     line-height: 1.65;
+    flex: 1;
 }
 
-/* ===== Download Section ===== */
-.download {
-    border-top: 1px solid var(--border);
-    padding: 80px 0 120px;
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
 }
 
-.download-header {
-    margin-bottom: 48px;
-}
-
-.download-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2rem;
-    font-weight: 400;
-    letter-spacing: -0.5px;
-    margin-bottom: 10px;
-}
-
-.download-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
+.btn-visit {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
     border: 1px solid var(--border);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.download-card {
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
+.btn-visit:hover {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
 }
 
-.dl-info {
-    padding: 20px 24px 24px;
-    display: flex;
-    flex-direction: column;
+.btn-dl {
     flex: 1;
-}
-
-.dl-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.dl-count {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-}
-
-.dl-name {
-    font-size: 0.875rem;
-    font-weight: 400;
-    letter-spacing: -0.1px;
-    margin-bottom: 6px;
-}
-
-.dl-tech {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    flex: 1;
-    margin-bottom: 20px;
-}
-
-.dl-btn {
-    width: 100%;
-    padding: 11px 0;
+    padding: 10px 0;
     background: var(--text);
     color: var(--bg);
     border: none;
@@ -249,13 +191,13 @@ a { text-decoration: none; color: inherit; }
     font-family: inherit;
     font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
     transition: opacity 0.2s;
 }
 
-.dl-btn:hover:not(:disabled) { opacity: 0.7; }
-.dl-btn:disabled { opacity: 0.45; cursor: default; }
+.btn-dl:hover:not(:disabled) { opacity: 0.7; }
+.btn-dl:disabled { opacity: 0.45; cursor: default; }
 
 /* ===== Footer ===== */
 .footer {
@@ -277,8 +219,7 @@ a { text-decoration: none; color: inherit; }
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
     .hero-title { font-size: 3rem; }
-    .projects-grid { grid-template-columns: repeat(2, 1fr); }
-    .download-grid { grid-template-columns: repeat(2, 1fr); }
+    .card-preview iframe { transform: scale(0.37); }
 }
 
 @media (max-width: 768px) {
@@ -288,13 +229,12 @@ a { text-decoration: none; color: inherit; }
     .hero-title { font-size: 2.25rem; letter-spacing: -0.5px; }
     .projects-grid { grid-template-columns: 1fr; }
     .projects { padding: 0 0 80px; }
-    .download { padding: 60px 0 80px; }
-    .download-title { font-size: 1.5rem; }
+    .card-preview iframe { transform: scale(0.56); }
 }
 
 @media (max-width: 480px) {
     .hero-title { font-size: 1.875rem; }
-    .card-preview { height: 200px; }
+    .card-preview { height: 240px; }
     .header-inner { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .download-grid { grid-template-columns: 1fr; }
+    .card-preview iframe { transform: scale(0.34); }
 }

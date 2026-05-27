@@ -52,7 +52,7 @@ function cleanHtml(html) {
 
 async function downloadTemplate(demoId) {
   const demo = DEMOS[demoId];
-  const btn = document.querySelector(`[data-demo="${demoId}"] .dl-btn`);
+  const btn = document.querySelector(`[data-demo="${demoId}"] .btn-dl`);
 
   btn.textContent = '打包中…';
   btn.disabled = true;
