@@ -55,7 +55,7 @@ body { background: var(--nv-bg); color: var(--nv-text); }
 .table-hover > tbody > tr:hover > * { background: rgba(0,212,255,0.04); }
 
 /* Hero */
-.nv-hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
+.nv-hero { min-height: 100vh; padding-top: 72px; position: relative; display: flex; align-items: center; overflow: hidden; }
 .nv-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.08) 0%, transparent 60%); pointer-events: none; }
 .nv-hero-title { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; letter-spacing: -1px; color: #fff; line-height: 1.1; }
 .nv-hero-title .line2 { color: var(--nv-cyan); text-shadow: 0 0 30px rgba(0,212,255,0.6); }
@@ -65,7 +65,7 @@ body { background: var(--nv-bg); color: var(--nv-text); }
 .border-glow { border-color: var(--nv-cyan) !important; box-shadow: 0 0 8px rgba(0,212,255,0.2); }
 
 /* Buttons */
-.btn-nv { background: var(--nv-cyan); color: var(--nv-bg); border: none; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 28px; border-radius: 4px; display: inline-block; text-decoration: none; cursor: pointer; }
+.btn-nv { background: var(--nv-cyan); color: var(--nv-bg); border: none; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 28px; border-radius: 4px; display: inline-block; text-decoration: none; cursor: pointer; font-family: inherit; }
 .btn-nv:hover { background: #00bbdd; box-shadow: 0 0 20px rgba(0,212,255,0.4); color: var(--nv-bg); }
 .btn-nv-outline { background: transparent; border: 1px solid var(--nv-cyan); color: var(--nv-cyan); font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 28px; border-radius: 4px; display: inline-block; text-decoration: none; }
 .btn-nv-outline:hover { background: rgba(0,212,255,0.1); color: var(--nv-cyan); }
