@@ -34,12 +34,12 @@
     </aside>
 
     <!-- 主要內容 -->
-    <main class="nf-main">
+    <main class="nf-main" onclick="event.target===this&&document.getElementById('sidebar').classList.remove('open')">
 
         <!-- 頂部導覽列 -->
         <header class="nf-topbar d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-3">
-                <button class="btn p-0 border-0 d-md-none" style="color:var(--nf-text);font-size:1.25rem;" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                <button class="btn p-0 border-0 d-md-none nf-menu-btn" onclick="event.stopPropagation();document.getElementById('sidebar').classList.toggle('open')">☰</button>
                 <input type="search" class="form-control form-control-sm d-none d-md-block" placeholder="搜尋訂單..." style="width:220px;">
             </div>
             <div class="d-flex gap-2 align-items-center">
@@ -91,7 +91,7 @@
                             <span style="color:var(--nf-text-muted);">⏳</span>
                         </div>
                         <p class="stat-value mb-1" style="color:var(--nf-yellow);">17</p>
-                        <p class="stat-change-down mb-0">↑ 3 vs 昨日</p>
+                        <p class="stat-change-up mb-0">↑ 3 vs 昨日</p>
                     </div>
                 </div>
                 <div class="col">

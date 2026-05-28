@@ -75,8 +75,11 @@ body { background: var(--nf-bg); color: var(--nf-text); }
 /* Buttons */
 .btn-nf { background: var(--nf-blue); color: #fff; border: none; font-size: 0.8rem; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
 .btn-nf:hover { background: #4895e0; color: #fff; }
+.btn-nf:focus-visible { outline: 2px solid var(--nf-blue); outline-offset: 2px; }
 .btn-nf-outline { background: transparent; border: 1px solid var(--nf-border); color: var(--nf-text); font-size: 0.8rem; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
 .btn-nf-outline:hover { border-color: var(--nf-blue); color: var(--nf-blue); }
+.btn-nf-outline:focus-visible { outline: 2px solid var(--nf-blue); outline-offset: 2px; }
+.nf-menu-btn { color: var(--nf-text); font-size: 1.25rem; }
 
 /* Form controls */
 .form-control, .form-select { background: var(--nf-bg); border-color: var(--nf-border); color: var(--nf-text); border-radius: 6px; font-size: 0.875rem; }
