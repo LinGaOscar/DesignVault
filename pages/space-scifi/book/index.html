@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂房 — ORBITAL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
+</head>
+<body>
+    <a href="../../../index.html" class="designvault-back">← DesignVault</a>
+
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../">ORBITAL</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nvNav" aria-controls="nvNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nvNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="../">首頁</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../rooms/">客艙</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../experiences/">體驗</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">訂房</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../about/">關於</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="nv-page-header">
+        <div class="container">
+            <a href="../" class="btn-nv-outline py-1 px-3" style="font-size:0.7rem;">← 返回首頁</a>
+            <p class="section-label mt-3 mb-1">Reserve Your Journey</p>
+            <h1 class="h4 fw-normal" style="color:#fff;">預訂行程</h1>
+        </div>
+    </div>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-12 col-lg-4">
+                    <p class="section-label mb-3">地球聯絡中心</p>
+                    <div class="d-flex flex-column gap-3 small mb-4" style="color:var(--nv-muted);">
+                        <div>📍 台北市信義區星際大道 408 號</div>
+                        <div>📞 +886 2 0000 4080</div>
+                        <div>✉️ orbital@example.com</div>
+                        <div>🕐 週一至週五 09:00–18:00</div>
+                    </div>
+                    <div class="card p-3">
+                        <p class="section-label mb-2">出發說明</p>
+                        <p class="small mb-0" style="color:var(--nv-muted);line-height:1.8;">梭艙每週二、五從肯亞奈洛比太空港起飛。最短住宿 2 晚，需提前 90 天預訂。</p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-7 offset-lg-1">
+                    <form class="d-flex flex-column gap-4">
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="book-checkin">入住日期</label>
+                                <input type="date" id="book-checkin" class="form-control">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="book-checkout">退房日期</label>
+                                <input type="date" id="book-checkout" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-8">
+                                <label class="form-label" for="book-room">艙型選擇</label>
+                                <select id="book-room" class="form-select">
+                                    <option value="">請選擇艙型</option>
+                                    <option>Standard Pod — NT$ 48,000 / 晚</option>
+                                    <option>Observatory Suite — NT$ 98,000 / 晚</option>
+                                    <option>Executive Sphere — NT$ 198,000 / 晚</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <label class="form-label" for="book-guests">人數</label>
+                                <input type="number" id="book-guests" class="form-control" min="1" max="4" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="book-name">姓名</label>
+                                <input type="text" id="book-name" class="form-control" placeholder="您的全名">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="book-email">電子郵件</label>
+                                <input type="email" id="book-email" class="form-control" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="book-notes">備註 / 特殊需求</label>
+                            <textarea id="book-notes" class="form-control" rows="3" placeholder="如有特殊飲食需求或慶祝活動，請在此說明..."></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn-nv">送出訂房申請</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background:var(--nv-surface);border-top:1px solid var(--nv-border);padding:24px 0;">
+        <div class="container d-flex justify-content-between small">
+            <span class="glow-cyan" style="letter-spacing:2px;">ORBITAL</span>
+            <span style="color:var(--nv-muted);">© 2026 ORBITAL HOTELS</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
