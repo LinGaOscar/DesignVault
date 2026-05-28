@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="../">AURÈLE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#auNav"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#auNav" aria-controls="auNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="auNav">
                 <ul class="navbar-nav ms-auto gap-3">
                     <li class="nav-item"><a class="nav-link" href="../story/">故事</a></li>
@@ -53,20 +53,20 @@
                 <div class="col-12 col-lg-7 offset-lg-1">
                     <form class="d-flex flex-column gap-4">
                         <div>
-                            <label class="section-tag d-block mb-2">姓名</label>
-                            <input type="text" class="au-input w-100" placeholder="您的姓名">
+                            <label class="section-tag d-block mb-2" for="contact-name">姓名</label>
+                            <input type="text" id="contact-name" class="au-input w-100" placeholder="您的姓名">
                         </div>
                         <div>
-                            <label class="section-tag d-block mb-2">電子郵件</label>
-                            <input type="email" class="au-input w-100" placeholder="email@example.com">
+                            <label class="section-tag d-block mb-2" for="contact-email">電子郵件</label>
+                            <input type="email" id="contact-email" class="au-input w-100" placeholder="email@example.com">
                         </div>
                         <div>
-                            <label class="section-tag d-block mb-2">偏好日期</label>
-                            <input type="date" class="au-input w-100">
+                            <label class="section-tag d-block mb-2" for="contact-date">偏好日期</label>
+                            <input type="date" id="contact-date" class="au-input w-100">
                         </div>
                         <div>
-                            <label class="section-tag d-block mb-2">備註</label>
-                            <textarea class="au-input w-100" rows="4" placeholder="請說明您的需求或問題..."></textarea>
+                            <label class="section-tag d-block mb-2" for="contact-notes">備註</label>
+                            <textarea id="contact-notes" class="au-input w-100" rows="4" placeholder="請說明您的需求或問題..."></textarea>
                         </div>
                         <div>
                             <button type="submit" class="btn-au">送出預約</button>

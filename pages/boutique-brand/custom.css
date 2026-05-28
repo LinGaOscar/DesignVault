@@ -1,6 +1,7 @@
 /* === AURÈLE — Bootstrap Overrides === */
 :root {
     --au-bg: #faf9f7;
+    --au-bg-alt: #f3f0eb;
     --au-text: #1a1a1a;
     --au-muted: #888;
     --au-gold: #b8a898;
@@ -67,6 +68,8 @@
 .btn-au:hover { background: var(--au-gold); color: #fff; }
 .btn-au-outline { background: transparent; border: 1px solid var(--au-text); color: var(--au-text); border-radius: 0; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 32px; text-decoration: none; display: inline-block; }
 .btn-au-outline:hover { background: var(--au-text); color: #fff; }
+.btn-au-outline-on-dark { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 0; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; padding: 14px 32px; text-decoration: none; display: inline-block; }
+.btn-au-outline-on-dark:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
 /* Philosophy quote */
 .philosophy { border-top: 1px solid var(--au-border); border-bottom: 1px solid var(--au-border); padding: 64px 0; }
@@ -76,9 +79,10 @@
 .au-footer { background: #1a1a1a; color: rgba(255,255,255,0.6); }
 .au-footer a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; }
 .au-footer a:hover { color: #fff; }
+.au-brand-wordmark { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.5rem; letter-spacing: 4px; color: #fff; }
 
 /* Forms */
-.au-input { background: transparent; border: none; border-bottom: 1px solid var(--au-border); border-radius: 0; padding: 12px 0; font-size: 0.875rem; color: var(--au-text); }
+.au-input { display: block; background: transparent; border: none; border-bottom: 1px solid var(--au-border); border-radius: 0; padding: 12px 0; font-size: 0.875rem; color: var(--au-text); }
 .au-input:focus { box-shadow: none; border-bottom-color: var(--au-text); background: transparent; color: var(--au-text); outline: none; }
 .au-input::placeholder { color: var(--au-muted); }
 
