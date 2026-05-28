@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DesignVault is a **static front-end portfolio** showcasing three web design demos. There is no build process, no backend, no dependencies, and no package manager. Everything is plain HTML5, CSS3, and vanilla JavaScript.
+DesignVault is a **static front-end portfolio** showcasing four web design demos. There is no build process, no backend, and no package manager. Pages use **Bootstrap 5.3.3** (loaded via CDN) plus a per-demo `custom.css` for brand-specific overrides.
 
 The Chinese tagline "精選網頁設計作品展示" means "Premium Web Design Portfolio Showcase".
 
@@ -14,21 +14,31 @@ The Chinese tagline "精選網頁設計作品展示" means "Premium Web Design P
 
 ```
 DesignVault/
-├── index.html                        # Landing page — lists all three demos
+├── index.html                        # Landing page — lists all four demos
 ├── css/
-│   └── style.css                     # Global styles shared by index.html only
+│   └── style.css                     # Global styles for index.html only
 ├── js/
-│   └── main.js                       # Minimal init script (logs on DOMContentLoaded)
+│   └── main.js                       # Download-ZIP logic + cleanHtml() strips DV navigation
 └── pages/
     ├── fashion-ecommerce/
-    │   └── index.html                # "MAISON NOIR" e-commerce storefront
+    │   ├── custom.css                # MAISON NOIR brand overrides
+    │   ├── index.html
+    │   ├── womens/ mens/ accessories/ about/
     ├── saas-dashboard/
-    │   └── index.html                # "NexusFlow Enterprise" analytics dashboard
-    └── boutique-brand/
-        └── index.html                # "AURÈLE" luxury brand showcase
+    │   ├── custom.css                # NexusFlow Enterprise brand overrides
+    │   ├── index.html
+    │   ├── analytics/ users/ orders/ settings/
+    ├── boutique-brand/
+    │   ├── custom.css                # AURÈLE brand overrides
+    │   ├── index.html
+    │   ├── story/ collections/ works/ contact/
+    └── space-scifi/
+        ├── custom.css                # NEXUS VOID brand overrides
+        ├── index.html
+        ├── missions/ fleet/ telemetry/ signal/
 ```
 
-Each demo page is **self-contained**: all CSS lives in a `<style>` block inside the HTML file. There are no separate per-page JS or CSS files.
+Each demo's homepage loads `custom.css`; subpages load `../custom.css`.
 
 ---
 
@@ -37,13 +47,12 @@ Each demo page is **self-contained**: all CSS lives in a `<style>` block inside 
 | Layer | Choice |
 |---|---|
 | Markup | HTML5 |
-| Styling | CSS3 (custom properties, Grid, Flexbox) |
+| CSS framework | Bootstrap 5.3.3 via jsDelivr CDN |
+| Brand styles | Per-demo `custom.css` (CSS custom properties + brand overrides) |
 | Scripting | Vanilla JavaScript (no frameworks) |
 | Fonts | Google Fonts (loaded via `<link>`) |
 | Build | None — open the file directly in a browser |
 | Dependencies | None — no `package.json` or lock files |
-| Testing | None |
-| CI/CD | None |
 
 ---
 
@@ -64,6 +73,38 @@ Then visit `http://localhost:8080` for the landing page, or navigate directly to
 - `http://localhost:8080/pages/fashion-ecommerce/`
 - `http://localhost:8080/pages/saas-dashboard/`
 - `http://localhost:8080/pages/boutique-brand/`
+- `http://localhost:8080/pages/space-scifi/`
+
+---
+
+## Bootstrap Integration Pattern
+
+### Head order (every page)
+
+```html
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Google Fonts (if needed by this demo) -->
+<link href="..." rel="stylesheet">
+<!-- Brand overrides last -->
+<link rel="stylesheet" href="custom.css">          <!-- homepage -->
+<link rel="stylesheet" href="../custom.css">       <!-- subpages -->
+```
+
+### Body end
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- demo-specific inline JS if any -->
+```
+
+### custom.css structure
+
+Each `custom.css` follows this order:
+1. `:root { }` — brand CSS variables + Bootstrap token overrides (`--bs-body-bg`, `--bs-border-radius`, etc.)
+2. Layout / structural classes unique to this demo
+3. Component overrides (navbar, cards, buttons, forms)
+4. Animation keyframes
+5. `@media` breakpoints for custom classes only (Bootstrap handles grid breakpoints)
 
 ---
 
@@ -71,73 +112,80 @@ Then visit `http://localhost:8080` for the landing page, or navigate directly to
 
 ### CSS Custom Properties
 
-`index.html` defines global variables in `:root`. Each demo page defines its own variables at the top of its `<style>` block, often overriding or extending the global set.
-
-**Global variables (index.html / style.css):**
+**Global variables (index.html / css/style.css):**
 ```css
 --bg: #ffffff
 --text: #1a1a1a
 --accent: #2563eb
 --border: #e5e7eb
 --radius: 12px
---shadow: 0 4px 20px rgba(0,0,0,0.08)
 ```
 
-**Per-page overrides:**
-- `fashion-ecommerce`: warm palette — `#faf8f5` background, `#c9a96e` gold accent
-- `saas-dashboard`: dark theme — `#0d1117` background, `#58a6ff` blue accent
-- `boutique-brand`: minimal luxury — off-white background, serif typography, muted tones
+**Per-demo brand variables (in each demo's `custom.css :root`):**
+- `fashion-ecommerce`: `--mn-bg: #faf8f5`, `--mn-gold: #c9a96e`
+- `saas-dashboard`: `--nf-bg: #0d1117`, `--nf-blue: #58a6ff`, `--nf-surface: #161b22`
+- `boutique-brand`: `--au-bg: #faf9f7`, `--au-gold: #b8a898`, `--au-bg-alt: #f3f0eb`
+- `space-scifi`: `--nv-bg: #060b14`, `--nv-cyan: #00d4ff`, `--nv-surface: #0d1829`
 
-### Responsive Breakpoints
+### Responsive Approach
 
-All pages share the same breakpoint ladder (applied via `@media` blocks inside each file's `<style>`):
-
-| Breakpoint | Target |
-|---|---|
-| `max-width: 1200px` | Large laptops |
-| `max-width: 1024px` | Tablets landscape |
-| `max-width: 768px` | Tablets portrait / large phones |
-| `max-width: 480px` | Small phones |
-
-### Layout Approach
-
-- **CSS Grid** for multi-column sections (product grids, stats, collections).
-- **Flexbox** for single-axis alignment (navbars, card interiors, icon rows).
-- Mobile-first progressive enhancement: grids collapse from N columns → 2 → 1 as viewport narrows.
+Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle layout breakpoints. Custom `@media` blocks in `custom.css` are used only for custom component classes not covered by Bootstrap utilities.
 
 ### Typography
 
 | Demo | Display font | Body font |
 |---|---|---|
-| fashion-ecommerce | Playfair Display (Google Fonts) | Inter |
+| fashion-ecommerce | Playfair Display | Inter |
 | saas-dashboard | Inter only | Inter |
-| boutique-brand | Cormorant Garamond (Google Fonts) | Inter |
+| boutique-brand | Cormorant Garamond | Inter |
+| space-scifi | `'Courier New', 'Consolas', monospace` (no Google Fonts) | monospace |
 
 ---
 
 ## Demo Pages — Key Details
 
-### 1. Fashion E-Commerce (`pages/fashion-ecommerce/index.html`)
+### 1. Fashion E-Commerce (`pages/fashion-ecommerce/`)
 
-- Brand name: **MAISON NOIR**
-- Sections: sticky nav → full-width hero → category cards → featured products grid (4-col) → membership CTA → footer
-- Hover effects on category cards (scale + overlay)
-- No JavaScript interactivity beyond standard browser behaviour
+- Brand: **MAISON NOIR** · 4 subpages: womens, mens, accessories, about
+- DesignVault back link class: `.dv-bar` (strip target for `cleanHtml()`)
+- Nav: Bootstrap `navbar-expand-lg sticky-top` with custom `--mn-*` variables
+- Filters on subpages use `nav nav-pills` (not `nav-tabs`) to receive brand pill styling
+- No JavaScript beyond Bootstrap collapse
 
-### 2. SaaS Dashboard (`pages/saas-dashboard/index.html`)
+### 2. SaaS Dashboard (`pages/saas-dashboard/`)
 
-- Brand name: **NexusFlow Enterprise**
-- Layout: fixed 240 px sidebar + scrollable main area
-- Sections: sidebar nav groups → sticky topbar (search + notifications + avatar) → KPI stats grid (4-col) → charts area → recent-orders table with coloured status badges
-- Dark theme throughout; multiple accent colours for data visualisation
-- No charting library — chart visuals are pure CSS shapes
+- Brand: **NexusFlow Enterprise** · 4 subpages: analytics, users, orders, settings
+- DesignVault back link class: `.dv-back` (strip target for `cleanHtml()`)
+- Layout: fixed 240 px `.nf-sidebar` (transforms off-screen on mobile, `.open` class toggles it) + `.nf-main`
+- Settings page uses Bootstrap JS tab panels (`data-bs-toggle="tab"`)
+- No charting library — chart bars are pure CSS
 
-### 3. Boutique Brand (`pages/boutique-brand/index.html`)
+### 3. Boutique Brand (`pages/boutique-brand/`)
 
-- Brand name: **AURÈLE**
-- Layout: fixed nav that gains a background on scroll (JS scroll listener)
-- Sections: full-height hero → philosophy quote → collections grid (3-col with zoom-on-hover) → brand story → products → contact CTA → dark footer
-- Only page with non-trivial JavaScript (scroll event for nav styling)
+- Brand: **AURÈLE** · 4 subpages: story, collections, works, contact
+- DesignVault back link class: `.designvault-link` (strip target for `cleanHtml()`)
+- Navbar: `fixed-top`, transparent; gains `.scrolled` class via scroll listener
+- `au-input` inputs have `display: block` — required for `w-100` to work on them
+- `.btn-au-outline-on-dark` variant for buttons on dark backgrounds
+
+### 4. Space Sci-Fi (`pages/space-scifi/`)
+
+- Brand: **NEXUS VOID** · 4 subpages: missions, fleet, telemetry, signal
+- DesignVault back link class: `.designvault-back` (strip target for `cleanHtml()`)
+- Monospace font everywhere — no Google Fonts loaded
+- Signal page uses Bootstrap JS tabs (only page with proper `data-bs-toggle="tab"` + `tab-content`)
+- `.nv-hero` has `padding-top: 72px` to compensate for `fixed-top` navbar
+
+### DesignVault back link classes (critical for `cleanHtml()`)
+
+| Demo | Class |
+|---|---|
+| fashion-ecommerce | `.dv-bar` |
+| saas-dashboard | `.dv-back` |
+| boutique-brand | `.designvault-link` |
+| space-scifi | `.designvault-back` |
+
+`js/main.js` `cleanHtml()` removes elements with these classes before zipping for download. If you change a back link, update `cleanHtml()` to match.
 
 ---
 
@@ -149,27 +197,28 @@ Follow the existing convention: `feat:`, `fix:`, `docs:` prefixes with a concise
 
 ```
 feat: add contact form to boutique-brand page
-fix: correct grid collapse on 768px breakpoint in saas-dashboard
-docs: update CLAUDE.md with new page conventions
+fix: correct nav-pills styling in fashion-ecommerce accessories
+docs: update CLAUDE.md with Bootstrap architecture notes
 ```
 
 ### Cache Busting
 
-When modifying `css/style.css` or `js/main.js`, update the version query string in `index.html` (e.g. `?v=20260526`) to force browser cache invalidation.
+When modifying `css/style.css` or `js/main.js`, update the version query string in `index.html` (e.g. `?v=20260528`) to force browser cache invalidation.
 
 ---
 
 ## Editing Conventions for AI Assistants
 
 1. **No build step** — edits to HTML/CSS take effect immediately on refresh. Never suggest running `npm install` or `npm build`.
-2. **Self-contained pages** — all styles for a demo page go inside that page's `<style>` block, not in external files.
-3. **Global styles** (`css/style.css`) apply only to `index.html`. Do not import it from demo pages.
-4. **CSS variables first** — when changing colours, spacing, or radii in a demo, update the variable at the top of the `<style>` block rather than scattering literal values.
-5. **No JavaScript frameworks** — keep scripts vanilla. A scroll listener or a class toggle is fine; do not reach for React, Vue, Alpine, or similar.
-6. **Responsive parity** — whenever a new section or layout is added, add the matching `@media` blocks at the same time.
-7. **No minification or bundling** — source files stay human-readable; there is no output directory to target.
-8. **Chinese copy** — the project mixes Traditional Chinese and English. Preserve the tone and register of existing Chinese text when editing nearby sections.
-9. **No new top-level files** unless explicitly requested — new demo pages go inside `pages/<demo-name>/index.html`.
+2. **No `<style>` blocks** — demo pages have no inline `<style>`. All brand CSS goes in the demo's `custom.css`, never scattered as inline `style=""` attributes.
+3. **Bootstrap utilities first** — use Bootstrap classes (`d-flex`, `gap-2`, `text-muted`, etc.) before writing custom CSS. Add custom CSS only when Bootstrap has no equivalent or brand identity requires it.
+4. **CSS variables first** — when changing colours, spacing, or radii in a demo, update the CSS variable in `custom.css :root` rather than scattering literal values.
+5. **Global styles** (`css/style.css`) apply only to `index.html`. Do not import it from demo pages.
+6. **No JavaScript frameworks** — keep scripts vanilla. A scroll listener or a class toggle is fine; do not reach for React, Vue, Alpine, or similar.
+7. **Responsive parity** — Bootstrap grid handles most layout. When adding custom classes, add the matching `@media` blocks in `custom.css` at the same time.
+8. **No minification or bundling** — source files stay human-readable.
+9. **Chinese copy** — the project mixes Traditional Chinese and English. Preserve the tone and register of existing Chinese text when editing nearby sections.
+10. **New demo pages** — go inside `pages/<demo-name>/index.html`. Add the DesignVault back link with the demo's designated class (see table above).
 
 ---
 
