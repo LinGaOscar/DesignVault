@@ -42,6 +42,16 @@ const DEMOS = {
       ['pages/space-scifi/book/index.html',       'book/index.html'],
       ['pages/space-scifi/about/index.html',      'about/index.html'],
     ]
+  },
+  'quill-landing': {
+    folder: 'quill-template',
+    files: [
+      ['pages/quill-landing/custom.css',            'custom.css'],
+      ['pages/quill-landing/index.html',            'index.html'],
+      ['pages/quill-landing/features/index.html',   'features/index.html'],
+      ['pages/quill-landing/pricing/index.html',    'pricing/index.html'],
+      ['pages/quill-landing/about/index.html',      'about/index.html'],
+    ]
   }
 };
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DesignVault is a **static front-end portfolio** showcasing four web design demos. There is no build process, no backend, and no package manager. Pages use **Bootstrap 5.3.3** (loaded via CDN) plus a per-demo `custom.css` for brand-specific overrides.
+DesignVault is a **static front-end portfolio** showcasing five web design demos. There is no build process, no backend, and no package manager. Pages use **Bootstrap 5.3.3** (loaded via CDN) plus a per-demo `custom.css` for brand-specific overrides.
 
 The Chinese tagline "精選網頁設計作品展示" means "Premium Web Design Portfolio Showcase".
 
@@ -14,7 +14,7 @@ The Chinese tagline "精選網頁設計作品展示" means "Premium Web Design P
 
 ```
 DesignVault/
-├── index.html                        # Landing page — lists all four demos
+├── index.html                        # Landing page — lists all five demos
 ├── css/
 │   └── style.css                     # Global styles for index.html only
 ├── js/
@@ -32,10 +32,14 @@ DesignVault/
     │   ├── custom.css                # AURÈLE brand overrides
     │   ├── index.html
     │   ├── story/ collections/ works/ contact/
-    └── space-scifi/
-        ├── custom.css                # NEXUS VOID brand overrides
+    ├── space-scifi/
+    │   ├── custom.css                # ORBITAL brand overrides
+    │   ├── index.html
+    │   ├── rooms/ experiences/ book/ about/
+    └── quill-landing/
+        ├── custom.css                # Quill brand overrides
         ├── index.html
-        ├── missions/ fleet/ telemetry/ signal/
+        ├── features/ pricing/ about/
 ```
 
 Each demo's homepage loads `custom.css`; subpages load `../custom.css`.
@@ -74,6 +78,7 @@ Then visit `http://localhost:8080` for the landing page, or navigate directly to
 - `http://localhost:8080/pages/saas-dashboard/`
 - `http://localhost:8080/pages/boutique-brand/`
 - `http://localhost:8080/pages/space-scifi/`
+- `http://localhost:8080/pages/quill-landing/`
 
 ---
 
@@ -126,6 +131,7 @@ Each `custom.css` follows this order:
 - `saas-dashboard`: `--nf-bg: #0d1117`, `--nf-blue: #58a6ff`, `--nf-surface: #161b22`
 - `boutique-brand`: `--au-bg: #faf9f7`, `--au-gold: #b8a898`, `--au-bg-alt: #f3f0eb`
 - `space-scifi`: `--nv-bg: #060b14`, `--nv-cyan: #00d4ff`, `--nv-surface: #0d1829`
+- `quill-landing`: `--ql-bg: #ffffff`, `--ql-teal: #0d9488`, `--ql-blue: #0ea5e9`
 
 ### Responsive Approach
 
@@ -139,6 +145,7 @@ Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle lay
 | saas-dashboard | Inter only | Inter |
 | boutique-brand | Cormorant Garamond | Inter |
 | space-scifi | `'Courier New', 'Consolas', monospace` (no Google Fonts) | monospace |
+| quill-landing | Inter only | Inter |
 
 ---
 
@@ -177,6 +184,17 @@ Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle lay
 - `book/`: Booking form with date pickers, room select, guest count; all `<label>` have `for` matching `id`
 - `.nv-hero` has `padding-top: 72px` to compensate for `fixed-top` navbar
 
+### 5. Quill Landing Page (`pages/quill-landing/`)
+
+- Brand: **Quill** · 3 subpages: features, pricing, about
+- DesignVault back link class: `.dv-bar` (strip target for `cleanHtml()`)
+- Palette: `--ql-teal: #0d9488`, `--ql-blue: #0ea5e9`, white background (`--ql-bg: #ffffff`)
+- Google Fonts: Inter only (loaded in homepage; subpages inherit via `../custom.css`)
+- Navbar: `sticky-top` (NOT `fixed-top`) — no padding compensation needed
+- `pricing/`: visual billing toggle (pure CSS, no JS), `Pro` card has `.featured` class + `.pricing-badge`
+- `pricing/`: Bootstrap accordion FAQ with IDs `faq1`–`faq4`; first item open (`show`) by default
+- `.ql-editor-mock`: homepage hero editor mockup with `.mock-toolbar` and `.ql-ai-chip` floating chip
+
 ### DesignVault back link classes (critical for `cleanHtml()`)
 
 | Demo | Class |
@@ -185,6 +203,7 @@ Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle lay
 | saas-dashboard | `.dv-back` |
 | boutique-brand | `.designvault-link` |
 | space-scifi | `.designvault-back` |
+| quill-landing | `.dv-bar` |
 
 `js/main.js` `cleanHtml()` removes elements with these classes before zipping for download. If you change a back link, update `cleanHtml()` to match.
 
