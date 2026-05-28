@@ -3,925 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusFlow — 管理儀表板</title>
+    <title>NexusFlow — 儀表板</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #0c0e11;
-            --surface: #13161b;
-            --surface-2: #1a1e25;
-            --border: rgba(255,255,255,0.07);
-            --border-solid: #1f2430;
-            --text: #e2e4e9;
-            --text-muted: #5a6272;
-            --text-dim: #8892a0;
-            --accent: #5b8ef8;
-            --green: #34d399;
-            --red: #f87171;
-            --orange: #fb923c;
-            --purple: #a78bfa;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* ====== Layout ====== */
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* ====== Sidebar ====== */
-        .sidebar {
-            width: 240px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            padding: 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            transition: transform 0.3s;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-header {
-            padding: 24px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-logo {
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            color: var(--text);
-        }
-
-        .sidebar-plan {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: var(--accent);
-            background: rgba(91,142,248,0.1);
-            padding: 2px 8px;
-            border-radius: 3px;
-            margin-top: 6px;
-        }
-
-        .nav-section {
-            padding: 20px 0 8px;
-        }
-
-        .nav-section-label {
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 0 20px;
-            margin-bottom: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 20px;
-            font-size: 0.825rem;
-            font-weight: 400;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-            position: relative;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.04);
-            color: var(--text);
-        }
-
-        .nav-item.active {
-            color: var(--text);
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 2px;
-            height: 16px;
-            background: var(--accent);
-            border-radius: 0 1px 1px 0;
-        }
-
-        .nav-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: transparent;
-            border: 1px solid var(--text-muted);
-            flex-shrink: 0;
-            transition: background 0.15s, border-color 0.15s;
-        }
-
-        .nav-item.active .nav-dot {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .nav-item:hover .nav-dot {
-            border-color: var(--text-dim);
-        }
-
-        /* ====== Main ====== */
-        .main {
-            flex: 1;
-            margin-left: 240px;
-            min-width: 0;
-        }
-
-        /* ====== Topbar ====== */
-        .topbar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0 32px;
-            height: 56px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 18px;
-            height: 1px;
-            background: var(--text-dim);
-        }
-
-        .topbar-title {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg);
-            border: 1px solid var(--border-solid);
-            border-radius: 6px;
-            padding: 7px 14px;
-        }
-
-        .search-icon {
-            width: 14px;
-            height: 14px;
-            border: 1.5px solid var(--text-muted);
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .search-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            right: -4px;
-            width: 5px;
-            height: 1.5px;
-            background: var(--text-muted);
-            transform: rotate(45deg);
-        }
-
-        .search-box input {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 0.8rem;
-            font-family: inherit;
-            outline: none;
-            width: 180px;
-        }
-
-        .search-box input::placeholder { color: var(--text-muted); }
-
-        .notif-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            background: none;
-            border: 1px solid var(--border-solid);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s;
-        }
-
-        .notif-btn:hover { background: var(--surface-2); }
-
-        .notif-icon {
-            width: 12px;
-            height: 13px;
-            border: 1.5px solid var(--text-dim);
-            border-radius: 3px 3px 0 0;
-            position: relative;
-        }
-
-        .notif-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 3px;
-            border: 1.5px solid var(--text-dim);
-            border-top: none;
-            border-radius: 0 0 3px 3px;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* ====== Content ====== */
-        .content {
-            padding: 28px 32px;
-        }
-
-        .content-header {
-            margin-bottom: 28px;
-        }
-
-        .content-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .content-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* ====== Stats ====== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .stat-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .stat-label {
-            font-size: 0.775rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .stat-badge {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .stat-badge.blue  { background: rgba(91,142,248,0.12); color: var(--accent); }
-        .stat-badge.green { background: rgba(52,211,153,0.12); color: var(--green); }
-        .stat-badge.purple{ background: rgba(167,139,250,0.12); color: var(--purple); }
-        .stat-badge.orange{ background: rgba(251,146,60,0.12); color: var(--orange); }
-
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-        }
-
-        .stat-change {
-            font-size: 0.75rem;
-            font-weight: 400;
-        }
-
-        .stat-change.up   { color: var(--green); }
-        .stat-change.down { color: var(--red); }
-
-        /* ====== Charts Row ====== */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .tab-group {
-            display: flex;
-            gap: 4px;
-        }
-
-        .tab {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: inherit;
-            transition: all 0.15s;
-        }
-
-        .tab:hover { background: var(--surface-2); color: var(--text-dim); }
-
-        .tab.active {
-            background: var(--surface-2);
-            color: var(--text);
-            border: 1px solid var(--border-solid);
-        }
-
-        /* Bar Chart */
-        .bar-chart {
-            height: 200px;
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            padding-top: 20px;
-        }
-
-        .bar-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            height: 100%;
-            justify-content: flex-end;
-        }
-
-        .bar {
-            width: 100%;
-            border-radius: 3px 3px 0 0;
-            background: linear-gradient(180deg, var(--accent) 0%, rgba(91,142,248,0.4) 100%);
-            transition: opacity 0.2s;
-        }
-
-        .bar:hover { opacity: 0.8; }
-
-        .bar-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-
-        /* Donut Chart */
-        .donut-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 0;
-        }
-
-        .donut {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: conic-gradient(
-                var(--accent)   0deg 140deg,
-                var(--green)    140deg 230deg,
-                var(--purple)   230deg 300deg,
-                var(--orange)   300deg 360deg
-            );
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .donut-hole {
-            position: absolute;
-            inset: 24px;
-            background: var(--surface);
-            border-radius: 50%;
-        }
-
-        .legend {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .legend-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .legend-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .legend-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .legend-label {
-            font-size: 0.775rem;
-            color: var(--text-dim);
-        }
-
-        .legend-pct {
-            font-size: 0.775rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        /* ====== Table ====== */
-        .table-wrap { overflow-x: auto; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            padding: 10px 16px;
-            font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 13px 16px;
-            font-size: 0.825rem;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border);
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
-
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-av {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 9px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 500;
-        }
-
-        .badge-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-        }
-
-        .badge.success { background: rgba(52,211,153,0.1); color: var(--green); }
-        .badge.warning { background: rgba(251,146,60,0.1); color: var(--orange); }
-        .badge.error   { background: rgba(248,113,113,0.1); color: var(--red); }
-        .badge.success .badge-dot { background: var(--green); }
-        .badge.warning .badge-dot { background: var(--orange); }
-        .badge.error   .badge-dot { background: var(--red); }
-
-        .text-bold { color: var(--text); font-weight: 500; }
-
-        .action-btn {
-            padding: 5px 12px;
-            border-radius: 5px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--border-solid);
-            background: transparent;
-            color: var(--text-dim);
-            font-family: inherit;
-            transition: all 0.15s;
-        }
-
-        .action-btn:hover {
-            background: var(--surface-2);
-            color: var(--text);
-        }
-
-        /* ====== Responsive ====== */
-        @media (max-width: 1200px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .charts-row { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main { margin-left: 0; }
-            .menu-toggle { display: flex; }
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .content { padding: 20px 16px; }
-            .topbar { padding: 0 16px; }
-            .search-box { display: none; }
-            .topbar-title { font-size: 0.825rem; }
-        }
-
-        @media (max-width: 480px) {
-            .stat-value { font-size: 1.5rem; }
-            .card-head { flex-direction: column; gap: 12px; align-items: flex-start; }
-        }
-
-        /* DesignVault 返回連結：放在 sidebar 最頂部 */
-        .dv-back {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
-            transition: color 0.15s;
-            letter-spacing: 0.2px;
-        }
-
-        .dv-back:hover { color: var(--text-dim); }
-
-        .dv-back-arrow {
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-    </style>
+    <link rel="stylesheet" href="custom.css">
 </head>
 <body>
-<div class="layout">
+<div class="nf-layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <a href="../../index.html" class="dv-back">
-            <span class="dv-back-arrow">←</span>DesignVault
-        </a>
-        <div class="sidebar-header">
-            <div class="sidebar-logo">NexusFlow</div>
-            <div class="sidebar-plan">Enterprise</div>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">主頁</p>
-            <a class="nav-item active" href="#">
-                <span class="nav-dot"></span>儀表板
-            </a>
-            <a class="nav-item" href="analytics/">
-                <span class="nav-dot"></span>分析
-            </a>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">管理</p>
-            <a class="nav-item" href="users/">
-                <span class="nav-dot"></span>用戶
-            </a>
-            <a class="nav-item" href="orders/">
-                <span class="nav-dot"></span>訂單
-            </a>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">系統</p>
-            <a class="nav-item" href="settings/">
-                <span class="nav-dot"></span>設定
-            </a>
-        </div>
+    <!-- 側邊欄 -->
+    <aside class="nf-sidebar" id="sidebar">
+        <a href="../../index.html" class="dv-back">← DesignVault</a>
+        <div class="sidebar-logo">NexusFlow</div>
+        <p class="nav-group-title">主頁</p>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="./">📊 儀表板</a>
+            <a class="nav-link" href="analytics/">📈 分析</a>
+        </nav>
+        <p class="nav-group-title">管理</p>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="users/">👥 用戶</a>
+            <a class="nav-link" href="orders/">📦 訂單</a>
+        </nav>
+        <p class="nav-group-title">系統</p>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="settings/">⚙️ 設定</a>
+        </nav>
     </aside>
 
-    <!-- Main -->
-    <main class="main">
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
-                    <span></span><span></span><span></span>
-                </button>
-                <span class="topbar-title">儀表板</span>
+    <!-- 主要內容 -->
+    <main class="nf-main">
+
+        <!-- 頂部導覽列 -->
+        <header class="nf-topbar d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn p-0 border-0 d-md-none" style="color:var(--nf-text);font-size:1.25rem;" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                <input type="search" class="form-control form-control-sm d-none d-md-block" placeholder="搜尋..." style="width:200px;">
             </div>
-            <div class="topbar-right">
-                <div class="search-box">
-                    <div class="search-icon"></div>
-                    <input type="text" placeholder="搜尋...">
-                </div>
-                <button class="notif-btn"><div class="notif-icon"></div></button>
-                <div class="avatar">JD</div>
+            <div class="d-flex align-items-center gap-3">
+                <span style="color:var(--nf-text-muted);font-size:1.1rem;">🔔</span>
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:32px;height:32px;background:var(--nf-blue);color:#fff;font-size:0.75rem;font-weight:500;">JD</div>
             </div>
         </header>
 
-        <div class="content">
-            <div class="content-header">
-                <h1 class="content-title">總覽</h1>
-                <p class="content-subtitle">2026年5月 · 所有數據已更新至今日</p>
+        <div class="p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h1 class="fs-5 fw-normal mb-1">儀表板</h1>
+                    <p class="small mb-0" style="color:var(--nf-text-muted);">歡迎回來，John</p>
+                </div>
+                <button class="btn-nf">+ 新增報表</button>
             </div>
 
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-top">
-                        <p class="stat-label">總營收</p>
-                        <div class="stat-badge blue">$</div>
+            <!-- 統計卡片 -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+                <div class="col">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <p class="small mb-0" style="color:var(--nf-text-muted);">總營收</p>
+                            <span style="color:var(--nf-text-muted);">💰</span>
+                        </div>
+                        <p class="stat-value mb-1">NT$2.4M</p>
+                        <p class="stat-change-up mb-0">↑ 12.5% vs 上月</p>
                     </div>
-                    <p class="stat-value">NT$2.4M</p>
-                    <p class="stat-change up">↑ 12.5% vs 上月</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-top">
-                        <p class="stat-label">活躍用戶</p>
-                        <div class="stat-badge green">U</div>
+                <div class="col">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <p class="small mb-0" style="color:var(--nf-text-muted);">活躍用戶</p>
+                            <span style="color:var(--nf-text-muted);">👥</span>
+                        </div>
+                        <p class="stat-value mb-1">8,247</p>
+                        <p class="stat-change-up mb-0">↑ 3.2% vs 上月</p>
                     </div>
-                    <p class="stat-value">18,432</p>
-                    <p class="stat-change up">↑ 8.2% vs 上月</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-top">
-                        <p class="stat-label">訂單數</p>
-                        <div class="stat-badge purple">O</div>
+                <div class="col">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <p class="small mb-0" style="color:var(--nf-text-muted);">訂單數</p>
+                            <span style="color:var(--nf-text-muted);">📦</span>
+                        </div>
+                        <p class="stat-value mb-1">1,893</p>
+                        <p class="stat-change-down mb-0">↓ 1.8% vs 上月</p>
                     </div>
-                    <p class="stat-value">3,847</p>
-                    <p class="stat-change down">↓ 2.1% vs 上月</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-top">
-                        <p class="stat-label">轉換率</p>
-                        <div class="stat-badge orange">%</div>
+                <div class="col">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <p class="small mb-0" style="color:var(--nf-text-muted);">轉換率</p>
+                            <span style="color:var(--nf-text-muted);">📊</span>
+                        </div>
+                        <p class="stat-value mb-1">3.64%</p>
+                        <p class="stat-change-up mb-0">↑ 0.4% vs 上月</p>
                     </div>
-                    <p class="stat-value">4.2%</p>
-                    <p class="stat-change up">↑ 0.4% vs 上月</p>
                 </div>
             </div>
 
-            <!-- Charts -->
-            <div class="charts-row">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title">營收趨勢</h3>
-                        <div class="tab-group">
-                            <button class="tab active">週</button>
-                            <button class="tab">月</button>
-                            <button class="tab">年</button>
+            <div class="row g-4 mb-4">
+                <!-- 營收趨勢圖 -->
+                <div class="col-12 col-lg-8">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">營收趨勢</h6>
+                            <span class="small" style="color:var(--nf-text-muted);">最近 7 天</span>
                         </div>
-                    </div>
-                    <div class="bar-chart">
-                        <div class="bar-col">
-                            <div class="bar" style="height:55%"></div>
-                            <span class="bar-label">Mon</span>
+                        <div class="chart-bar-wrap">
+                            <div class="chart-bar" style="height:45%;"></div>
+                            <div class="chart-bar" style="height:60%;"></div>
+                            <div class="chart-bar" style="height:38%;"></div>
+                            <div class="chart-bar" style="height:75%;"></div>
+                            <div class="chart-bar" style="height:55%;"></div>
+                            <div class="chart-bar" style="height:80%;"></div>
+                            <div class="chart-bar current" style="height:92%;"></div>
                         </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:75%"></div>
-                            <span class="bar-label">Tue</span>
-                        </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:45%"></div>
-                            <span class="bar-label">Wed</span>
-                        </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:85%"></div>
-                            <span class="bar-label">Thu</span>
-                        </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:60%"></div>
-                            <span class="bar-label">Fri</span>
-                        </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:92%"></div>
-                            <span class="bar-label">Sat</span>
-                        </div>
-                        <div class="bar-col">
-                            <div class="bar" style="height:68%"></div>
-                            <span class="bar-label">Sun</span>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="small" style="color:var(--nf-text-muted);">5/22</span>
+                            <span class="small" style="color:var(--nf-text-muted);">5/28</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title">營收來源</h3>
-                    </div>
-                    <div class="donut-wrap">
-                        <div class="donut"><div class="donut-hole"></div></div>
-                        <div class="legend">
-                            <div class="legend-row">
-                                <div class="legend-left">
-                                    <span class="legend-dot" style="background:var(--accent)"></span>
-                                    <span class="legend-label">訂閱</span>
+                <!-- 系統狀態 -->
+                <div class="col-12 col-lg-4">
+                    <div class="card p-3 h-100">
+                        <h6 class="mb-3">系統狀態</h6>
+                        <div class="d-flex flex-column gap-3">
+                            <div>
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span style="color:var(--nf-text-muted);">API 回應速度</span>
+                                    <span style="color:var(--nf-green);">142ms</span>
                                 </div>
-                                <span class="legend-pct">39%</span>
+                                <div class="progress"><div class="progress-bar" style="width:85%;background:var(--nf-green);"></div></div>
                             </div>
-                            <div class="legend-row">
-                                <div class="legend-left">
-                                    <span class="legend-dot" style="background:var(--green)"></span>
-                                    <span class="legend-label">一次性</span>
+                            <div>
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span style="color:var(--nf-text-muted);">伺服器負載</span>
+                                    <span>43%</span>
                                 </div>
-                                <span class="legend-pct">25%</span>
+                                <div class="progress"><div class="progress-bar" style="width:43%;"></div></div>
                             </div>
-                            <div class="legend-row">
-                                <div class="legend-left">
-                                    <span class="legend-dot" style="background:var(--purple)"></span>
-                                    <span class="legend-label">企業</span>
+                            <div>
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span style="color:var(--nf-text-muted);">資料庫使用</span>
+                                    <span style="color:var(--nf-yellow);">78%</span>
                                 </div>
-                                <span class="legend-pct">19%</span>
+                                <div class="progress"><div class="progress-bar" style="width:78%;background:var(--nf-yellow);"></div></div>
                             </div>
-                            <div class="legend-row">
-                                <div class="legend-left">
-                                    <span class="legend-dot" style="background:var(--orange)"></span>
-                                    <span class="legend-label">其他</span>
+                            <div>
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span style="color:var(--nf-text-muted);">正常運行時間</span>
+                                    <span style="color:var(--nf-green);">99.9%</span>
                                 </div>
-                                <span class="legend-pct">17%</span>
+                                <div class="progress"><div class="progress-bar" style="width:99.9%;background:var(--nf-green);"></div></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Table -->
+            <!-- 最近訂單表格 -->
             <div class="card">
-                <div class="card-head">
-                    <h3 class="card-title">最近訂單</h3>
-                    <button class="action-btn">查看全部</button>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>訂單 ID</th>
-                                <th>客戶</th>
-                                <th>專案</th>
-                                <th>金額</th>
-                                <th>狀態</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-bold">#ORD-2024-001</td>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(91,142,248,0.15);color:var(--accent)">王</div>
-                                        王小明
-                                    </div>
-                                </td>
-                                <td>企業版授權</td>
-                                <td class="text-bold">NT$128,000</td>
-                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">#ORD-2024-002</td>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(52,211,153,0.15);color:var(--green)">李</div>
-                                        李小姐
-                                    </div>
-                                </td>
-                                <td>專業版訂閱</td>
-                                <td class="text-bold">NT$24,000</td>
-                                <td><span class="badge success"><span class="badge-dot"></span>已完成</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">#ORD-2024-003</td>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(167,139,250,0.15);color:var(--purple)">黃</div>
-                                        黃先生
-                                    </div>
-                                </td>
-                                <td>客製化開發</td>
-                                <td class="text-bold">NT$380,000</td>
-                                <td><span class="badge warning"><span class="badge-dot"></span>處理中</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">#ORD-2024-004</td>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(248,113,113,0.15);color:var(--red)">張</div>
-                                        張小姐
-                                    </div>
-                                </td>
-                                <td>標準版授權</td>
-                                <td class="text-bold">NT$48,000</td>
-                                <td><span class="badge error"><span class="badge-dot"></span>已取消</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">最近訂單</h6>
+                        <a href="orders/" class="small" style="color:var(--nf-blue);text-decoration:none;">查看全部</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>訂單號</th><th>客戶</th><th>商品</th><th>金額</th><th>狀態</th><th>日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>#ORD-2847</td><td>陳小明</td><td>Premium 方案</td><td>NT$ 2,400</td><td><span class="badge badge-active">已完成</span></td><td>2026-05-28</td></tr>
+                                <tr><td>#ORD-2846</td><td>林雅琪</td><td>Business 方案</td><td>NT$ 4,800</td><td><span class="badge badge-pending">處理中</span></td><td>2026-05-28</td></tr>
+                                <tr><td>#ORD-2845</td><td>王大偉</td><td>Starter 方案</td><td>NT$ 960</td><td><span class="badge badge-active">已完成</span></td><td>2026-05-27</td></tr>
+                                <tr><td>#ORD-2844</td><td>張美玲</td><td>Enterprise 方案</td><td>NT$ 12,000</td><td><span class="badge badge-pending">審核中</span></td><td>2026-05-27</td></tr>
+                                <tr><td>#ORD-2843</td><td>李建國</td><td>Premium 方案</td><td>NT$ 2,400</td><td><span class="badge badge-inactive">已取消</span></td><td>2026-05-26</td></tr>
+                                <tr><td>#ORD-2842</td><td>吳淑芬</td><td>Business 方案</td><td>NT$ 4,800</td><td><span class="badge badge-active">已完成</span></td><td>2026-05-26</td></tr>
+                                <tr><td>#ORD-2841</td><td>黃志豪</td><td>Starter 方案</td><td>NT$ 960</td><td><span class="badge badge-active">已完成</span></td><td>2026-05-25</td></tr>
+                                <tr><td>#ORD-2840</td><td>劉芳華</td><td>Premium 方案</td><td>NT$ 2,400</td><td><span class="badge badge-pending">處理中</span></td><td>2026-05-25</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

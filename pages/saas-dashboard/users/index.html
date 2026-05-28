@@ -3,842 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用戶管理 | NexusFlow</title>
+    <title>NexusFlow — 用戶管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #0c0e11;
-            --surface: #13161b;
-            --surface-2: #1a1e25;
-            --border: rgba(255,255,255,0.07);
-            --border-solid: #1f2430;
-            --text: #e2e4e9;
-            --text-muted: #5a6272;
-            --text-dim: #8892a0;
-            --accent: #5b8ef8;
-            --green: #34d399;
-            --red: #f87171;
-            --orange: #fb923c;
-            --purple: #a78bfa;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        .layout { display: flex; min-height: 100vh; }
-
-        /* ====== Sidebar ====== */
-        .sidebar {
-            width: 240px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            transition: transform 0.3s;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dv-back {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
-            transition: color 0.15s;
-            letter-spacing: 0.2px;
-        }
-        .dv-back:hover { color: var(--text-dim); }
-        .dv-back-arrow { font-size: 0.7rem; opacity: 0.7; }
-
-        .sidebar-header {
-            padding: 24px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-logo { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
-
-        .sidebar-plan {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: var(--accent);
-            background: rgba(91,142,248,0.1);
-            padding: 2px 8px;
-            border-radius: 3px;
-            margin-top: 6px;
-        }
-
-        .nav-section { padding: 20px 0 8px; }
-
-        .nav-section-label {
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 0 20px;
-            margin-bottom: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 20px;
-            font-size: 0.825rem;
-            font-weight: 400;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-            position: relative;
-        }
-
-        .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
-        .nav-item.active { color: var(--text); }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 50%;
-            transform: translateY(-50%);
-            width: 2px; height: 16px;
-            background: var(--accent);
-            border-radius: 0 1px 1px 0;
-        }
-
-        .nav-dot {
-            width: 5px; height: 5px;
-            border-radius: 50%;
-            background: transparent;
-            border: 1px solid var(--text-muted);
-            flex-shrink: 0;
-            transition: background 0.15s, border-color 0.15s;
-        }
-
-        .nav-item.active .nav-dot { background: var(--accent); border-color: var(--accent); }
-        .nav-item:hover .nav-dot { border-color: var(--text-dim); }
-
-        /* ====== Main ====== */
-        .main { flex: 1; margin-left: 240px; min-width: 0; }
-
-        /* ====== Topbar ====== */
-        .topbar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0 32px;
-            height: 56px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .topbar-left { display: flex; align-items: center; gap: 16px; }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .menu-toggle span { display: block; width: 18px; height: 1px; background: var(--text-dim); }
-
-        .topbar-title { font-size: 0.875rem; font-weight: 500; color: var(--text); }
-
-        .topbar-right { display: flex; align-items: center; gap: 16px; }
-
-        .search-box {
-            display: flex; align-items: center; gap: 8px;
-            background: var(--bg);
-            border: 1px solid var(--border-solid);
-            border-radius: 6px;
-            padding: 7px 14px;
-        }
-
-        .search-icon {
-            width: 14px; height: 14px;
-            border: 1.5px solid var(--text-muted);
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .search-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; right: -4px;
-            width: 5px; height: 1.5px;
-            background: var(--text-muted);
-            transform: rotate(45deg);
-        }
-
-        .search-box input {
-            background: none; border: none;
-            color: var(--text); font-size: 0.8rem;
-            font-family: inherit; outline: none; width: 180px;
-        }
-
-        .search-box input::placeholder { color: var(--text-muted); }
-
-        .notif-btn {
-            width: 32px; height: 32px; border-radius: 6px;
-            background: none; border: 1px solid var(--border-solid);
-            cursor: pointer; display: flex; align-items: center;
-            justify-content: center; transition: background 0.15s;
-        }
-
-        .notif-btn:hover { background: var(--surface-2); }
-
-        .notif-icon {
-            width: 12px; height: 13px;
-            border: 1.5px solid var(--text-dim);
-            border-radius: 3px 3px 0 0;
-            position: relative;
-        }
-
-        .notif-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 50%;
-            transform: translateX(-50%);
-            width: 6px; height: 3px;
-            border: 1.5px solid var(--text-dim);
-            border-top: none;
-            border-radius: 0 0 3px 3px;
-        }
-
-        .avatar {
-            width: 32px; height: 32px; border-radius: 6px;
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 600; cursor: pointer;
-        }
-
-        /* ====== Content ====== */
-        .content { padding: 28px 32px; }
-
-        .content-header { margin-bottom: 28px; }
-
-        .content-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
-
-        .content-subtitle { font-size: 0.8rem; color: var(--text-muted); }
-
-        /* ====== 搜尋 + 篩選列 ====== */
-        .toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .toolbar-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-
-        .search-input-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--surface);
-            border: 1px solid var(--border-solid);
-            border-radius: 7px;
-            padding: 8px 14px;
-            flex: 1;
-            max-width: 320px;
-            transition: border-color 0.15s;
-        }
-
-        .search-input-wrap:focus-within { border-color: var(--accent); }
-
-        .search-input-wrap input {
-            background: none; border: none;
-            color: var(--text); font-size: 0.825rem;
-            font-family: inherit; outline: none; width: 100%;
-        }
-
-        .search-input-wrap input::placeholder { color: var(--text-muted); }
-
-        .search-ic {
-            width: 13px; height: 13px;
-            border: 1.5px solid var(--text-muted);
-            border-radius: 50%;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .search-ic::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; right: -4px;
-            width: 5px; height: 1.5px;
-            background: var(--text-muted);
-            transform: rotate(45deg);
-        }
-
-        .filter-select {
-            background: var(--surface);
-            border: 1px solid var(--border-solid);
-            border-radius: 7px;
-            padding: 8px 12px;
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            font-family: inherit;
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.15s;
-        }
-
-        .filter-select:focus { border-color: var(--accent); }
-
-        .btn-primary {
-            padding: 8px 16px;
-            border-radius: 7px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            background: var(--accent);
-            color: #fff;
-            font-family: inherit;
-            transition: opacity 0.15s;
-            white-space: nowrap;
-        }
-
-        .btn-primary:hover { opacity: 0.88; }
-
-        /* ====== Table Card ====== */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .card-title { font-size: 0.875rem; font-weight: 500; }
-
-        .card-count { font-size: 0.78rem; color: var(--text-muted); }
-
-        /* ====== Table ====== */
-        .table-wrap { overflow-x: auto; }
-
-        table { width: 100%; border-collapse: collapse; }
-
-        th {
-            text-align: left;
-            padding: 10px 20px;
-            font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 14px 20px;
-            font-size: 0.825rem;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border);
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(255,255,255,0.02); }
-
-        .user-cell { display: flex; align-items: center; gap: 10px; }
-
-        .user-av {
-            width: 32px; height: 32px;
-            border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .user-name { font-size: 0.825rem; font-weight: 500; color: var(--text); }
-        .user-email { font-size: 0.75rem; color: var(--text-muted); }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 9px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 500;
-        }
-
-        .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
-
-        .badge.success { background: rgba(52,211,153,0.1); color: var(--green); }
-        .badge.warning { background: rgba(251,146,60,0.1); color: var(--orange); }
-        .badge.error   { background: rgba(248,113,113,0.1); color: var(--red); }
-        .badge.info    { background: rgba(91,142,248,0.1); color: var(--accent); }
-        .badge.success .badge-dot { background: var(--green); }
-        .badge.warning .badge-dot { background: var(--orange); }
-        .badge.error   .badge-dot { background: var(--red); }
-        .badge.info    .badge-dot { background: var(--accent); }
-
-        .role-badge {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            border: 1px solid var(--border-solid);
-            color: var(--text-dim);
-        }
-
-        .role-badge.admin { border-color: rgba(91,142,248,0.3); color: var(--accent); }
-        .role-badge.manager { border-color: rgba(167,139,250,0.3); color: var(--purple); }
-
-        .action-wrap { display: flex; gap: 6px; }
-
-        .action-btn {
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--border-solid);
-            background: transparent;
-            color: var(--text-dim);
-            font-family: inherit;
-            transition: all 0.15s;
-        }
-
-        .action-btn:hover { background: var(--surface-2); color: var(--text); }
-
-        .action-btn.danger { border-color: rgba(248,113,113,0.2); color: var(--red); }
-        .action-btn.danger:hover { background: rgba(248,113,113,0.08); }
-
-        /* ====== Pagination ====== */
-        .pagination {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .pagination-info { font-size: 0.78rem; color: var(--text-muted); }
-
-        .pagination-btns { display: flex; gap: 4px; }
-
-        .page-btn {
-            width: 30px; height: 30px;
-            border-radius: 6px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--border-solid);
-            background: transparent;
-            color: var(--text-dim);
-            font-family: inherit;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .page-btn:hover { background: var(--surface-2); color: var(--text); }
-
-        .page-btn.active {
-            background: rgba(91,142,248,0.12);
-            border-color: rgba(91,142,248,0.3);
-            color: var(--accent);
-        }
-
-        /* ====== Responsive ====== */
-        @media (max-width: 1024px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main { margin-left: 0; }
-            .menu-toggle { display: flex; }
-        }
-
-        @media (max-width: 768px) {
-            .content { padding: 20px 16px; }
-            .topbar { padding: 0 16px; }
-            .search-box { display: none; }
-            .toolbar { flex-direction: column; align-items: flex-start; }
-            .toolbar-left { width: 100%; }
-            .search-input-wrap { max-width: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .action-wrap { flex-direction: column; }
-            .card-head { flex-direction: column; gap: 8px; align-items: flex-start; }
-        }
-    </style>
+    <link rel="stylesheet" href="../custom.css">
 </head>
 <body>
-<div class="layout">
+<div class="nf-layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <a href="../../../index.html" class="dv-back">
-            <span class="dv-back-arrow">←</span>DesignVault
-        </a>
-        <div class="sidebar-header">
-            <div class="sidebar-logo">NexusFlow</div>
-            <div class="sidebar-plan">Enterprise</div>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">主頁</p>
-            <a class="nav-item" href="../">
-                <span class="nav-dot"></span>儀表板
-            </a>
-            <a class="nav-item" href="../analytics/">
-                <span class="nav-dot"></span>分析
-            </a>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">管理</p>
-            <a class="nav-item active" href="#">
-                <span class="nav-dot"></span>用戶
-            </a>
-            <a class="nav-item" href="../orders/">
-                <span class="nav-dot"></span>訂單
-            </a>
-        </div>
-
-        <div class="nav-section">
-            <p class="nav-section-label">系統</p>
-            <a class="nav-item" href="../settings/">
-                <span class="nav-dot"></span>設定
-            </a>
-        </div>
+    <!-- 側邊欄 -->
+    <aside class="nf-sidebar" id="sidebar">
+        <a href="../../../index.html" class="dv-back">← DesignVault</a>
+        <div class="sidebar-logo">NexusFlow</div>
+        <p class="nav-group-title">主頁</p>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="../">📊 儀表板</a>
+            <a class="nav-link" href="../analytics/">📈 分析</a>
+        </nav>
+        <p class="nav-group-title">管理</p>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="./">👥 用戶</a>
+            <a class="nav-link" href="../orders/">📦 訂單</a>
+        </nav>
+        <p class="nav-group-title">系統</p>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="../settings/">⚙️ 設定</a>
+        </nav>
     </aside>
 
-    <!-- Main -->
-    <main class="main">
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
-                    <span></span><span></span><span></span>
-                </button>
-                <span class="topbar-title">用戶管理</span>
+    <!-- 主要內容 -->
+    <main class="nf-main">
+
+        <!-- 頂部導覽列 -->
+        <header class="nf-topbar d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn p-0 border-0 d-md-none" style="color:var(--nf-text);font-size:1.25rem;" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                <input type="search" class="form-control form-control-sm d-none d-md-block" placeholder="搜尋用戶..." style="width:220px;">
             </div>
-            <div class="topbar-right">
-                <div class="search-box">
-                    <div class="search-icon"></div>
-                    <input type="text" placeholder="搜尋...">
-                </div>
-                <button class="notif-btn"><div class="notif-icon"></div></button>
-                <div class="avatar">JD</div>
+            <div class="d-flex gap-2 align-items-center">
+                <select class="form-select form-select-sm" style="width:auto;">
+                    <option value="">全部角色</option>
+                    <option>管理員</option>
+                    <option>編輯者</option>
+                    <option>一般用戶</option>
+                </select>
+                <select class="form-select form-select-sm" style="width:auto;">
+                    <option value="">全部狀態</option>
+                    <option>已啟用</option>
+                    <option>已停用</option>
+                    <option>待驗證</option>
+                </select>
+                <button class="btn-nf">+ 新增用戶</button>
             </div>
         </header>
 
-        <div class="content">
-            <div class="content-header">
-                <h1 class="content-title">用戶管理</h1>
-                <p class="content-subtitle">管理所有平台用戶的帳號、角色與存取權限</p>
+        <div class="p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h1 class="fs-5 fw-normal mb-1">用戶管理</h1>
+                    <p class="small mb-0" style="color:var(--nf-text-muted);">共 10 位用戶</p>
+                </div>
             </div>
 
-            <!-- 搜尋 + 篩選 -->
-            <div class="toolbar">
-                <div class="toolbar-left">
-                    <div class="search-input-wrap">
-                        <div class="search-ic"></div>
-                        <input type="text" placeholder="搜尋姓名、Email...">
+            <!-- 用戶統計 -->
+            <div class="row row-cols-1 row-cols-sm-3 g-3 mb-4">
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="small mb-1" style="color:var(--nf-text-muted);">總用戶數</p>
+                        <p class="stat-value mb-0">8,247</p>
                     </div>
-                    <select class="filter-select">
-                        <option>所有角色</option>
-                        <option>管理員</option>
-                        <option>經理</option>
-                        <option>一般用戶</option>
-                    </select>
-                    <select class="filter-select">
-                        <option>所有狀態</option>
-                        <option>啟用中</option>
-                        <option>未啟用</option>
-                        <option>待審核</option>
-                    </select>
                 </div>
-                <button class="btn-primary">+ 新增用戶</button>
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="small mb-1" style="color:var(--nf-text-muted);">本月新增</p>
+                        <p class="stat-value mb-0" style="color:var(--nf-green);">+142</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="small mb-1" style="color:var(--nf-text-muted);">待驗證</p>
+                        <p class="stat-value mb-0" style="color:var(--nf-yellow);">23</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- 用戶表格 -->
+            <!-- 用戶列表 -->
             <div class="card">
-                <div class="card-head">
-                    <span class="card-title">用戶列表</span>
-                    <span class="card-count">共 248 位用戶</span>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>用戶</th>
-                                <th>角色</th>
-                                <th>狀態</th>
-                                <th>加入日期</th>
-                                <th>最後登入</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(91,142,248,0.15);color:var(--accent)">王</div>
-                                        <div>
-                                            <div class="user-name">王志明</div>
-                                            <div class="user-email">zhiming.wang@nexusflow.io</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>電子郵件</th>
+                                    <th>角色</th>
+                                    <th>狀態</th>
+                                    <th>加入日期</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:var(--nf-blue);color:#fff;font-size:0.7rem;">陳</div>
+                                            陳小明
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge admin">管理員</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2024-01-15</td>
-                                <td>2 小時前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(52,211,153,0.15);color:var(--green)">李</div>
-                                        <div>
-                                            <div class="user-name">李雅婷</div>
-                                            <div class="user-email">yating.li@gmail.com</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">chen.xiaoming@example.com</td>
+                                    <td><span class="badge badge-critical">管理員</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-03-15</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#3fb950;color:#fff;font-size:0.7rem;">林</div>
+                                            林雅琪
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge manager">經理</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2024-02-03</td>
-                                <td>昨天</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(167,139,250,0.15);color:var(--purple)">陳</div>
-                                        <div>
-                                            <div class="user-name">陳建宏</div>
-                                            <div class="user-email">jianhong.chen@corp.tw</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">lin.yaqi@example.com</td>
+                                    <td><span class="badge badge-pending">編輯者</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-04-02</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#d29922;color:#fff;font-size:0.7rem;">王</div>
+                                            王大偉
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge">一般用戶</span></td>
-                                <td><span class="badge warning"><span class="badge-dot"></span>待審核</span></td>
-                                <td>2024-03-20</td>
-                                <td>3 天前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">審核</button>
-                                        <button class="action-btn danger">拒絕</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(251,146,60,0.15);color:var(--orange)">張</div>
-                                        <div>
-                                            <div class="user-name">張淑芬</div>
-                                            <div class="user-email">shufen.zhang@outlook.com</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">wang.dawei@example.com</td>
+                                    <td><span class="badge badge-inactive">一般用戶</span></td>
+                                    <td><span class="badge badge-pending">待驗證</span></td>
+                                    <td>2024-05-10</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#58a6ff;color:#fff;font-size:0.7rem;">張</div>
+                                            張美玲
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge">一般用戶</span></td>
-                                <td><span class="badge error"><span class="badge-dot"></span>未啟用</span></td>
-                                <td>2024-04-08</td>
-                                <td>30 天前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn">啟用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(248,113,113,0.15);color:var(--red)">林</div>
-                                        <div>
-                                            <div class="user-name">林宥廷</div>
-                                            <div class="user-email">youting.lin@nexusflow.io</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">zhang.meiling@example.com</td>
+                                    <td><span class="badge badge-pending">編輯者</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-05-22</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#8b949e;color:#fff;font-size:0.7rem;">李</div>
+                                            李建國
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge manager">經理</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2024-01-28</td>
-                                <td>5 小時前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(91,142,248,0.12);color:var(--accent)">黃</div>
-                                        <div>
-                                            <div class="user-name">黃詩涵</div>
-                                            <div class="user-email">shihan.huang@corp.tw</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">li.jianguo@example.com</td>
+                                    <td><span class="badge badge-inactive">一般用戶</span></td>
+                                    <td><span class="badge badge-inactive">已停用</span></td>
+                                    <td>2024-06-01</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#3fb950;color:#fff;font-size:0.7rem;">吳</div>
+                                            吳淑芬
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge">一般用戶</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2024-05-12</td>
-                                <td>剛剛</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(52,211,153,0.12);color:var(--green)">吳</div>
-                                        <div>
-                                            <div class="user-name">吳俊賢</div>
-                                            <div class="user-email">junxian.wu@gmail.com</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">wu.shufen@example.com</td>
+                                    <td><span class="badge badge-inactive">一般用戶</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-07-14</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#f85149;color:#fff;font-size:0.7rem;">黃</div>
+                                            黃志豪
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge">一般用戶</span></td>
-                                <td><span class="badge warning"><span class="badge-dot"></span>待審核</span></td>
-                                <td>2024-05-19</td>
-                                <td>從未登入</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">審核</button>
-                                        <button class="action-btn danger">拒絕</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(167,139,250,0.12);color:var(--purple)">劉</div>
-                                        <div>
-                                            <div class="user-name">劉品萱</div>
-                                            <div class="user-email">pinxuan.liu@corp.tw</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">huang.zhihao@example.com</td>
+                                    <td><span class="badge badge-pending">編輯者</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-08-03</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#58a6ff;color:#fff;font-size:0.7rem;">劉</div>
+                                            劉芳華
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge admin">管理員</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2023-11-05</td>
-                                <td>1 天前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(251,146,60,0.12);color:var(--orange)">蔡</div>
-                                        <div>
-                                            <div class="user-name">蔡明哲</div>
-                                            <div class="user-email">mingzhe.tsai@outlook.com</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">liu.fanghua@example.com</td>
+                                    <td><span class="badge badge-inactive">一般用戶</span></td>
+                                    <td><span class="badge badge-pending">待驗證</span></td>
+                                    <td>2024-09-19</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#d29922;color:#fff;font-size:0.7rem;">蔡</div>
+                                            蔡宜庭
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge">一般用戶</span></td>
-                                <td><span class="badge error"><span class="badge-dot"></span>未啟用</span></td>
-                                <td>2024-04-22</td>
-                                <td>45 天前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn">啟用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <div class="user-av" style="background:rgba(248,113,113,0.12);color:var(--red)">許</div>
-                                        <div>
-                                            <div class="user-name">許雅文</div>
-                                            <div class="user-email">yawen.hsu@nexusflow.io</div>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">cai.yiting@example.com</td>
+                                    <td><span class="badge badge-critical">管理員</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2024-10-08</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;background:#3fb950;color:#fff;font-size:0.7rem;">鄭</div>
+                                            鄭俊傑
                                         </div>
-                                    </div>
-                                </td>
-                                <td><span class="role-badge manager">經理</span></td>
-                                <td><span class="badge success"><span class="badge-dot"></span>啟用中</span></td>
-                                <td>2024-02-14</td>
-                                <td>12 小時前</td>
-                                <td>
-                                    <div class="action-wrap">
-                                        <button class="action-btn">編輯</button>
-                                        <button class="action-btn danger">停用</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="pagination">
-                    <span class="pagination-info">顯示第 1–10 筆，共 248 筆</span>
-                    <div class="pagination-btns">
-                        <button class="page-btn">‹</button>
-                        <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
-                        <button class="page-btn">…</button>
-                        <button class="page-btn">25</button>
-                        <button class="page-btn">›</button>
+                                    </td>
+                                    <td style="color:var(--nf-text-muted);">zheng.junjie@example.com</td>
+                                    <td><span class="badge badge-inactive">一般用戶</span></td>
+                                    <td><span class="badge badge-active">已啟用</span></td>
+                                    <td>2025-01-12</td>
+                                    <td><button class="btn-nf-outline" style="padding:4px 10px;font-size:0.75rem;">編輯</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
