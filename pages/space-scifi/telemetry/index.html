@@ -3,822 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>遙測數據 | NEXUS VOID</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #040810;
-            --surface: #080f1a;
-            --panel: rgba(0, 200, 255, 0.04);
-            --text: #e0f0ff;
-            --muted: rgba(160, 200, 240, 0.5);
-            --cyan: #00c8ff;
-            --cyan-dim: rgba(0, 200, 255, 0.15);
-            --cyan-glow: 0 0 20px rgba(0, 200, 255, 0.4);
-            --border: rgba(0, 200, 255, 0.15);
-            --green: #00ff88;
-            --red: #ff3860;
-            --yellow: #ffd700;
-            --orange: #ff8c42;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        a { text-decoration: none; color: inherit; }
-
-        #starfield {
-            position: fixed; inset: 0;
-            width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
-        }
-
-        .designvault-back {
-            position: fixed; top: 10px; left: 80px; z-index: 200;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.55rem; letter-spacing: 2.5px;
-            color: rgba(0, 200, 255, 0.55);
-            transition: color 0.2s, text-shadow 0.2s;
-        }
-        .designvault-back:hover { color: var(--cyan); text-shadow: 0 0 10px rgba(0, 200, 255, 0.6); }
-
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 24px 80px;
-            background: rgba(4, 8, 16, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-        }
-        .nav-left { display: flex; align-items: center; gap: 24px; }
-        .nav-back { font-family: 'Orbitron', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--muted); transition: color 0.2s; }
-        .nav-back:hover { color: var(--cyan); }
-        .nav-logo { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 6px; color: var(--cyan); text-shadow: var(--cyan-glow); }
-        .nav-links { display: flex; gap: 40px; list-style: none; }
-        .nav-links a { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
-        .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
-        .nav-status { font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); opacity: 0.7; }
-        .nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
-        .nav-toggle span { display: block; width: 22px; height: 1px; background: var(--cyan); }
-
-        .page-content { position: relative; z-index: 1; padding-top: 100px; }
-
-        /* 頁首 */
-        .page-hero {
-            padding: 80px 80px 60px;
-            border-bottom: 1px solid var(--border);
-            position: relative; overflow: hidden;
-        }
-        .page-hero::before {
-            content: 'TELEMETRY';
-            position: absolute; right: -40px; top: 50%;
-            transform: translateY(-50%);
-            font-family: 'Orbitron', monospace; font-size: 7rem; font-weight: 900;
-            color: rgba(0, 200, 255, 0.04); letter-spacing: 6px;
-            pointer-events: none; white-space: nowrap;
-        }
-        .page-tag { font-size: 0.62rem; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; opacity: 0.8; }
-        .page-title { font-family: 'Orbitron', monospace; font-size: 3rem; font-weight: 900; margin-bottom: 16px; }
-        .page-desc { font-size: 0.875rem; color: var(--muted); max-width: 600px; line-height: 1.9; }
-
-        /* Live 指示燈 */
-        .live-indicator {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: 'Orbitron', monospace; font-size: 0.6rem;
-            letter-spacing: 2px; color: var(--green); margin-top: 20px;
-        }
-        .live-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--green); box-shadow: 0 0 10px var(--green);
-            animation: livePulse 1s ease-in-out infinite;
-        }
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        /* 感測器儀表板 */
-        .sensor-dashboard {
-            padding: 60px 80px;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .sensor-panel {
-            background: var(--surface);
-            padding: 36px 28px;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s;
-        }
-        .sensor-panel:hover { background: var(--panel); }
-        .sensor-label {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.58rem; letter-spacing: 3px;
-            text-transform: uppercase; color: var(--muted);
-            margin-bottom: 4px;
-        }
-        .sensor-id {
-            font-size: 0.55rem; letter-spacing: 2px;
-            color: var(--cyan); opacity: 0.6; margin-bottom: 20px;
-        }
-        .sensor-value {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.2rem; font-weight: 900;
-            line-height: 1; margin-bottom: 4px;
-        }
-        .sensor-unit {
-            font-size: 0.7rem; color: var(--muted);
-            letter-spacing: 1px; margin-bottom: 20px;
-        }
-        /* 垂直 bar chart (純 CSS) */
-        .sensor-bar-chart {
-            display: flex; align-items: flex-end; gap: 3px;
-            height: 48px; margin-bottom: 12px;
-        }
-        .bar-col {
-            flex: 1; background: var(--cyan-dim);
-            position: relative; overflow: hidden;
-            min-height: 4px;
-            transition: background 0.2s;
-        }
-        .bar-col::after {
-            content: '';
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: var(--cyan);
-            height: var(--h, 50%);
-            box-shadow: 0 0 6px var(--cyan);
-        }
-        .bar-col.warn::after { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
-        .bar-col.danger::after { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .bar-col.ok::after { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        .sensor-status {
-            font-size: 0.6rem; letter-spacing: 1.5px;
-            display: inline-flex; align-items: center; gap: 5px;
-        }
-        .sensor-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
-        .status-ok { color: var(--green); }
-        .status-ok::before { background: var(--green); box-shadow: 0 0 5px var(--green); }
-        .status-warn { color: var(--yellow); animation: blink 1.4s step-end infinite; }
-        .status-warn::before { background: var(--yellow); }
-        .status-crit { color: var(--red); animation: blink 0.8s step-end infinite; }
-        .status-crit::before { background: var(--red); box-shadow: 0 0 5px var(--red); }
-        @keyframes blink { 50% { opacity: 0.4; } }
-
-        /* 波形圖 (CSS animation) */
-        .waveform-section {
-            padding: 60px 80px;
-            border-bottom: 1px solid var(--border);
-            background: var(--surface);
-        }
-        .section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 32px;
-        }
-        .section-title { font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; letter-spacing: 3px; }
-        .waveforms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .waveform-card {
-            border: 1px solid var(--border);
-            background: var(--bg);
-            padding: 24px;
-        }
-        .waveform-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px;
-        }
-        .waveform-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.7rem; letter-spacing: 2px; color: var(--cyan);
-        }
-        .waveform-val {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem; font-weight: 700; color: var(--text);
-        }
-        /* CSS-only 橫向 bar wave 模擬波形 */
-        .waveform {
-            display: flex; align-items: center; gap: 2px; height: 60px;
-            overflow: hidden;
-        }
-        .wave-bar {
-            width: 4px; flex-shrink: 0;
-            border-radius: 2px;
-            background: var(--cyan);
-            box-shadow: 0 0 4px var(--cyan);
-            animation: waveAnim var(--dur, 0.8s) ease-in-out infinite alternate;
-        }
-        @keyframes waveAnim {
-            from { height: var(--min-h, 4px); }
-            to { height: var(--max-h, 40px); }
-        }
-        .wave-bar.warn { background: var(--yellow); box-shadow: 0 0 4px var(--yellow); }
-        .wave-bar.ok { background: var(--green); box-shadow: 0 0 4px var(--green); }
-
-        /* 異常警報 */
-        .anomaly-section { padding: 60px 80px; border-bottom: 1px solid var(--border); }
-        .anomaly-list { display: flex; flex-direction: column; gap: 12px; }
-        .anomaly-item {
-            border: 1px solid;
-            padding: 20px 24px;
-            display: grid; grid-template-columns: 160px 80px 1fr auto;
-            gap: 24px; align-items: center;
-            transition: background 0.2s;
-        }
-        .anomaly-item:hover { background: rgba(255,255,255,0.02); }
-        .anomaly-time { font-family: 'Orbitron', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; }
-        .anomaly-code { font-family: 'Orbitron', monospace; font-size: 0.65rem; letter-spacing: 2px; }
-        .anomaly-msg { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
-        .anomaly-msg strong { color: var(--text); }
-        .anomaly-resolve {
-            font-family: 'Orbitron', monospace; font-size: 0.55rem;
-            letter-spacing: 1.5px; padding: 5px 12px; border: 1px solid;
-            cursor: pointer; white-space: nowrap; background: transparent;
-        }
-        .anomaly-critical { border-color: rgba(255,56,96,0.3); background: rgba(255,56,96,0.04); }
-        .anomaly-critical .anomaly-code { color: var(--red); }
-        .anomaly-critical .anomaly-resolve { color: var(--red); border-color: rgba(255,56,96,0.4); }
-        .anomaly-warn { border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.04); }
-        .anomaly-warn .anomaly-code { color: var(--yellow); }
-        .anomaly-warn .anomaly-resolve { color: var(--yellow); border-color: rgba(255,215,0,0.4); }
-        .anomaly-info { border-color: rgba(0,200,255,0.2); background: rgba(0,200,255,0.02); }
-        .anomaly-info .anomaly-code { color: var(--cyan); }
-        .anomaly-info .anomaly-resolve { color: var(--cyan); border-color: rgba(0,200,255,0.3); }
-
-        /* 系統健康格 */
-        .health-section { padding: 60px 80px 120px; }
-        .health-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-        .health-cell {
-            border: 1px solid var(--border);
-            background: var(--surface);
-            padding: 24px 20px;
-            position: relative; overflow: hidden;
-            transition: border-color 0.3s, background 0.3s;
-        }
-        .health-cell:hover { border-color: rgba(0,200,255,0.35); background: var(--panel); }
-        .health-system {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem; letter-spacing: 2px;
-            color: var(--muted); margin-bottom: 10px;
-        }
-        .health-pct {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.6rem; font-weight: 900;
-            margin-bottom: 8px;
-        }
-        .health-bar { height: 2px; background: rgba(0,200,255,0.1); position: relative; overflow: hidden; }
-        .health-fill { position: absolute; top: 0; left: 0; height: 100%; }
-        .pct-high { color: var(--green); }
-        .pct-high .health-fill { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        .pct-mid { color: var(--cyan); }
-        .pct-mid .health-fill { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
-        .pct-warn { color: var(--yellow); }
-        .pct-warn .health-fill { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
-        .pct-low { color: var(--red); }
-        .pct-low .health-fill { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .health-ship { font-size: 0.65rem; color: var(--muted); margin-top: 6px; }
-
-        /* Footer */
-        .footer {
-            padding: 60px 80px 40px; border-top: 1px solid var(--border);
-            background: var(--bg); position: relative; z-index: 1;
-        }
-        .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
-        .footer-logo { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--cyan); letter-spacing: 6px; margin-bottom: 16px; }
-        .footer-brand-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.85; max-width: 240px; }
-        .footer-col-title { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; opacity: 0.7; }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 0.2s; }
-        .footer-links a:hover { color: var(--text); }
-        .footer-bottom { padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); opacity: 0.6; }
-
-        /* RWD */
-        @media (max-width: 1200px) {
-            .sensor-dashboard { grid-template-columns: repeat(3, 1fr); }
-            .health-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 1024px) {
-            .designvault-back { left: 40px; }
-            .nav { padding: 20px 40px; }
-            .page-hero { padding: 80px 40px 60px; }
-            .sensor-dashboard { padding: 40px; grid-template-columns: repeat(3, 1fr); }
-            .waveform-section { padding: 60px 40px; }
-            .waveforms-grid { grid-template-columns: 1fr; }
-            .anomaly-section { padding: 60px 40px; }
-            .anomaly-item { grid-template-columns: 120px 60px 1fr; gap: 16px; }
-            .anomaly-resolve { display: none; }
-            .health-section { padding: 60px 40px 80px; }
-            .health-grid { grid-template-columns: repeat(3, 1fr); }
-            .footer { padding: 48px 40px 32px; }
-            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-        @media (max-width: 768px) {
-            .designvault-back { left: 24px; top: 8px; }
-            .nav { padding: 18px 24px; }
-            .nav-links { display: none; }
-            .nav-links.active { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: rgba(4,8,16,0.98); border-top: 1px solid var(--border); padding: 8px 24px; gap: 0; }
-            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border); }
-            .nav-status { display: none; }
-            .nav-toggle { display: flex; }
-            .page-hero { padding: 60px 24px 40px; }
-            .page-title { font-size: 2rem; }
-            .sensor-dashboard { padding: 24px; grid-template-columns: repeat(2, 1fr); }
-            .waveform-section { padding: 48px 24px; }
-            .anomaly-section { padding: 48px 24px; }
-            .anomaly-item { grid-template-columns: 1fr; gap: 8px; padding: 16px 20px; }
-            .health-section { padding: 48px 24px 60px; }
-            .health-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer { padding: 40px 24px 28px; }
-            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 8px; }
-        }
-        @media (max-width: 480px) {
-            .page-title { font-size: 1.6rem; }
-            .sensor-dashboard { grid-template-columns: 1fr 1fr; }
-            .sensor-value { font-size: 1.6rem; }
-            .health-grid { grid-template-columns: 1fr 1fr; }
-        }
-    </style>
+    <title>遙測 — NEXUS VOID</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
 </head>
 <body>
-    <canvas id="starfield"></canvas>
-    <a href="../../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
-    <nav class="nav" id="nav">
-        <div class="nav-left">
-            <a href="../" class="nav-back">← NEXUS VOID</a>
-            <div class="nav-logo">TELEMETRY</div>
+    <a href="../../../index.html" class="designvault-back">← DesignVault</a>
+
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../">NEXUS VOID</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nvNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nvNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="../">系統</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../missions/">任務</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../fleet/">艦隊</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">遙測</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../signal/">信號</a></li>
+                </ul>
+            </div>
         </div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="../missions/">任務</a></li>
-            <li><a href="../telemetry/" class="active">遙測</a></li>
-            <li><a href="../fleet/">艦隊</a></li>
-            <li><a href="../signal/">通訊</a></li>
-        </ul>
-        <span class="nav-status">TELEMETRY ONLINE ▮</span>
     </nav>
 
-    <main class="page-content">
-        <!-- 頁首 -->
-        <section class="page-hero">
-            <p class="page-tag">LIVE SENSOR NETWORK / 0.3s SYNC</p>
-            <h1 class="page-title">遙測數據</h1>
-            <p class="page-desc">即時監控艦隊全頻感測器數據。每 0.3 秒從所有已部署艦艇同步一次，覆蓋溫度、壓力、輻射、速度與能量五大核心指標。</p>
-            <div class="live-indicator">
-                <div class="live-dot"></div>
-                LIVE SYNC — 最後更新 2157.08.14 / 03:48:05 UTC
-            </div>
-        </section>
+    <div class="nv-page-header">
+        <div class="container">
+            <a href="../" class="btn-nv-outline py-1 px-3" style="font-size:0.7rem;">← 返回系統</a>
+            <p class="section-label mt-3 mb-1">Sensor Telemetry</p>
+            <h1 class="h4 fw-normal" style="color:#fff;">感測器遙測中心</h1>
+        </div>
+    </div>
 
-        <!-- 感測器儀表板 -->
-        <div class="sensor-dashboard" style="position:relative; z-index:1; margin: 0 0 0 0; padding: 0;">
-            <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); width: 100%; grid-column: 1/-1;">
-                <!-- 溫度 -->
-                <div class="sensor-panel">
-                    <div class="sensor-label">THERMAL</div>
-                    <div class="sensor-id">SENS-T01 · NEXUS-01</div>
-                    <div class="sensor-value" style="color: var(--orange);">4,720</div>
-                    <div class="sensor-unit">°K 核心溫度</div>
-                    <div class="sensor-bar-chart">
-                        <div class="bar-col warn" style="--h:30%"></div>
-                        <div class="bar-col warn" style="--h:45%"></div>
-                        <div class="bar-col warn" style="--h:38%"></div>
-                        <div class="bar-col warn" style="--h:62%"></div>
-                        <div class="bar-col warn" style="--h:55%"></div>
-                        <div class="bar-col warn" style="--h:70%"></div>
-                        <div class="bar-col warn" style="--h:80%"></div>
-                        <div class="bar-col warn" style="--h:75%"></div>
-                        <div class="bar-col warn" style="--h:88%"></div>
-                        <div class="bar-col warn" style="--h:92%"></div>
-                    </div>
-                    <div class="sensor-status status-warn">ELEVATED</div>
+    <!-- 即時狀態列 -->
+    <section class="py-3" style="background:var(--nv-surface);border-bottom:1px solid var(--nv-border);">
+        <div class="container">
+            <div class="d-flex align-items-center gap-3">
+                <span class="live-dot"></span>
+                <span class="small" style="color:var(--nv-muted);">即時感測器串流</span>
+                <div class="d-flex align-items-end gap-1 ms-2" style="height:24px;">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
                 </div>
-                <!-- 壓力 -->
-                <div class="sensor-panel">
-                    <div class="sensor-label">PRESSURE</div>
-                    <div class="sensor-id">SENS-P02 · NEXUS-01</div>
-                    <div class="sensor-value" style="color: var(--green);">1.013</div>
-                    <div class="sensor-unit">atm 艙內氣壓</div>
-                    <div class="sensor-bar-chart">
-                        <div class="bar-col ok" style="--h:65%"></div>
-                        <div class="bar-col ok" style="--h:68%"></div>
-                        <div class="bar-col ok" style="--h:62%"></div>
-                        <div class="bar-col ok" style="--h:67%"></div>
-                        <div class="bar-col ok" style="--h:64%"></div>
-                        <div class="bar-col ok" style="--h:66%"></div>
-                        <div class="bar-col ok" style="--h:65%"></div>
-                        <div class="bar-col ok" style="--h:63%"></div>
-                        <div class="bar-col ok" style="--h:66%"></div>
-                        <div class="bar-col ok" style="--h:65%"></div>
+                <span class="ms-auto small" style="color:var(--nv-muted);">最後更新：00:00:04 前</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 感測器網格 -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row row-cols-2 row-cols-md-3 g-3">
+                <!-- 引力感測器 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">引力感測器</p>
+                        <p class="glow-cyan mb-1" style="font-size:1.8rem;font-weight:700;">9.81 <span style="font-size:0.75rem;color:var(--nv-muted);">m/s²</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">強度</span>
+                            <span class="badge badge-active-nv">正常</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar" style="width:72%;"></div></div>
                     </div>
-                    <div class="sensor-status status-ok">NOMINAL</div>
                 </div>
-                <!-- 輻射 -->
-                <div class="sensor-panel">
-                    <div class="sensor-label">RADIATION</div>
-                    <div class="sensor-id">SENS-R03 · NEXUS-01</div>
-                    <div class="sensor-value" style="color: var(--red);">847</div>
-                    <div class="sensor-unit">mSv/hr 輻射劑量</div>
-                    <div class="sensor-bar-chart">
-                        <div class="bar-col danger" style="--h:40%"></div>
-                        <div class="bar-col danger" style="--h:55%"></div>
-                        <div class="bar-col danger" style="--h:48%"></div>
-                        <div class="bar-col danger" style="--h:70%"></div>
-                        <div class="bar-col danger" style="--h:85%"></div>
-                        <div class="bar-col danger" style="--h:92%"></div>
-                        <div class="bar-col danger" style="--h:88%"></div>
-                        <div class="bar-col danger" style="--h:95%"></div>
-                        <div class="bar-col danger" style="--h:100%"></div>
-                        <div class="bar-col danger" style="--h:97%"></div>
+                <!-- 輻射監測 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">輻射監測</p>
+                        <p class="mb-1" style="font-size:1.8rem;font-weight:700;color:var(--nv-red);">847 <span style="font-size:0.75rem;color:var(--nv-muted);">mSv</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">劑量率</span>
+                            <span class="badge badge-critical">危險</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar critical" style="width:84%;"></div></div>
                     </div>
-                    <div class="sensor-status status-crit">CRITICAL</div>
                 </div>
-                <!-- 速度 -->
-                <div class="sensor-panel">
-                    <div class="sensor-label">VELOCITY</div>
-                    <div class="sensor-id">SENS-V04 · NEXUS-01</div>
-                    <div class="sensor-value" style="color: var(--cyan);">12.4</div>
-                    <div class="sensor-unit">× c 光速倍率</div>
-                    <div class="sensor-bar-chart">
-                        <div class="bar-col" style="--h:20%"></div>
-                        <div class="bar-col" style="--h:35%"></div>
-                        <div class="bar-col" style="--h:50%"></div>
-                        <div class="bar-col" style="--h:60%"></div>
-                        <div class="bar-col" style="--h:72%"></div>
-                        <div class="bar-col" style="--h:75%"></div>
-                        <div class="bar-col" style="--h:74%"></div>
-                        <div class="bar-col" style="--h:78%"></div>
-                        <div class="bar-col" style="--h:76%"></div>
-                        <div class="bar-col" style="--h:78%"></div>
+                <!-- 溫度感測 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">溫度感測</p>
+                        <p class="glow-cyan mb-1" style="font-size:1.8rem;font-weight:700;">-127 <span style="font-size:0.75rem;color:var(--nv-muted);">°C</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">外殼溫度</span>
+                            <span class="badge badge-active-nv">正常</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar" style="width:35%;"></div></div>
                     </div>
-                    <div class="sensor-status status-ok">NOMINAL</div>
                 </div>
-                <!-- 能量 -->
-                <div class="sensor-panel">
-                    <div class="sensor-label">ENERGY</div>
-                    <div class="sensor-id">SENS-E05 · NEXUS-01</div>
-                    <div class="sensor-value" style="color: var(--cyan);">98.4</div>
-                    <div class="sensor-unit">TW 輸出功率</div>
-                    <div class="sensor-bar-chart">
-                        <div class="bar-col" style="--h:90%"></div>
-                        <div class="bar-col" style="--h:92%"></div>
-                        <div class="bar-col" style="--h:88%"></div>
-                        <div class="bar-col" style="--h:94%"></div>
-                        <div class="bar-col" style="--h:91%"></div>
-                        <div class="bar-col" style="--h:95%"></div>
-                        <div class="bar-col" style="--h:90%"></div>
-                        <div class="bar-col" style="--h:93%"></div>
-                        <div class="bar-col" style="--h:96%"></div>
-                        <div class="bar-col" style="--h:94%"></div>
+                <!-- 壓力計 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">壓力計</p>
+                        <p class="mb-1" style="font-size:1.8rem;font-weight:700;color:var(--nv-yellow);">2.3 <span style="font-size:0.75rem;color:var(--nv-muted);">kPa</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">艙內氣壓</span>
+                            <span class="badge badge-warn">偏低</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar warn" style="width:43%;"></div></div>
                     </div>
-                    <div class="sensor-status status-ok">NOMINAL</div>
+                </div>
+                <!-- 訊號強度 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">訊號強度</p>
+                        <p class="glow-cyan mb-1" style="font-size:1.8rem;font-weight:700;">-68 <span style="font-size:0.75rem;color:var(--nv-muted);">dBm</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">通訊強度</span>
+                            <span class="badge badge-active-nv">良好</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar" style="width:79%;"></div></div>
+                    </div>
+                </div>
+                <!-- 電磁干擾 -->
+                <div class="col">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">電磁干擾</p>
+                        <p class="glow-cyan mb-1" style="font-size:1.8rem;font-weight:700;">0.4 <span style="font-size:0.75rem;color:var(--nv-muted);">T</span></p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small" style="color:var(--nv-muted);">磁場強度</span>
+                            <span class="badge badge-standby">監測中</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar" style="width:18%;"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 波形圖 -->
-        <section class="waveform-section" style="position:relative; z-index:1;">
-            <div class="section-header">
-                <div>
-                    <p class="page-tag">SIGNAL WAVEFORM ANALYSIS</p>
-                    <h2 class="section-title">[ 訊號波形分析 ]</h2>
-                </div>
-            </div>
-            <div class="waveforms-grid">
-                <!-- 引力波 -->
-                <div class="waveform-card">
-                    <div class="waveform-header">
-                        <span class="waveform-title">GRAVITATIONAL WAVE / SENS-GW01</span>
-                        <span class="waveform-val">3.72 μHz</span>
-                    </div>
-                    <div class="waveform">
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:4px; --max-h:20px;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:6px; --max-h:35px;"></div>
-                        <div class="wave-bar" style="--dur:0.4s; --min-h:4px; --max-h:55px;"></div>
-                        <div class="wave-bar" style="--dur:0.9s; --min-h:8px; --max-h:42px;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:4px; --max-h:28px;"></div>
-                        <div class="wave-bar" style="--dur:0.8s; --min-h:10px; --max-h:58px;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:6px; --max-h:38px;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:4px; --max-h:22px;"></div>
-                        <div class="wave-bar" style="--dur:0.4s; --min-h:8px; --max-h:48px;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:4px; --max-h:30px;"></div>
-                        <div class="wave-bar" style="--dur:0.9s; --min-h:6px; --max-h:52px;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:4px; --max-h:18px;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:10px; --max-h:44px;"></div>
-                        <div class="wave-bar" style="--dur:0.4s; --min-h:6px; --max-h:36px;"></div>
-                        <div class="wave-bar" style="--dur:0.8s; --min-h:4px; --max-h:26px;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:8px; --max-h:56px;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:4px; --max-h:32px;"></div>
-                        <div class="wave-bar" style="--dur:0.9s; --min-h:6px; --max-h:46px;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:4px; --max-h:20px;"></div>
-                        <div class="wave-bar" style="--dur:0.4s; --min-h:8px; --max-h:58px;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:8px;">
-                        <span style="font-size:0.6rem; color:var(--muted); letter-spacing:1px;">T-00:00:20</span>
-                        <span style="font-size:0.6rem; color:var(--muted); letter-spacing:1px;">T-NOW</span>
+    <!-- 異常事件 -->
+    <section class="py-4" style="background:var(--nv-surface);border-top:1px solid var(--nv-border);">
+        <div class="container">
+            <p class="section-label mb-3">Anomaly Log</p>
+            <div class="list-group">
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1" style="font-size:0.85rem;">Sector 9 輻射異常飆升</p>
+                            <p class="small mb-0" style="color:var(--nv-muted);">偵測到高能粒子爆發，NV-007 已收到撤退指令</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge badge-critical d-block mb-1">危急</span>
+                            <span class="small" style="color:var(--nv-muted);">03:47 UTC</span>
+                        </div>
                     </div>
                 </div>
-                <!-- 未知訊號 -->
-                <div class="waveform-card">
-                    <div class="waveform-header">
-                        <span class="waveform-title" style="color:var(--red);">UNKNOWN SIGNAL / SENS-UNK04</span>
-                        <span class="waveform-val" style="color:var(--red);">7.3 Hz PULSE</span>
-                    </div>
-                    <div class="waveform">
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:58px; animation-delay:0.14s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:56px; animation-delay:0.28s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:60px; animation-delay:0.42s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:54px; animation-delay:0.56s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:58px; animation-delay:0.70s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:56px; animation-delay:0.84s;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                        <div class="wave-bar warn" style="--dur:1.4s; --min-h:4px; --max-h:4px;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:8px;">
-                        <span style="font-size:0.6rem; color:var(--red); letter-spacing:1px; animation: blink 1s step-end infinite;">⚠ 規律脈衝 — 非自然來源</span>
-                        <span style="font-size:0.6rem; color:var(--muted); letter-spacing:1px;">MIS-004 ACTIVE</span>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1" style="font-size:0.85rem;">Kepler Belt 重力場波動</p>
+                            <p class="small mb-0" style="color:var(--nv-muted);">引力感測器偵測 ±0.3 m/s² 週期性波動，持續追蹤中</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge badge-warn d-block mb-1">警告</span>
+                            <span class="small" style="color:var(--nv-muted);">02:15 UTC</span>
+                        </div>
                     </div>
                 </div>
-                <!-- 量子通訊訊號 -->
-                <div class="waveform-card">
-                    <div class="waveform-header">
-                        <span class="waveform-title" style="color:var(--green);">QUANTUM COMM / QC-RELAY-37</span>
-                        <span class="waveform-val" style="color:var(--green);">9,800 LY</span>
-                    </div>
-                    <div class="waveform">
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:52px;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:44px; animation-delay:0.05s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:56px; animation-delay:0.1s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:48px; animation-delay:0.15s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:52px; animation-delay:0.2s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:44px; animation-delay:0.25s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:56px; animation-delay:0.3s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:48px; animation-delay:0.35s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:52px; animation-delay:0.4s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:44px; animation-delay:0.45s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:56px; animation-delay:0.5s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:48px; animation-delay:0.55s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:52px; animation-delay:0.6s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:44px; animation-delay:0.65s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:56px; animation-delay:0.7s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:48px; animation-delay:0.75s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:52px; animation-delay:0.8s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.35s; --min-h:10px; --max-h:44px; animation-delay:0.85s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.3s; --min-h:8px; --max-h:56px; animation-delay:0.9s;"></div>
-                        <div class="wave-bar ok" style="--dur:0.4s; --min-h:6px; --max-h:48px; animation-delay:0.95s;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:8px;">
-                        <span style="font-size:0.6rem; color:var(--green); letter-spacing:1px;">延遲 0.003s · 覆蓋率 91%</span>
-                        <span style="font-size:0.6rem; color:var(--muted); letter-spacing:1px;">MIS-003 PULSE ARRAY</span>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1" style="font-size:0.85rem;">NV-033 氣壓系統偏低</p>
+                            <p class="small mb-0" style="color:var(--nv-muted);">艙內氣壓低於標準值 12%，維修組已排程檢查</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge badge-warn d-block mb-1">警告</span>
+                            <span class="small" style="color:var(--nv-muted);">01:30 UTC</span>
+                        </div>
                     </div>
                 </div>
-                <!-- 反物質爐 -->
-                <div class="waveform-card">
-                    <div class="waveform-header">
-                        <span class="waveform-title">ANTIMATTER CORE / REACT-TITAN-X</span>
-                        <span class="waveform-val">98.4 TW</span>
-                    </div>
-                    <div class="waveform">
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:46px; --max-h:56px;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:44px; --max-h:58px; animation-delay:0.08s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:48px; --max-h:54px; animation-delay:0.16s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:45px; --max-h:57px; animation-delay:0.24s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:47px; --max-h:55px; animation-delay:0.32s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:44px; --max-h:56px; animation-delay:0.4s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:48px; --max-h:58px; animation-delay:0.48s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:46px; --max-h:54px; animation-delay:0.56s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:45px; --max-h:57px; animation-delay:0.64s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:47px; --max-h:55px; animation-delay:0.72s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:44px; --max-h:58px; animation-delay:0.8s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:48px; --max-h:56px; animation-delay:0.88s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:46px; --max-h:54px; animation-delay:0.96s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:45px; --max-h:57px; animation-delay:1.04s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:47px; --max-h:55px; animation-delay:1.12s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:44px; --max-h:58px; animation-delay:1.2s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:48px; --max-h:56px; animation-delay:1.28s;"></div>
-                        <div class="wave-bar" style="--dur:0.7s; --min-h:46px; --max-h:54px; animation-delay:1.36s;"></div>
-                        <div class="wave-bar" style="--dur:0.6s; --min-h:45px; --max-h:57px; animation-delay:1.44s;"></div>
-                        <div class="wave-bar" style="--dur:0.5s; --min-h:47px; --max-h:55px; animation-delay:1.52s;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:8px;">
-                        <span style="font-size:0.6rem; color:var(--cyan); letter-spacing:1px;">穩定輸出 · 效率 99.2%</span>
-                        <span style="font-size:0.6rem; color:var(--muted); letter-spacing:1px;">TITAN-X CORE</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 異常警報 -->
-        <section class="anomaly-section" style="position:relative; z-index:1;">
-            <div class="section-header" style="margin-bottom:24px;">
-                <div>
-                    <p class="page-tag">ANOMALY DETECTION</p>
-                    <h2 class="section-title">[ 異常事件紀錄 ]</h2>
-                </div>
-                <span style="font-family:'Orbitron',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--muted);">4 EVENTS</span>
-            </div>
-            <div class="anomaly-list">
-                <div class="anomaly-item anomaly-critical">
-                    <div class="anomaly-time">2157.08.14<br>03:47:22 UTC</div>
-                    <div class="anomaly-code">RAD-CRIT</div>
-                    <div class="anomaly-msg"><strong>[NEXUS-01 / SENS-R03]</strong> 輻射劑量超出安全閾值 847 mSv/hr（限值 500 mSv/hr）。Sgr A* 磁場噴流影響，護盾已自動加強至 Level-7，乘員撤離至輻射屏蔽艙。</div>
-                    <button class="anomaly-resolve">ACK ▶</button>
-                </div>
-                <div class="anomaly-item anomaly-critical">
-                    <div class="anomaly-time">2157.08.14<br>03:47:22 UTC</div>
-                    <div class="anomaly-code">SIG-UNK</div>
-                    <div class="anomaly-msg"><strong>[PHANTOM-3 / SENS-UNK04]</strong> 偵測到規律性 7.3Hz 電磁脈衝，非已知自然現象模式。訊號源方位角 274.3°，距離估算 1.2AU。任務等級已提升至 CRITICAL。</div>
-                    <button class="anomaly-resolve">ACK ▶</button>
-                </div>
-                <div class="anomaly-item anomaly-warn">
-                    <div class="anomaly-time">2157.08.13<br>18:30:19 UTC</div>
-                    <div class="anomaly-code">STRUCT-W</div>
-                    <div class="anomaly-msg"><strong>[TITAN-X / STRUCT-C07]</strong> C 模組對接口形變 2.1mm，超出容許公差（2.0mm）。工程組啟動應急焊接方案，預計 4 小時完工。建設進度暫停。</div>
-                    <button class="anomaly-resolve">ACK ▶</button>
-                </div>
-                <div class="anomaly-item anomaly-info">
-                    <div class="anomaly-time">2157.08.13<br>14:08:55 UTC</div>
-                    <div class="anomaly-code">ATMOS-I</div>
-                    <div class="anomaly-msg"><strong>[MIS-005 / AURORA-7]</strong> Wolf 1061c 大氣氧氣濃度超過目標值（19.2% vs 18.0%），生態改造進度超前。Phase-3 種子播種提前 3 個標準日完成。</div>
-                    <button class="anomaly-resolve">LOG ▶</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 系統健康格 -->
-        <section class="health-section" style="position:relative; z-index:1;">
-            <div class="section-header" style="margin-bottom:24px;">
-                <div>
-                    <p class="page-tag">SYSTEM HEALTH GRID</p>
-                    <h2 class="section-title">[ 系統健康狀態 ]</h2>
-                </div>
-            </div>
-            <div class="health-grid">
-                <div class="health-cell pct-high">
-                    <div class="health-system">QUANTUM ENGINE / NEXUS-01</div>
-                    <div class="health-pct">99.7%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:99.7%"></div></div>
-                    <div class="health-ship">QD-VII 量子躍遷引擎</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">LIFE SUPPORT / NEXUS-01</div>
-                    <div class="health-pct">100%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:100%"></div></div>
-                    <div class="health-ship">生命維持系統</div>
-                </div>
-                <div class="health-cell pct-mid">
-                    <div class="health-system">SHIELD ARRAY / NEXUS-01</div>
-                    <div class="health-pct">87%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:87%"></div></div>
-                    <div class="health-ship">七層波動護盾</div>
-                </div>
-                <div class="health-cell pct-warn">
-                    <div class="health-system">STRUCT INTEGRITY / TITAN-X</div>
-                    <div class="health-pct">64%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:64%"></div></div>
-                    <div class="health-ship">C模組對接結構</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">COMMS RELAY / PULSE ARRAY</div>
-                    <div class="health-pct">91%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:91%"></div></div>
-                    <div class="health-ship">量子通訊中繼站 #37</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">SENSOR NET / AURORA-7</div>
-                    <div class="health-pct">96%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:96%"></div></div>
-                    <div class="health-ship">全頻譜感測器陣列</div>
-                </div>
-                <div class="health-cell pct-mid">
-                    <div class="health-system">CLOAK FIELD / PHANTOM-3</div>
-                    <div class="health-pct">78%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:78%"></div></div>
-                    <div class="health-ship">暗物質護盾系統</div>
-                </div>
-                <div class="health-cell pct-low">
-                    <div class="health-system">FUEL RESERVE / SENTINEL-4</div>
-                    <div class="health-pct">28%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:28%"></div></div>
-                    <div class="health-ship">反物質儲量不足</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">NAVIGATION / ALL FLEET</div>
-                    <div class="health-pct">100%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:100%"></div></div>
-                    <div class="health-ship">星際導航系統</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">ANTIMATTER CORE / TITAN-X</div>
-                    <div class="health-pct">99.2%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:99.2%"></div></div>
-                    <div class="health-ship">反物質反應爐</div>
-                </div>
-                <div class="health-cell pct-warn">
-                    <div class="health-system">FUEL CELL / HERALD-2</div>
-                    <div class="health-pct">43%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:43%"></div></div>
-                    <div class="health-ship">量子燃料電池</div>
-                </div>
-                <div class="health-cell pct-high">
-                    <div class="health-system">OVERALL FLEET HEALTH</div>
-                    <div class="health-pct">83.7%</div>
-                    <div class="health-bar"><div class="health-fill" style="width:83.7%"></div></div>
-                    <div class="health-ship">艦隊綜合健康指數</div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <div>
-                <div class="footer-logo">NEXUS VOID</div>
-                <p class="footer-brand-desc">人類最遠的眼睛。我們相信宇宙的每一個角落都值得被探索，每一個謎題都值得被解開。</p>
-            </div>
-            <div>
-                <h4 class="footer-col-title">任務</h4>
-                <ul class="footer-links">
-                    <li><a href="../missions/">任務中心</a></li>
-                    <li><a href="../missions/">Deep Horizon</a></li>
-                    <li><a href="../missions/">Orbit Genesis</a></li>
-                    <li><a href="../missions/">Pulse Array</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">艦隊</h4>
-                <ul class="footer-links">
-                    <li><a href="../fleet/">艦隊登錄</a></li>
-                    <li><a href="../telemetry/">遙測數據</a></li>
-                    <li><a href="../signal/">通訊頻道</a></li>
-                    <li><a href="../fleet/">技術規格</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">指揮中心</h4>
-                <ul class="footer-links">
-                    <li><a href="../signal/">發送訊號</a></li>
-                    <li><a href="../telemetry/">系統狀態</a></li>
-                    <li><a href="../missions/">任務日誌</a></li>
-                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2157 NEXUS VOID CORP. All rights reserved.</span>
-            <span>SECTOR-7 · Signal Encrypted · Uptime 99.7%</span>
+    </section>
+
+    <footer style="background:var(--nv-surface);border-top:1px solid var(--nv-border);padding:24px 0;">
+        <div class="container d-flex justify-content-between small">
+            <span class="glow-cyan" style="letter-spacing:2px;">NEXUS VOID</span>
+            <span style="color:var(--nv-muted);">Telemetry Hub v2.1</span>
         </div>
     </footer>
 
-    <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        function initStars() {
-            stars = Array.from({ length: 200 }, () => ({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                r: Math.random() * 1.2, a: Math.random(), speed: 0.002 + Math.random() * 0.003
-            }));
-        }
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                s.a += s.speed;
-                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(200, 230, 255, ${Math.abs(Math.sin(s.a))})`; ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-        resize(); initStars(); drawStars();
-        window.addEventListener('resize', () => { resize(); initStars(); });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

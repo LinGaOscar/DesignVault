@@ -3,740 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS VOID — 太空科幻</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #040810;
-            --surface: #080f1a;
-            --panel: rgba(0, 200, 255, 0.04);
-            --text: #e0f0ff;
-            --muted: rgba(160, 200, 240, 0.5);
-            --cyan: #00c8ff;
-            --cyan-dim: rgba(0, 200, 255, 0.15);
-            --cyan-glow: 0 0 20px rgba(0, 200, 255, 0.4);
-            --border: rgba(0, 200, 255, 0.15);
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        a { text-decoration: none; color: inherit; }
-        #starfield {
-            position: fixed;
-            inset: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 80px;
-            border-bottom: 1px solid transparent;
-            transition: all 0.4s;
-        }
-        .nav.scrolled {
-            background: rgba(4, 8, 16, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom-color: var(--border);
-        }
-        .nav-logo {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            color: var(--cyan);
-            text-shadow: var(--cyan-glow);
-        }
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-        .nav-links a {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--cyan); }
-        .nav-status {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--cyan);
-            opacity: 0.7;
-        }
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--cyan);
-        }
-        /* DesignVault 返回連結 — 漂浮在 nav 上方 */
-        .designvault-back {
-            position: fixed;
-            top: 10px;
-            left: 80px;
-            z-index: 200;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.55rem;
-            letter-spacing: 2.5px;
-            color: rgba(0, 200, 255, 0.55);
-            text-decoration: none;
-            transition: color 0.2s, text-shadow 0.2s;
-        }
-        .designvault-back:hover {
-            color: var(--cyan);
-            text-shadow: 0 0 10px rgba(0, 200, 255, 0.6);
-        }
-        @media (max-width: 1024px) { .designvault-back { left: 40px; } }
-        @media (max-width: 768px) { .designvault-back { left: 24px; top: 8px; } }
-        .hero {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 0 80px;
-            overflow: hidden;
-        }
-        .hero-grid-lines {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
-            background-size: 80px 80px;
-            pointer-events: none;
-        }
-        .hero-tag {
-            font-size: 0.65rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 24px;
-            opacity: 0.8;
-        }
-        .hero-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 6rem;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -2px;
-            margin-bottom: 12px;
-        }
-        .hero-title .line1 { color: var(--text); }
-        .hero-title .line2 {
-            color: transparent;
-            -webkit-text-stroke: 1px var(--cyan);
-            display: block;
-        }
-        .hero-sub {
-            font-size: 0.85rem;
-            color: var(--muted);
-            max-width: 480px;
-            margin: 32px 0 48px;
-            line-height: 1.9;
-        }
-        .hero-btns {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-        .btn-primary {
-            font-size: 0.7rem;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--bg);
-            background: var(--cyan);
-            padding: 14px 36px;
-            border: none;
-            cursor: pointer;
-            transition: box-shadow 0.3s;
-            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-        }
-        .btn-primary:hover { box-shadow: var(--cyan-glow); }
-        .btn-outline {
-            font-size: 0.7rem;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            background: transparent;
-            padding: 14px 36px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: border-color 0.3s, background 0.3s;
-        }
-        .btn-outline:hover {
-            border-color: var(--cyan);
-            background: var(--cyan-dim);
-        }
-        .hero-stats {
-            position: absolute;
-            bottom: 60px;
-            right: 80px;
-            display: flex;
-            gap: 48px;
-        }
-        .hero-stat-num {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--cyan);
-            display: block;
-        }
-        .hero-stat-label {
-            font-size: 0.62rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-        section { position: relative; z-index: 1; }
-        .section-tag {
-            font-size: 0.62rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 12px;
-            opacity: 0.8;
-        }
-        .section-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 16px;
-        }
-        .section-desc {
-            font-size: 0.875rem;
-            color: var(--muted);
-            max-width: 560px;
-            line-height: 1.9;
-        }
-        .missions {
-            padding: 120px 80px;
-            border-top: 1px solid var(--border);
-        }
-        .missions-head { margin-bottom: 64px; }
-        .missions-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-        }
-        .mission-card {
-            background: var(--surface);
-            padding: 40px 36px;
-            transition: background 0.3s;
-            cursor: pointer;
-        }
-        .mission-card:hover { background: var(--panel); }
-        .mission-id {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--cyan);
-            margin-bottom: 20px;
-            opacity: 0.7;
-        }
-        .mission-icon {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .mission-name {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .mission-desc {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.85;
-        }
-        .mission-bar {
-            margin-top: 28px;
-            height: 2px;
-            background: rgba(0,200,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .mission-bar::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            background: var(--cyan);
-            width: var(--progress, 60%);
-            box-shadow: 0 0 8px var(--cyan);
-        }
-        .telemetry {
-            padding: 100px 80px;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .telemetry-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-        .telemetry-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-        }
-        .tstat {
-            padding: 28px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-        }
-        .tstat-num {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--cyan);
-            text-shadow: var(--cyan-glow);
-            display: block;
-            margin-bottom: 6px;
-        }
-        .tstat-label {
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-        .fleet {
-            padding: 120px 80px;
-            border-top: 1px solid var(--border);
-        }
-        .fleet-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 64px;
-        }
-        .fleet-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-        .fleet-card {
-            border: 1px solid var(--border);
-            background: var(--surface);
-            display: flex;
-            overflow: hidden;
-            transition: border-color 0.3s;
-            cursor: pointer;
-        }
-        .fleet-card:hover { border-color: var(--cyan); }
-        .fleet-card:hover .fleet-img { filter: brightness(1.1); }
-        .fleet-img {
-            width: 200px;
-            flex-shrink: 0;
-            overflow: hidden;
-            transition: filter 0.3s;
-        }
-        .fleet-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .fleet-info {
-            padding: 32px 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .fleet-code {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--cyan);
-            margin-bottom: 10px;
-            opacity: 0.7;
-        }
-        .fleet-name {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .fleet-desc {
-            font-size: 0.78rem;
-            color: var(--muted);
-            line-height: 1.8;
-        }
-        .fleet-status {
-            margin-top: 16px;
-            font-size: 0.62rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #00ff88;
-        }
-        .fleet-status::before {
-            content: '● ';
-            font-size: 0.5rem;
-        }
-        .signal {
-            padding: 140px 80px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            background: var(--surface);
-        }
-        .signal-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-        }
-        .signal-desc {
-            font-size: 0.875rem;
-            color: var(--muted);
-            max-width: 480px;
-            margin: 0 auto 52px;
-            line-height: 1.9;
-        }
-        .footer {
-            padding: 60px 80px 40px;
-            border-top: 1px solid var(--border);
-            background: var(--bg);
-        }
-        .footer-inner {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 48px;
-        }
-        .footer-logo {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--cyan);
-            letter-spacing: 6px;
-            margin-bottom: 16px;
-        }
-        .footer-brand-desc {
-            font-size: 0.78rem;
-            color: var(--muted);
-            line-height: 1.85;
-            max-width: 240px;
-        }
-        .footer-col-title {
-            font-size: 0.62rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 20px;
-            opacity: 0.7;
-        }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a {
-            font-size: 0.78rem;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--text); }
-        .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--muted);
-            opacity: 0.6;
-        }
-        @media (max-width: 1024px) {
-            .nav { padding: 20px 40px; }
-            .hero { padding: 0 40px; }
-            .hero-title { font-size: 4rem; }
-            .hero-stats { right: 40px; bottom: 40px; gap: 32px; }
-            .missions { padding: 80px 40px; }
-            .missions-grid { grid-template-columns: 1fr; }
-            .telemetry { padding: 80px 40px; }
-            .telemetry-inner { grid-template-columns: 1fr; gap: 48px; }
-            .fleet { padding: 80px 40px; }
-            .fleet-grid { grid-template-columns: 1fr; }
-            .signal { padding: 100px 40px; }
-            .footer { padding: 48px 40px 32px; }
-            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-        @media (max-width: 768px) {
-            .nav { padding: 18px 24px; }
-            .nav-links { display: none; }
-            .nav-links.active {
-                display: flex;
-                position: absolute;
-                top: 100%; left: 0; right: 0;
-                flex-direction: column;
-                background: rgba(4,8,16,0.98);
-                border-top: 1px solid var(--border);
-                padding: 8px 24px;
-                gap: 0;
-            }
-            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border); }
-            .nav-status { display: none; }
-            .nav-toggle { display: flex; }
-            .hero { padding: 0 24px; }
-            .hero-title { font-size: 2.75rem; }
-            .hero-stats { position: static; margin-top: 48px; gap: 32px; }
-            .missions { padding: 60px 24px; }
-            .telemetry { padding: 60px 24px; }
-            .telemetry-stats { grid-template-columns: 1fr 1fr; }
-            .fleet { padding: 60px 24px; }
-            .fleet-card { flex-direction: column; }
-            .fleet-img { width: 100%; height: 200px; }
-            .signal { padding: 80px 24px; }
-            .signal-title { font-size: 2rem; }
-            .footer { padding: 40px 24px 28px; }
-            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 8px; }
-        }
-        @media (max-width: 480px) {
-            .hero-title { font-size: 2.25rem; }
-            .hero-btns { flex-direction: column; align-items: flex-start; }
-            .section-title { font-size: 1.75rem; }
-            .signal-title { font-size: 1.75rem; }
-        }
-    </style>
+    <title>NEXUS VOID — 太空科幻介面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="custom.css">
 </head>
 <body>
-    <canvas id="starfield"></canvas>
-    <a href="../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
-    <nav class="nav" id="nav">
-        <div class="nav-logo">NEXUS VOID</div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="missions/">任務</a></li>
-            <li><a href="telemetry/">遙測</a></li>
-            <li><a href="fleet/">艦隊</a></li>
-            <li><a href="signal/">通訊</a></li>
-        </ul>
-        <span class="nav-status">SYS: ONLINE ▮</span>
+
+    <a href="../../index.html" class="designvault-back">← DesignVault</a>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="./">NEXUS VOID</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nvNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nvNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link active" href="./">系統</a></li>
+                    <li class="nav-item"><a class="nav-link" href="missions/">任務</a></li>
+                    <li class="nav-item"><a class="nav-link" href="fleet/">艦隊</a></li>
+                    <li class="nav-item"><a class="nav-link" href="telemetry/">遙測</a></li>
+                    <li class="nav-item"><a class="nav-link" href="signal/">信號</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <section class="hero" id="hero">
-        <div class="hero-grid-lines"></div>
-        <p class="hero-tag">MISSION LOG / 2157.08.14</p>
-        <h1 class="hero-title">
-            <span class="line1">EXPLORE</span>
-            <span class="line2">THE VOID</span>
-        </h1>
-        <p class="hero-sub">深入宇宙邊界，突破人類認知的極限。NEXUS VOID 是下一代星際探索計畫，我們不只是在尋找新世界，我們正在重新定義可能。</p>
-        <div class="hero-btns">
-            <a href="#missions" class="btn-primary">開始任務</a>
-            <a href="#fleet" class="btn-outline">查看艦隊</a>
-        </div>
-        <div class="hero-stats">
-            <div><span class="hero-stat-num">247</span><span class="hero-stat-label">已探索星系</span></div>
-            <div><span class="hero-stat-num">12.4K</span><span class="hero-stat-label">光年距離</span></div>
-            <div><span class="hero-stat-num">99.7%</span><span class="hero-stat-label">系統穩定度</span></div>
-        </div>
-    </section>
-    <section class="missions" id="missions">
-        <div class="missions-head">
-            <p class="section-tag">ACTIVE MISSIONS</p>
-            <h2 class="section-title">當前任務</h2>
-            <p class="section-desc">三大核心探索計畫同步進行，每一項都將改寫人類歷史。</p>
-        </div>
-        <div class="missions-grid">
-            <div class="mission-card">
-                <p class="mission-id">MIS-001 / ALPHA</p>
-                <span class="mission-icon">🌌</span>
-                <h3 class="mission-name">DEEP HORIZON</h3>
-                <p class="mission-desc">深入銀河系核心，探索超大質量黑洞周圍的時空扭曲現象。搭載第七代引力波感測器，精確度提升 400%。</p>
-                <div class="mission-bar" style="--progress: 78%"></div>
-            </div>
-            <div class="mission-card">
-                <p class="mission-id">MIS-002 / BETA</p>
-                <span class="mission-icon">🪐</span>
-                <h3 class="mission-name">ORBIT GENESIS</h3>
-                <p class="mission-desc">在類地行星系統建立永久軌道站，為人類第一個跨星系殖民地奠定基礎。</p>
-                <div class="mission-bar" style="--progress: 45%"></div>
-            </div>
-            <div class="mission-card">
-                <p class="mission-id">MIS-003 / GAMMA</p>
-                <span class="mission-icon">⚡</span>
-                <h3 class="mission-name">PULSE ARRAY</h3>
-                <p class="mission-desc">部署量子通訊陣列，實現跨星系即時通訊，徹底消除宇宙距離的訊號延遲。</p>
-                <div class="mission-bar" style="--progress: 91%"></div>
-            </div>
-        </div>
-    </section>
-    <section class="telemetry" id="telemetry">
-        <div class="telemetry-inner">
-            <div>
-                <p class="section-tag">TELEMETRY DATA</p>
-                <h2 class="section-title">即時遙測</h2>
-                <p class="section-desc">每 0.3 秒從艦隊同步一次數據。所有指標均在標準範圍內，任務持續推進。</p>
-            </div>
-            <div class="telemetry-stats">
-                <div class="tstat"><span class="tstat-num">247</span><span class="tstat-label">探索星系數</span></div>
-                <div class="tstat"><span class="tstat-num">3</span><span class="tstat-label">活躍任務</span></div>
-                <div class="tstat"><span class="tstat-num">1.2M</span><span class="tstat-label">收集樣本</span></div>
-                <div class="tstat"><span class="tstat-num">99.7%</span><span class="tstat-label">系統穩定度</span></div>
-            </div>
-        </div>
-    </section>
-    <section class="fleet" id="fleet">
-        <div class="fleet-head">
-            <div>
-                <p class="section-tag">FLEET REGISTRY</p>
-                <h2 class="section-title">星際艦隊</h2>
-            </div>
-            <a href="#" class="btn-outline">查看全部艦艇</a>
-        </div>
-        <div class="fleet-grid">
-            <div class="fleet-card">
-                <div class="fleet-img"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=400&q=80" alt="NEXUS-01"></div>
-                <div class="fleet-info">
-                    <p class="fleet-code">NXV-001 / CLASS-A</p>
-                    <h3 class="fleet-name">NEXUS-01</h3>
-                    <p class="fleet-desc">旗艦級星際探索艦，配備量子躍遷引擎與全息指揮中樞，最大乘員 2,400 名。</p>
-                    <span class="fleet-status">DEPLOYED — 獵戶座臂</span>
+
+    <!-- Hero -->
+    <section class="nv-hero">
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <p class="section-label mb-3"><span class="live-dot me-2"></span>NEXUS VOID COMMAND</p>
+                    <h1 class="nv-hero-title mb-4">
+                        艦隊指揮<br>
+                        <span class="line2">中央系統</span>
+                    </h1>
+                    <p class="mb-4" style="color:var(--nv-muted);font-size:0.875rem;line-height:1.8;">整合深空探測、艦隊管理與任務調度的次世代指揮平台。即時監控 247 艘飛船的狀態、位置與任務進度。</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="missions/" class="btn-nv">查看任務</a>
+                        <a href="fleet/" class="btn-nv-outline">艦隊狀態</a>
+                    </div>
                 </div>
-            </div>
-            <div class="fleet-card">
-                <div class="fleet-img"><img src="https://images.unsplash.com/photo-1614642264762-d0a3b8bf3700?auto=format&fit=crop&w=400&q=80" alt="AURORA-7"></div>
-                <div class="fleet-info">
-                    <p class="fleet-code">NXV-007 / CLASS-B</p>
-                    <h3 class="fleet-name">AURORA-7</h3>
-                    <p class="fleet-desc">輕型偵察艦，高機動性設計，專為前線探索與數據採集任務打造。</p>
-                    <span class="fleet-status">DEPLOYED — 人馬座方向</span>
-                </div>
-            </div>
-            <div class="fleet-card">
-                <div class="fleet-img"><img src="https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=400&q=80" alt="TITAN-X"></div>
-                <div class="fleet-info">
-                    <p class="fleet-code">NXV-010 / CLASS-S</p>
-                    <h3 class="fleet-name">TITAN-X</h3>
-                    <p class="fleet-desc">超重型建設艦，承擔軌道站建造與星際補給任務，動力核心為反物質反應爐。</p>
-                    <span class="fleet-status">DEPLOYED — Kepler-452b</span>
-                </div>
-            </div>
-            <div class="fleet-card">
-                <div class="fleet-img"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="PHANTOM-3"></div>
-                <div class="fleet-info">
-                    <p class="fleet-code">NXV-003 / CLASS-X</p>
-                    <h3 class="fleet-name">PHANTOM-3</h3>
-                    <p class="fleet-desc">隱匿級特種艦，搭載暗物質護盾，執行高風險深空滲透與未知訊號溯源任務。</p>
-                    <span class="fleet-status">DEPLOYED — 位置保密</span>
+                <div class="col-12 col-lg-5 offset-lg-1 d-none d-lg-block">
+                    <div class="card p-3 border-glow">
+                        <p class="section-label mb-3">即時系統狀態</p>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span style="color:var(--nv-muted);">主引擎</span>
+                                <span class="badge badge-active-nv">正常</span>
+                            </div>
+                            <div class="progress mb-1"><div class="progress-bar" style="width:87%;"></div></div>
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span style="color:var(--nv-muted);">護盾強度</span>
+                                <span class="badge badge-warn">警告</span>
+                            </div>
+                            <div class="progress mb-1"><div class="progress-bar warn" style="width:43%;"></div></div>
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span style="color:var(--nv-muted);">武器系統</span>
+                                <span class="badge badge-active-nv">待命</span>
+                            </div>
+                            <div class="progress mb-1"><div class="progress-bar" style="width:100%;"></div></div>
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span style="color:var(--nv-muted);">通訊陣列</span>
+                                <span class="badge badge-standby">連線中</span>
+                            </div>
+                            <div class="progress"><div class="progress-bar" style="width:92%;"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="signal" id="signal">
-        <p class="section-tag">OPEN CHANNEL</p>
-        <h2 class="signal-title">加入星際計畫</h2>
-        <p class="signal-desc">宇宙的邊界正在等待你來定義。立即申請加入 NEXUS VOID，與我們一起踏入未知深空。</p>
-        <a href="#" class="btn-primary">發送申請訊號</a>
-    </section>
-    <footer class="footer">
-        <div class="footer-inner">
-            <div>
-                <div class="footer-logo">NEXUS VOID</div>
-                <p class="footer-brand-desc">人類最遠的眼睛。我們相信宇宙的每一個角落都值得被探索，每一個謎題都值得被解開。</p>
-            </div>
-            <div>
-                <h4 class="footer-col-title">任務</h4>
-                <ul class="footer-links">
-                    <li><a href="missions/">任務中心</a></li>
-                    <li><a href="missions/">Deep Horizon</a></li>
-                    <li><a href="missions/">Orbit Genesis</a></li>
-                    <li><a href="missions/">Pulse Array</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">艦隊</h4>
-                <ul class="footer-links">
-                    <li><a href="fleet/">艦隊登錄</a></li>
-                    <li><a href="telemetry/">遙測數據</a></li>
-                    <li><a href="signal/">通訊頻道</a></li>
-                    <li><a href="fleet/">技術規格</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">指揮中心</h4>
-                <ul class="footer-links">
-                    <li><a href="signal/">發送訊號</a></li>
-                    <li><a href="telemetry/">系統狀態</a></li>
-                    <li><a href="missions/">任務日誌</a></li>
-                </ul>
+
+    <!-- Stats -->
+    <section class="py-5" style="background:var(--nv-surface);border-top:1px solid var(--nv-border);border-bottom:1px solid var(--nv-border);">
+        <div class="container">
+            <div class="row row-cols-2 row-cols-md-4 g-4 text-center">
+                <div class="col">
+                    <p class="glow-cyan mb-1" style="font-size:2rem;font-weight:700;">247</p>
+                    <p class="small" style="color:var(--nv-muted);">部署飛船</p>
+                </div>
+                <div class="col">
+                    <p class="glow-cyan mb-1" style="font-size:2rem;font-weight:700;">89</p>
+                    <p class="small" style="color:var(--nv-muted);">進行任務</p>
+                </div>
+                <div class="col">
+                    <p class="glow-cyan mb-1" style="font-size:2rem;font-weight:700;">12</p>
+                    <p class="small" style="color:var(--nv-muted);">活躍警報</p>
+                </div>
+                <div class="col">
+                    <p class="glow-cyan mb-1" style="font-size:2rem;font-weight:700;">99.4%</p>
+                    <p class="small" style="color:var(--nv-muted);">系統在線率</p>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2157 NEXUS VOID CORP. All rights reserved.</span>
-            <span>SECTOR-7 · Signal Encrypted · Uptime 99.7%</span>
+    </section>
+
+    <!-- Active Missions -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <p class="section-label mb-1">Active Missions</p>
+                    <h2 class="h5 fw-normal" style="color:#fff;">進行中任務</h2>
+                </div>
+                <a href="missions/" class="btn-nv-outline btn-sm py-2 px-3" style="font-size:0.7rem;">查看全部</a>
+            </div>
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div><p class="section-label mb-0">MISSION-4421</p></div>
+                            <span class="badge badge-active-nv">執行中</span>
+                        </div>
+                        <p class="mb-2" style="font-size:0.875rem;">深空探測 — Kepler-452b</p>
+                        <div class="d-flex justify-content-between small mb-1" style="color:var(--nv-muted);">
+                            <span>任務進度</span><span style="color:var(--nv-cyan);">68%</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar" style="width:68%;"></div></div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div><p class="section-label mb-0">MISSION-4398</p></div>
+                            <span class="badge badge-warn">延遲</span>
+                        </div>
+                        <p class="mb-2" style="font-size:0.875rem;">小行星採礦 — Belt-7C</p>
+                        <div class="d-flex justify-content-between small mb-1" style="color:var(--nv-muted);">
+                            <span>任務進度</span><span style="color:var(--nv-yellow);">34%</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar warn" style="width:34%;"></div></div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div><p class="section-label mb-0">MISSION-4415</p></div>
+                            <span class="badge badge-critical">緊急</span>
+                        </div>
+                        <p class="mb-2" style="font-size:0.875rem;">救援行動 — Sector 9</p>
+                        <div class="d-flex justify-content-between small mb-1" style="color:var(--nv-muted);">
+                            <span>任務進度</span><span style="color:var(--nv-red);">12%</span>
+                        </div>
+                        <div class="progress"><div class="progress-bar critical" style="width:12%;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fleet Table -->
+    <section class="py-5" style="background:var(--nv-surface);border-top:1px solid var(--nv-border);">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <p class="section-label mb-1">Fleet Status</p>
+                    <h2 class="h5 fw-normal" style="color:#fff;">艦隊狀態</h2>
+                </div>
+                <a href="fleet/" class="btn-nv-outline btn-sm py-2 px-3" style="font-size:0.7rem;">艦隊管理</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>飛船 ID</th><th>艦名</th><th>級別</th><th>位置</th><th>狀態</th><th>燃料</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="glow-cyan">NV-001</span></td><td>星塵號</td><td>偵察艦</td><td>Sector 3</td><td><span class="badge badge-active-nv">任務中</span></td><td><div class="progress" style="width:80px;"><div class="progress-bar" style="width:78%;"></div></div></td></tr>
+                        <tr><td><span class="glow-cyan">NV-007</span></td><td>虛空切割者</td><td>戰列艦</td><td>Sector 9</td><td><span class="badge badge-critical">緊急</span></td><td><div class="progress" style="width:80px;"><div class="progress-bar warn" style="width:22%;"></div></div></td></tr>
+                        <tr><td><span class="glow-cyan">NV-012</span></td><td>量子迴旋</td><td>科研艦</td><td>Kepler Belt</td><td><span class="badge badge-active-nv">任務中</span></td><td><div class="progress" style="width:80px;"><div class="progress-bar" style="width:65%;"></div></div></td></tr>
+                        <tr><td><span class="glow-cyan">NV-019</span></td><td>暗物質探針</td><td>探測艦</td><td>Deep Space</td><td><span class="badge badge-standby">待命</span></td><td><div class="progress" style="width:80px;"><div class="progress-bar" style="width:91%;"></div></div></td></tr>
+                        <tr><td><span class="glow-cyan">NV-033</span></td><td>脈衝騎士</td><td>護衛艦</td><td>Sector 1</td><td><span class="badge badge-active-nv">巡邏中</span></td><td><div class="progress" style="width:80px;"><div class="progress-bar" style="width:54%;"></div></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signal / Telemetry teaser -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">Live Telemetry</p>
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="live-dot"></span>
+                            <span class="small" style="color:var(--nv-muted);">即時信號監測</span>
+                        </div>
+                        <div class="d-flex align-items-end gap-1" style="height:40px;">
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                            <div class="wave-bar"></div>
+                        </div>
+                        <a href="telemetry/" class="btn-nv-outline mt-3 d-inline-block" style="font-size:0.7rem;padding:8px 20px;">查看遙測</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="card p-3">
+                        <p class="section-label mb-2">Signal Channels</p>
+                        <div class="d-flex flex-column gap-2 mb-3">
+                            <div class="d-flex justify-content-between small">
+                                <span style="color:var(--nv-muted);">CH-01 指揮頻道</span>
+                                <span class="badge badge-active-nv">連線</span>
+                            </div>
+                            <div class="d-flex justify-content-between small">
+                                <span style="color:var(--nv-muted);">CH-07 緊急頻道</span>
+                                <span class="badge badge-critical">警報</span>
+                            </div>
+                            <div class="d-flex justify-content-between small">
+                                <span style="color:var(--nv-muted);">CH-12 科研頻道</span>
+                                <span class="badge badge-standby">待命</span>
+                            </div>
+                        </div>
+                        <a href="signal/" class="btn-nv-outline d-inline-block" style="font-size:0.7rem;padding:8px 20px;">信號中心</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background:var(--nv-surface);border-top:1px solid var(--nv-border);padding:24px 0;">
+        <div class="container d-flex justify-content-between align-items-center small">
+            <span class="glow-cyan" style="letter-spacing:2px;">NEXUS VOID</span>
+            <span style="color:var(--nv-muted);">© 2026 Galactic Command</span>
         </div>
     </footer>
-    <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        function initStars() {
-            stars = Array.from({ length: 200 }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 1.2,
-                a: Math.random(),
-                speed: 0.002 + Math.random() * 0.003
-            }));
-        }
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                s.a += s.speed;
-                if (s.a > 1) s.a = 0;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(200, 230, 255, ${Math.abs(Math.sin(s.a))})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-        resize();
-        initStars();
-        drawStars();
-        window.addEventListener('resize', () => {
-            resize();
-            initStars();
-        });
-        window.addEventListener('scroll', () => {
-            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
-        });
-    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

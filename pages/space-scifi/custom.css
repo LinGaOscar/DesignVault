@@ -1,0 +1,111 @@
+/* === NEXUS VOID — Bootstrap Overrides === */
+:root {
+    --nv-bg: #060b14;
+    --nv-surface: #0d1829;
+    --nv-border: rgba(0,212,255,0.15);
+    --nv-text: #e0e8f0;
+    --nv-muted: #6a8099;
+    --nv-cyan: #00d4ff;
+    --nv-green: #00ff88;
+    --nv-red: #ff4757;
+    --nv-yellow: #ffd32a;
+    --bs-body-bg: var(--nv-bg);
+    --bs-body-color: var(--nv-text);
+    --bs-border-color: var(--nv-border);
+    --bs-border-radius: 4px;
+    --bs-card-bg: var(--nv-surface);
+    --bs-body-font-family: 'Courier New', 'Consolas', monospace;
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--nv-text);
+    --bs-table-border-color: var(--nv-border);
+}
+
+body { background: var(--nv-bg); color: var(--nv-text); }
+
+/* DesignVault 返回連結 — 固定於左上角 */
+.designvault-back {
+    position: fixed; top: 12px; left: 12px; z-index: 1100;
+    font-size: 0.65rem; color: var(--nv-muted); text-decoration: none;
+    letter-spacing: 1px; font-family: monospace;
+    padding: 4px 8px; border: 1px solid rgba(0,212,255,0.2);
+}
+.designvault-back:hover { color: var(--nv-cyan); border-color: var(--nv-cyan); }
+
+/* Navbar */
+.navbar { background: rgba(6,11,20,0.95) !important; border-bottom: 1px solid var(--nv-border); backdrop-filter: blur(8px); }
+.navbar-brand { font-size: 1.1rem; letter-spacing: 3px; text-transform: uppercase; color: var(--nv-cyan) !important; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+.nav-link { color: var(--nv-muted) !important; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-link:hover, .nav-link.active { color: var(--nv-cyan) !important; }
+.navbar-toggler { border-color: var(--nv-border); }
+.navbar-toggler-icon { filter: invert(1); }
+
+/* Cards */
+.card { background: var(--nv-surface); border: 1px solid var(--nv-border); }
+.card:hover { border-color: rgba(0,212,255,0.4); }
+
+/* Badges */
+.badge-active-nv { background: rgba(0,255,136,0.15); color: var(--nv-green); font-weight: 400; }
+.badge-standby { background: rgba(0,212,255,0.15); color: var(--nv-cyan); font-weight: 400; }
+.badge-critical { background: rgba(255,71,87,0.15); color: var(--nv-red); font-weight: 400; }
+.badge-warn { background: rgba(255,211,42,0.15); color: var(--nv-yellow); font-weight: 400; }
+
+/* Tables */
+.table th { color: var(--nv-muted); font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; border-color: var(--nv-border); }
+.table td { font-size: 0.85rem; border-color: var(--nv-border); vertical-align: middle; }
+.table-hover > tbody > tr:hover > * { background: rgba(0,212,255,0.04); }
+
+/* Hero */
+.nv-hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
+.nv-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.08) 0%, transparent 60%); pointer-events: none; }
+.nv-hero-title { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; letter-spacing: -1px; color: #fff; line-height: 1.1; }
+.nv-hero-title .line2 { color: var(--nv-cyan); text-shadow: 0 0 30px rgba(0,212,255,0.6); }
+
+/* 發光效果 */
+.glow-cyan { text-shadow: 0 0 10px rgba(0,212,255,0.8); color: var(--nv-cyan); }
+.border-glow { border-color: var(--nv-cyan) !important; box-shadow: 0 0 8px rgba(0,212,255,0.2); }
+
+/* Buttons */
+.btn-nv { background: var(--nv-cyan); color: var(--nv-bg); border: none; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 28px; border-radius: 4px; display: inline-block; text-decoration: none; cursor: pointer; }
+.btn-nv:hover { background: #00bbdd; box-shadow: 0 0 20px rgba(0,212,255,0.4); color: var(--nv-bg); }
+.btn-nv-outline { background: transparent; border: 1px solid var(--nv-cyan); color: var(--nv-cyan); font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 28px; border-radius: 4px; display: inline-block; text-decoration: none; }
+.btn-nv-outline:hover { background: rgba(0,212,255,0.1); color: var(--nv-cyan); }
+
+/* Progress bars */
+.progress { background: rgba(0,212,255,0.1); height: 4px; border-radius: 2px; }
+.progress-bar { background: var(--nv-cyan); border-radius: 2px; }
+.progress-bar.critical { background: var(--nv-red); }
+.progress-bar.warn { background: var(--nv-yellow); }
+
+/* Forms */
+.form-control, .form-select { background: rgba(255,255,255,0.04); border-color: var(--nv-border); color: var(--nv-text); border-radius: 4px; font-family: monospace; }
+.form-control:focus, .form-select:focus { background: rgba(255,255,255,0.06); border-color: var(--nv-cyan); color: var(--nv-text); box-shadow: 0 0 0 3px rgba(0,212,255,0.15); }
+.form-control::placeholder { color: var(--nv-muted); }
+.form-label { color: var(--nv-muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+
+/* 區塊標籤 */
+.section-label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--nv-cyan); }
+
+/* Mission list group */
+.list-group-item { background: var(--nv-surface); border-color: var(--nv-border); color: var(--nv-text); }
+.list-group-item:hover { background: rgba(0,212,255,0.05); }
+
+/* 脈動動畫 — 用於即時狀態指示器 */
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--nv-green); animation: pulse 2s infinite; display: inline-block; }
+
+/* 波形動畫 — 模擬訊號波形 */
+@keyframes wave { 0%,100% { height: 4px; } 50% { height: 20px; } }
+.wave-bar { width: 3px; background: var(--nv-cyan); border-radius: 2px; animation: wave 1s ease-in-out infinite; display: inline-block; margin: 0 1px; vertical-align: bottom; }
+.wave-bar:nth-child(2) { animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+/* 子頁面標頭 — 補足 fixed navbar 的高度 */
+.nv-page-header { padding-top: 100px; padding-bottom: 32px; border-bottom: 1px solid var(--nv-border); }
+
+/* Nav tabs 深色覆寫 */
+.nav-tabs { border-bottom-color: var(--nv-border); }
+.nav-tabs .nav-link { color: var(--nv-muted); border-color: transparent; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+.nav-tabs .nav-link:hover { color: var(--nv-cyan); border-color: transparent; }
+.nav-tabs .nav-link.active { background: transparent; border-color: var(--nv-border) var(--nv-border) var(--nv-bg); color: var(--nv-cyan); }

@@ -3,965 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>任務中心 | NEXUS VOID</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #040810;
-            --surface: #080f1a;
-            --panel: rgba(0, 200, 255, 0.04);
-            --text: #e0f0ff;
-            --muted: rgba(160, 200, 240, 0.5);
-            --cyan: #00c8ff;
-            --cyan-dim: rgba(0, 200, 255, 0.15);
-            --cyan-glow: 0 0 20px rgba(0, 200, 255, 0.4);
-            --border: rgba(0, 200, 255, 0.15);
-            --green: #00ff88;
-            --red: #ff3860;
-            --yellow: #ffd700;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        a { text-decoration: none; color: inherit; }
-
-        /* 星空背景 canvas */
-        #starfield {
-            position: fixed;
-            inset: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* DesignVault 返回連結 */
-        .designvault-back {
-            position: fixed;
-            top: 10px;
-            left: 80px;
-            z-index: 200;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.55rem;
-            letter-spacing: 2.5px;
-            color: rgba(0, 200, 255, 0.55);
-            transition: color 0.2s, text-shadow 0.2s;
-        }
-        .designvault-back:hover {
-            color: var(--cyan);
-            text-shadow: 0 0 10px rgba(0, 200, 255, 0.6);
-        }
-
-        /* 導覽列 */
-        .nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 80px;
-            background: rgba(4, 8, 16, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-        }
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        .nav-back {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .nav-back:hover { color: var(--cyan); }
-        .nav-logo {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            color: var(--cyan);
-            text-shadow: var(--cyan-glow);
-        }
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-        .nav-links a {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
-        .nav-status {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--cyan);
-            opacity: 0.7;
-        }
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--cyan);
-        }
-
-        /* 頁面主體 */
-        .page-content {
-            position: relative;
-            z-index: 1;
-            padding-top: 100px;
-        }
-
-        /* 頁首 Hero 區 */
-        .page-hero {
-            padding: 80px 80px 60px;
-            border-bottom: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-        .page-hero::before {
-            content: 'MISSIONS';
-            position: absolute;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-family: 'Orbitron', monospace;
-            font-size: 8rem;
-            font-weight: 900;
-            color: rgba(0, 200, 255, 0.04);
-            letter-spacing: 10px;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-        .page-tag {
-            font-size: 0.62rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 12px;
-            opacity: 0.8;
-        }
-        .page-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 16px;
-        }
-        .page-desc {
-            font-size: 0.875rem;
-            color: var(--muted);
-            max-width: 600px;
-            line-height: 1.9;
-        }
-        .page-hero-meta {
-            display: flex;
-            gap: 48px;
-            margin-top: 40px;
-        }
-        .meta-item { }
-        .meta-num {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--cyan);
-            text-shadow: var(--cyan-glow);
-            display: block;
-        }
-        .meta-label {
-            font-size: 0.62rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        /* 狀態徽章 */
-        .badge {
-            display: inline-block;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.55rem;
-            letter-spacing: 2px;
-            padding: 3px 10px;
-            border: 1px solid;
-        }
-        .badge-active {
-            color: var(--green);
-            border-color: rgba(0, 255, 136, 0.4);
-            background: rgba(0, 255, 136, 0.06);
-        }
-        .badge-standby {
-            color: var(--yellow);
-            border-color: rgba(255, 215, 0, 0.4);
-            background: rgba(255, 215, 0, 0.06);
-        }
-        .badge-critical {
-            color: var(--red);
-            border-color: rgba(255, 56, 96, 0.4);
-            background: rgba(255, 56, 96, 0.06);
-            animation: blink 1.4s step-end infinite;
-        }
-        @keyframes blink {
-            50% { opacity: 0.4; }
-        }
-
-        /* 任務列表 */
-        .missions-section {
-            padding: 80px 80px;
-        }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        .section-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-        }
-        .section-count {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--muted);
-        }
-
-        /* 任務卡片列表 */
-        .mission-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-        }
-        .mission-row {
-            background: var(--surface);
-            padding: 32px 36px;
-            display: grid;
-            grid-template-columns: 140px 1fr 120px 80px 160px;
-            gap: 24px;
-            align-items: center;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .mission-row:hover { background: var(--panel); }
-        .mission-row-id {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: var(--cyan);
-            opacity: 0.8;
-        }
-        .mission-row-name {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .mission-row-dest {
-            font-size: 0.75rem;
-            color: var(--muted);
-        }
-        .mission-row-crew {
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-align: center;
-        }
-        .mission-row-crew strong {
-            display: block;
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* 進度條 */
-        .progress-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.62rem;
-            color: var(--muted);
-            letter-spacing: 1px;
-        }
-        .progress-bar {
-            height: 2px;
-            background: rgba(0,200,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .progress-fill {
-            position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            background: var(--cyan);
-            box-shadow: 0 0 8px var(--cyan);
-            transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
-        }
-        .progress-fill.critical {
-            background: var(--red);
-            box-shadow: 0 0 8px var(--red);
-        }
-
-        /* 任務詳細卡片 */
-        .mission-detail-section {
-            padding: 0 80px 80px;
-        }
-        .mission-details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-        .mission-detail-card {
-            border: 1px solid var(--border);
-            background: var(--surface);
-            padding: 36px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s;
-        }
-        .mission-detail-card:hover { border-color: rgba(0, 200, 255, 0.4); }
-        .mission-detail-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--cyan);
-            opacity: 0.6;
-        }
-        .detail-card-id {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.58rem;
-            letter-spacing: 3px;
-            color: var(--cyan);
-            opacity: 0.7;
-            margin-bottom: 10px;
-        }
-        .detail-card-name {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .detail-card-badge { margin-bottom: 16px; }
-        .detail-card-desc {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.85;
-            margin-bottom: 20px;
-        }
-        .detail-meta-row {
-            display: flex;
-            gap: 32px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-        .detail-meta-item { }
-        .detail-meta-val {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--cyan);
-            display: block;
-        }
-        .detail-meta-lbl {
-            font-size: 0.6rem;
-            letter-spacing: 1.5px;
-            color: var(--muted);
-            text-transform: uppercase;
-        }
-
-        /* 任務日誌 */
-        .log-section {
-            padding: 0 80px 120px;
-        }
-        .log-header {
-            margin-bottom: 32px;
-        }
-        .log-entries {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            border: 1px solid var(--border);
-        }
-        .log-entry {
-            padding: 24px 32px;
-            border-bottom: 1px solid var(--border);
-            display: grid;
-            grid-template-columns: 200px 80px 1fr;
-            gap: 24px;
-            align-items: start;
-            transition: background 0.2s;
-        }
-        .log-entry:last-child { border-bottom: none; }
-        .log-entry:hover { background: var(--panel); }
-        .log-timestamp {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem;
-            color: var(--cyan);
-            opacity: 0.7;
-            letter-spacing: 1px;
-            line-height: 1.6;
-        }
-        .log-level {
-            font-size: 0.6rem;
-            letter-spacing: 1.5px;
-        }
-        .log-level-info { color: var(--cyan); }
-        .log-level-warn { color: var(--yellow); }
-        .log-level-alert { color: var(--red); }
-        .log-message {
-            font-size: 0.8rem;
-            color: var(--muted);
-            line-height: 1.7;
-        }
-        .log-message strong { color: var(--text); }
-
-        /* Footer */
-        .footer {
-            padding: 60px 80px 40px;
-            border-top: 1px solid var(--border);
-            background: var(--bg);
-            position: relative;
-            z-index: 1;
-        }
-        .footer-inner {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 48px;
-        }
-        .footer-logo {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--cyan);
-            letter-spacing: 6px;
-            margin-bottom: 16px;
-        }
-        .footer-brand-desc {
-            font-size: 0.78rem;
-            color: var(--muted);
-            line-height: 1.85;
-            max-width: 240px;
-        }
-        .footer-col-title {
-            font-size: 0.62rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            margin-bottom: 20px;
-            opacity: 0.7;
-        }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a {
-            font-size: 0.78rem;
-            color: var(--muted);
-            transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--text); }
-        .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--muted);
-            opacity: 0.6;
-        }
-
-        /* RWD */
-        @media (max-width: 1200px) {
-            .mission-row { grid-template-columns: 120px 1fr 100px 70px 140px; gap: 16px; }
-        }
-        @media (max-width: 1024px) {
-            .designvault-back { left: 40px; }
-            .nav { padding: 20px 40px; }
-            .page-hero { padding: 80px 40px 60px; }
-            .missions-section { padding: 60px 40px; }
-            .mission-row { grid-template-columns: 100px 1fr 100px; gap: 16px; }
-            .mission-row .mission-row-crew, .mission-row .progress-wrap { display: none; }
-            .mission-detail-section { padding: 0 40px 60px; }
-            .mission-details-grid { grid-template-columns: 1fr; }
-            .log-section { padding: 0 40px 80px; }
-            .log-entry { grid-template-columns: 160px 60px 1fr; gap: 16px; }
-            .footer { padding: 48px 40px 32px; }
-            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
-        }
-        @media (max-width: 768px) {
-            .designvault-back { left: 24px; top: 8px; }
-            .nav { padding: 18px 24px; }
-            .nav-links { display: none; }
-            .nav-links.active {
-                display: flex;
-                position: absolute;
-                top: 100%; left: 0; right: 0;
-                flex-direction: column;
-                background: rgba(4,8,16,0.98);
-                border-top: 1px solid var(--border);
-                padding: 8px 24px;
-                gap: 0;
-            }
-            .nav-links a { display: block; padding: 14px 0; border-bottom: 1px solid var(--border); }
-            .nav-status { display: none; }
-            .nav-toggle { display: flex; }
-            .page-hero { padding: 60px 24px 40px; }
-            .page-title { font-size: 2rem; }
-            .page-hero-meta { gap: 24px; flex-wrap: wrap; }
-            .missions-section { padding: 48px 24px; }
-            .mission-row { grid-template-columns: 1fr; gap: 12px; padding: 24px; }
-            .mission-row-id { margin-bottom: 4px; }
-            .mission-detail-section { padding: 0 24px 48px; }
-            .log-section { padding: 0 24px 60px; }
-            .log-entry { grid-template-columns: 1fr; gap: 8px; padding: 20px 24px; }
-            .footer { padding: 40px 24px 28px; }
-            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 8px; }
-        }
-        @media (max-width: 480px) {
-            .page-title { font-size: 1.6rem; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-        }
-    </style>
+    <title>任務 — NEXUS VOID</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
 </head>
 <body>
-    <canvas id="starfield"></canvas>
-    <a href="../../../index.html" class="designvault-back">[ ← DESIGNVAULT ]</a>
-    <nav class="nav" id="nav">
-        <div class="nav-left">
-            <a href="../" class="nav-back">← NEXUS VOID</a>
-            <div class="nav-logo">MISSIONS</div>
+    <a href="../../../index.html" class="designvault-back">← DesignVault</a>
+
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../">NEXUS VOID</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nvNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nvNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="../">系統</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">任務</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../fleet/">艦隊</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../telemetry/">遙測</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../signal/">信號</a></li>
+                </ul>
+            </div>
         </div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-            <li><a href="../missions/" class="active">任務</a></li>
-            <li><a href="../telemetry/">遙測</a></li>
-            <li><a href="../fleet/">艦隊</a></li>
-            <li><a href="../signal/">通訊</a></li>
-        </ul>
-        <span class="nav-status">MISSIONS ONLINE ▮</span>
     </nav>
 
-    <main class="page-content">
-        <!-- 頁首 -->
-        <section class="page-hero">
-            <p class="page-tag">MISSION CONTROL / SECTOR-7</p>
-            <h1 class="page-title">任務中心</h1>
-            <p class="page-desc">統籌管理所有星際探索行動，從深空偵察到軌道建設，每一項任務都是人類邁向宇宙的關鍵一步。目前共有 8 項任務進行中。</p>
-            <div class="page-hero-meta">
-                <div class="meta-item">
-                    <span class="meta-num">5</span>
-                    <span class="meta-label">ACTIVE</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-num">2</span>
-                    <span class="meta-label">STANDBY</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-num">1</span>
-                    <span class="meta-label">CRITICAL</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-num">3,847</span>
-                    <span class="meta-label">總乘員</span>
-                </div>
-            </div>
-        </section>
+    <div class="nv-page-header">
+        <div class="container">
+            <a href="../" class="btn-nv-outline py-1 px-3" style="font-size:0.7rem;">← 返回系統</a>
+            <p class="section-label mt-3 mb-1">Mission Control</p>
+            <h1 class="h4 fw-normal" style="color:#fff;">任務控制中心</h1>
+        </div>
+    </div>
 
-        <!-- 任務列表 -->
-        <section class="missions-section">
-            <div class="section-header">
-                <h2 class="section-title">[ ACTIVE MISSION REGISTRY ]</h2>
-                <span class="section-count">TOTAL: 08 MISSIONS</span>
-            </div>
-            <div class="mission-list">
-                <!-- MIS-001 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-001<br>ALPHA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">DEEP HORIZON</div>
-                        <div class="mission-row-dest">目標：銀河系核心 / Sgr A* 周邊 3,200 光年</div>
-                    </div>
-                    <span class="badge badge-active">ACTIVE</span>
-                    <div class="mission-row-crew">
-                        <strong>847</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>78%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-002 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-002<br>BETA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">ORBIT GENESIS</div>
-                        <div class="mission-row-dest">目標：Kepler-452b 軌道站建設</div>
-                    </div>
-                    <span class="badge badge-active">ACTIVE</span>
-                    <div class="mission-row-crew">
-                        <strong>1,204</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>45%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-003 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-003<br>GAMMA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">PULSE ARRAY</div>
-                        <div class="mission-row-dest">目標：量子通訊陣列 / 人馬座方向</div>
-                    </div>
-                    <span class="badge badge-active">ACTIVE</span>
-                    <div class="mission-row-crew">
-                        <strong>312</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>91%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-004 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-004<br>DELTA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">SHADOW RECON</div>
-                        <div class="mission-row-dest">目標：未知訊號源 / 獵戶臂外緣</div>
-                    </div>
-                    <span class="badge badge-critical">CRITICAL</span>
-                    <div class="mission-row-crew">
-                        <strong>48</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>33%</span></div>
-                        <div class="progress-bar"><div class="progress-fill critical" style="width:33%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-005 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-005<br>EPSILON CLASS</div>
-                    <div>
-                        <div class="mission-row-name">NOVA SEED</div>
-                        <div class="mission-row-dest">目標：類地行星生態系建立 / Wolf 1061c</div>
-                    </div>
-                    <span class="badge badge-active">ACTIVE</span>
-                    <div class="mission-row-crew">
-                        <strong>620</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>62%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-006 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-006<br>ZETA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">IRON VEIL</div>
-                        <div class="mission-row-dest">目標：小行星帶採礦作業 / Ceres 軌道</div>
-                    </div>
-                    <span class="badge badge-active">ACTIVE</span>
-                    <div class="mission-row-crew">
-                        <strong>408</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>84%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:84%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-007 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-007<br>ETA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">PHANTOM GATE</div>
-                        <div class="mission-row-dest">目標：蟲洞穩定性測試 / 銀河系邊緣</div>
-                    </div>
-                    <span class="badge badge-standby">STANDBY</span>
-                    <div class="mission-row-crew">
-                        <strong>276</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>12%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
-                    </div>
-                </div>
-                <!-- MIS-008 -->
-                <div class="mission-row">
-                    <div class="mission-row-id">MIS-008<br>THETA CLASS</div>
-                    <div>
-                        <div class="mission-row-name">ECHO DRIFT</div>
-                        <div class="mission-row-dest">目標：暗物質流偵測 / 虛空帶</div>
-                    </div>
-                    <span class="badge badge-standby">STANDBY</span>
-                    <div class="mission-row-crew">
-                        <strong>132</strong>
-                        乘員
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>進度</span><span>5%</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="py-4">
+        <div class="container">
+            <!-- 過濾分頁 -->
+            <ul class="nav nav-tabs mb-4">
+                <li class="nav-item"><a class="nav-link active" href="#">全部 (89)</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">執行中 (42)</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">待命 (31)</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">緊急 (7)</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">已完成 (9)</a></li>
+            </ul>
 
-        <!-- 任務詳情 -->
-        <section class="mission-detail-section">
-            <div class="section-header" style="margin-bottom:32px;">
-                <h2 class="section-title">[ MISSION DETAIL CARDS ]</h2>
-                <span class="section-count">PRIORITY MISSIONS</span>
-            </div>
-            <div class="mission-details-grid">
-                <div class="mission-detail-card">
-                    <div class="detail-card-id">MIS-001 / ALPHA CLASS / NEXUS-01</div>
-                    <div class="detail-card-name">DEEP HORIZON</div>
-                    <div class="detail-card-badge"><span class="badge badge-active">ACTIVE</span></div>
-                    <p class="detail-card-desc">深入銀河系核心，探索超大質量黑洞 Sgr A* 周邊的時空扭曲現象。搭載第七代引力波感測器（精確度提升 400%），量子磁場屏蔽系統可承受核心輻射壓。預計採集 2,400 組時空曲率數據，為人類首次近距離黑洞研究計畫提供基礎資料。</p>
-                    <div class="detail-meta-row">
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">847</span>
-                            <span class="detail-meta-lbl">乘員</span>
+            <!-- 任務清單 -->
+            <div class="list-group">
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4421</p>
+                            <p class="mb-1" style="font-size:0.9rem;">深空探測 — Kepler-452b</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：艾拉·陳 | 飛船：NV-001 星塵號</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-cyan);">68%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar" style="width:68%;"></div></div>
                         </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">3,200 LY</span>
-                            <span class="detail-meta-lbl">距離</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">78%</span>
-                            <span class="detail-meta-lbl">進度</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">2157.11</span>
-                            <span class="detail-meta-lbl">預計完成</span>
-                        </div>
+                        <span class="badge badge-active-nv">執行中</span>
                     </div>
                 </div>
-                <div class="mission-detail-card" style="--card-accent: var(--red);">
-                    <div class="detail-card-id">MIS-004 / DELTA CLASS / PHANTOM-3</div>
-                    <div class="detail-card-name">SHADOW RECON</div>
-                    <div class="detail-card-badge"><span class="badge badge-critical">CRITICAL</span></div>
-                    <p class="detail-card-desc">獵戶臂外緣偵測到未知規律性電磁脈衝訊號，PHANTOM-3 隱匿艦已啟動緊急深空滲透模式。暗物質護盾提供全頻段偽裝，但訊號源可能具備反制能力。任務優先級已提升至 ALPHA-RED，全艦組進入戰備狀態。</p>
-                    <div class="detail-meta-row">
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val" style="color:var(--red)">48</span>
-                            <span class="detail-meta-lbl">乘員</span>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4415</p>
+                            <p class="mb-1" style="font-size:0.9rem;">救援行動 — Sector 9</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：雷納德·馬克斯 | 飛船：NV-007 虛空切割者</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-red);">12%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar critical" style="width:12%;"></div></div>
                         </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val" style="color:var(--red)">機密</span>
-                            <span class="detail-meta-lbl">距離</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val" style="color:var(--red)">33%</span>
-                            <span class="detail-meta-lbl">進度</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val" style="color:var(--red)">未知</span>
-                            <span class="detail-meta-lbl">預計完成</span>
-                        </div>
+                        <span class="badge badge-critical">緊急</span>
                     </div>
                 </div>
-                <div class="mission-detail-card">
-                    <div class="detail-card-id">MIS-002 / BETA CLASS / TITAN-X</div>
-                    <div class="detail-card-name">ORBIT GENESIS</div>
-                    <div class="detail-card-badge"><span class="badge badge-active">ACTIVE</span></div>
-                    <p class="detail-card-desc">在 Kepler-452b 軌道建立永久人類居住站，這是人類第一個跨星系殖民計畫的核心工程。TITAN-X 超重型建設艦攜帶 120 組模組化居住艙，反物質反應爐提供足夠能源支撐 50 年自給自足運作。</p>
-                    <div class="detail-meta-row">
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">1,204</span>
-                            <span class="detail-meta-lbl">乘員</span>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4398</p>
+                            <p class="mb-1" style="font-size:0.9rem;">小行星採礦 — Belt-7C</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：索菲亞·雷耶斯 | 飛船：NV-012 量子迴旋</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-yellow);">34%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar warn" style="width:34%;"></div></div>
                         </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">1,400 LY</span>
-                            <span class="detail-meta-lbl">距離</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">45%</span>
-                            <span class="detail-meta-lbl">進度</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">2158.06</span>
-                            <span class="detail-meta-lbl">預計完成</span>
-                        </div>
+                        <span class="badge badge-warn">延遲</span>
                     </div>
                 </div>
-                <div class="mission-detail-card">
-                    <div class="detail-card-id">MIS-005 / EPSILON CLASS / AURORA-7</div>
-                    <div class="detail-card-name">NOVA SEED</div>
-                    <div class="detail-card-badge"><span class="badge badge-active">ACTIVE</span></div>
-                    <p class="detail-card-desc">在 Wolf 1061c 建立第一個外星生態系統，攜帶 3,000 種地球生物基因庫。AURORA-7 輕型偵察艦完成先期地表勘查，確認大氣組成適合改造工程。預計需要 20 年完成第一階段生態改造。</p>
-                    <div class="detail-meta-row">
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">620</span>
-                            <span class="detail-meta-lbl">乘員</span>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4389</p>
+                            <p class="mb-1" style="font-size:0.9rem;">蟲洞勘測 — WH-Alpha</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：李峰 | 飛船：NV-019 暗物質探針</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-cyan);">91%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar" style="width:91%;"></div></div>
                         </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">13.8 LY</span>
-                            <span class="detail-meta-lbl">距離</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">62%</span>
-                            <span class="detail-meta-lbl">進度</span>
-                        </div>
-                        <div class="detail-meta-item">
-                            <span class="detail-meta-val">2177.00</span>
-                            <span class="detail-meta-lbl">預計完成</span>
-                        </div>
+                        <span class="badge badge-active-nv">執行中</span>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- 任務日誌 -->
-        <section class="log-section">
-            <div class="log-header">
-                <p class="page-tag">MISSION LOG ENTRIES</p>
-                <h2 class="section-title">[ 最新任務日誌 ]</h2>
-            </div>
-            <div class="log-entries">
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.14<br>03:47:22 UTC</div>
-                    <div class="log-level log-level-alert">ALERT</div>
-                    <div class="log-message"><strong>[MIS-004]</strong> PHANTOM-3 回傳訊號出現 14 秒中斷，自動復原協議已啟動。訊號源確認發出規律性 7.3Hz 脈衝，非已知自然現象。指揮中心已提升任務等級至 CRITICAL。</div>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4371</p>
+                            <p class="mb-1" style="font-size:0.9rem;">外星文明接觸 — Zeta-5</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：亞曼達·福斯特 | 飛船：NV-033 脈衝騎士</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-cyan);">55%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar" style="width:55%;"></div></div>
+                        </div>
+                        <span class="badge badge-standby">待命</span>
+                    </div>
                 </div>
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.14<br>02:12:08 UTC</div>
-                    <div class="log-level log-level-info">INFO</div>
-                    <div class="log-message"><strong>[MIS-003]</strong> PULSE ARRAY 第 37 號量子中繼站部署完成，覆蓋範圍延伸至 9,800 光年。通訊延遲由原本 14 分鐘降至 0.003 秒。任務進度達 91%，預計本月完成全陣列建設。</div>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4360</p>
+                            <p class="mb-1" style="font-size:0.9rem;">氣態巨行星採樣 — Jupiter-9</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：卡洛斯·門多薩 | 飛船：NV-044 冰晶獵手</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-cyan);">77%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar" style="width:77%;"></div></div>
+                        </div>
+                        <span class="badge badge-active-nv">執行中</span>
+                    </div>
                 </div>
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.13<br>21:55:44 UTC</div>
-                    <div class="log-level log-level-info">INFO</div>
-                    <div class="log-message"><strong>[MIS-001]</strong> 引力波感測器第七次校準完成，偵測靈敏度提升 18%。NEXUS-01 已成功穿越 Sgr A* 外層磁場屏障，時空曲率讀數超出預期模型 3.7 個標準差。</div>
+                <div class="list-group-item p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="section-label mb-1">MISSION-4345</p>
+                            <p class="mb-1" style="font-size:0.9rem;">黑洞觀測 — Sagittarius-A</p>
+                            <p class="small mb-2" style="color:var(--nv-muted);">指揮官：艾蜜莉·張 | 飛船：NV-055 視界探索者</p>
+                            <div class="d-flex justify-content-between small mb-1" style="width:200px;color:var(--nv-muted);">
+                                <span>進度</span><span style="color:var(--nv-cyan);">43%</span>
+                            </div>
+                            <div class="progress" style="width:200px;"><div class="progress-bar" style="width:43%;"></div></div>
+                        </div>
+                        <span class="badge badge-standby">待命</span>
+                    </div>
                 </div>
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.13<br>18:30:19 UTC</div>
-                    <div class="log-level log-level-warn">WARN</div>
-                    <div class="log-message"><strong>[MIS-002]</strong> Kepler-452b 軌道站 C 模組對接口出現 2mm 形變，工程組已啟動應急焊接方案。TITAN-X 反物質儲量降至 68%，補給艦 SUPPLY-9 預計 72 小時內抵達。</div>
-                </div>
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.13<br>14:08:55 UTC</div>
-                    <div class="log-level log-level-info">INFO</div>
-                    <div class="log-message"><strong>[MIS-005]</strong> Wolf 1061c 大氣氧氣濃度達到 19.2%，超過生態改造第一階段目標（18%）。基因庫釋放程序 Phase-3 啟動，首批耐輻射植被種子已完成播種。</div>
-                </div>
-                <div class="log-entry">
-                    <div class="log-timestamp">2157.08.13<br>09:44:31 UTC</div>
-                    <div class="log-level log-level-info">INFO</div>
-                    <div class="log-message"><strong>[MIS-006]</strong> IRON VEIL 採礦作業完成本週配額，累計採集稀土元素 4,720 公噸、鈦金屬合金 12,340 公噸。礦石加工艦 FORGE-2 已滿載返回 Ceres 基地。</div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div>
-                <div class="footer-logo">NEXUS VOID</div>
-                <p class="footer-brand-desc">人類最遠的眼睛。我們相信宇宙的每一個角落都值得被探索，每一個謎題都值得被解開。</p>
-            </div>
-            <div>
-                <h4 class="footer-col-title">任務</h4>
-                <ul class="footer-links">
-                    <li><a href="../missions/">任務中心</a></li>
-                    <li><a href="../missions/">Deep Horizon</a></li>
-                    <li><a href="../missions/">Orbit Genesis</a></li>
-                    <li><a href="../missions/">Pulse Array</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">艦隊</h4>
-                <ul class="footer-links">
-                    <li><a href="../fleet/">艦隊登錄</a></li>
-                    <li><a href="../telemetry/">遙測數據</a></li>
-                    <li><a href="../signal/">通訊頻道</a></li>
-                    <li><a href="../fleet/">技術規格</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="footer-col-title">指揮中心</h4>
-                <ul class="footer-links">
-                    <li><a href="../signal/">發送訊號</a></li>
-                    <li><a href="../telemetry/">系統狀態</a></li>
-                    <li><a href="../missions/">任務日誌</a></li>
-                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2157 NEXUS VOID CORP. All rights reserved.</span>
-            <span>SECTOR-7 · Signal Encrypted · Uptime 99.7%</span>
+    </section>
+
+    <footer style="background:var(--nv-surface);border-top:1px solid var(--nv-border);padding:24px 0;">
+        <div class="container d-flex justify-content-between small">
+            <span class="glow-cyan" style="letter-spacing:2px;">NEXUS VOID</span>
+            <span style="color:var(--nv-muted);">Mission Control v4.2</span>
         </div>
     </footer>
 
-    <script>
-        // 星空粒子動畫
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        function initStars() {
-            stars = Array.from({ length: 200 }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 1.2,
-                a: Math.random(),
-                speed: 0.002 + Math.random() * 0.003
-            }));
-        }
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                s.a += s.speed;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(200, 230, 255, ${Math.abs(Math.sin(s.a))})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-        resize(); initStars(); drawStars();
-        window.addEventListener('resize', () => { resize(); initStars(); });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
