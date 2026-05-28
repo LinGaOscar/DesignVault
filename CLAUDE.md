@@ -168,12 +168,13 @@ Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle lay
 - `au-input` inputs have `display: block` — required for `w-100` to work on them
 - `.btn-au-outline-on-dark` variant for buttons on dark backgrounds
 
-### 4. Space Sci-Fi (`pages/space-scifi/`)
+### 4. Space Hotel (`pages/space-scifi/`)
 
-- Brand: **NEXUS VOID** · 4 subpages: missions, fleet, telemetry, signal
+- Brand: **ORBITAL** · 4 subpages: rooms, experiences, book, about
 - DesignVault back link class: `.designvault-back` (strip target for `cleanHtml()`)
 - Monospace font everywhere — no Google Fonts loaded
-- Signal page uses Bootstrap JS tabs (only page with proper `data-bs-toggle="tab"` + `tab-content`)
+- `rooms/`: Three cabin tiers (Standard Pod / Observatory Suite / Executive Sphere)
+- `book/`: Booking form with date pickers, room select, guest count; all `<label>` have `for` matching `id`
 - `.nv-hero` has `padding-top: 72px` to compensate for `fixed-top` navbar
 
 ### DesignVault back link classes (critical for `cleanHtml()`)

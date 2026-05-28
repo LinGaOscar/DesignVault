@@ -33,14 +33,14 @@ const DEMOS = {
     ]
   },
   'space-scifi': {
-    folder: 'nexus-void-template',
+    folder: 'orbital-template',
     files: [
-      ['pages/space-scifi/custom.css',           'custom.css'],
-      ['pages/space-scifi/index.html',           'index.html'],
-      ['pages/space-scifi/missions/index.html',  'missions/index.html'],
-      ['pages/space-scifi/fleet/index.html',     'fleet/index.html'],
-      ['pages/space-scifi/telemetry/index.html', 'telemetry/index.html'],
-      ['pages/space-scifi/signal/index.html',    'signal/index.html'],
+      ['pages/space-scifi/custom.css',            'custom.css'],
+      ['pages/space-scifi/index.html',            'index.html'],
+      ['pages/space-scifi/rooms/index.html',      'rooms/index.html'],
+      ['pages/space-scifi/experiences/index.html','experiences/index.html'],
+      ['pages/space-scifi/book/index.html',       'book/index.html'],
+      ['pages/space-scifi/about/index.html',      'about/index.html'],
     ]
   }
 };
