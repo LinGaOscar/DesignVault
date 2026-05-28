@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定價 — Quill</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css">
+</head>
+<body>
+    <a href="../../../index.html" class="dv-bar">← DesignVault</a>
+
+    <nav class="navbar ql-navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../">Quill</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#qlNav" aria-controls="qlNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="qlNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="../features/">功能</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./">定價</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../about/">關於</a></li>
+                </ul>
+                <a class="btn-ql ms-3" href="#">免費試用</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="ql-page-header">
+        <div class="container">
+            <p style="color:var(--ql-teal);font-size:0.8rem;font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Pricing</p>
+            <h1 class="fw-bold mb-2">選擇方案</h1>
+            <p style="color:var(--ql-muted);margin-bottom:1.25rem;">Simple, Transparent Pricing</p>
+            <div class="d-flex align-items-center justify-content-center gap-3">
+                <span style="font-size:0.875rem;color:var(--ql-text);font-weight:500;">月繳</span>
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" style="width:2.5rem;height:1.25rem;cursor:pointer;" aria-label="切換年繳月繳">
+                </div>
+                <span style="font-size:0.875rem;color:var(--ql-muted);">年繳 <span style="background:var(--ql-teal);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:10px;margin-left:4px;">省 20%</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing cards -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class="pricing-card">
+                        <h5 class="fw-semibold mb-1">Free</h5>
+                        <p class="display-6 fw-bold mb-0">NT$ 0</p>
+                        <p style="color:var(--ql-muted);font-size:0.8rem;margin-bottom:1.5rem;">/ 月，永久免費</p>
+                        <ul class="ql-check-list mb-4">
+                            <li>每月 5,000 字</li>
+                            <li>基本 AI 建議（每日 10 次）</li>
+                            <li>1 種語言</li>
+                            <li>PDF 匯出</li>
+                            <li>社群支援</li>
+                        </ul>
+                        <a href="#" class="btn-ql-outline d-block text-center">免費開始</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">推薦</div>
+                        <h5 class="fw-semibold mb-1">Pro</h5>
+                        <p class="display-6 fw-bold mb-0">NT$ 290</p>
+                        <p style="color:var(--ql-muted);font-size:0.8rem;margin-bottom:1.5rem;">/ 月</p>
+                        <ul class="ql-check-list mb-4">
+                            <li>無限字數</li>
+                            <li>進階 AI 建議（無限次）</li>
+                            <li>12 種語言</li>
+                            <li>PDF、DOCX、Markdown 匯出</li>
+                            <li>版本歷史（90 天）</li>
+                            <li>優先電郵支援</li>
+                        </ul>
+                        <a href="#" class="btn-ql d-block text-center">立即升級</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="pricing-card">
+                        <h5 class="fw-semibold mb-1">Team</h5>
+                        <p class="display-6 fw-bold mb-0">NT$ 890</p>
+                        <p style="color:var(--ql-muted);font-size:0.8rem;margin-bottom:1.5rem;">/ 月，最多 10 人</p>
+                        <ul class="ql-check-list mb-4">
+                            <li>所有 Pro 功能</li>
+                            <li>最多 10 個成員</li>
+                            <li>即時協作共編</li>
+                            <li>協作留言</li>
+                            <li>無限版本歷史</li>
+                            <li>管理後台</li>
+                            <li>專屬客服</li>
+                        </ul>
+                        <a href="#" class="btn-ql-outline d-block text-center">聯繫我們</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="ql-section-alt">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4">功能對比</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered ql-compare-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40%;">功能</th>
+                            <th class="text-center">Free</th>
+                            <th class="text-center" style="color:var(--ql-teal);">Pro</th>
+                            <th class="text-center">Team</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>字數限制</td>
+                            <td class="text-center" style="color:var(--ql-muted);font-size:0.875rem;">5,000 字/月</td>
+                            <td class="text-center" style="color:var(--ql-teal);">無限</td>
+                            <td class="text-center" style="color:var(--ql-teal);">無限</td>
+                        </tr>
+                        <tr>
+                            <td>AI 建議次數</td>
+                            <td class="text-center" style="color:var(--ql-muted);font-size:0.875rem;">10 次/天</td>
+                            <td class="text-center" style="color:var(--ql-teal);">無限</td>
+                            <td class="text-center" style="color:var(--ql-teal);">無限</td>
+                        </tr>
+                        <tr>
+                            <td>支援語言數</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center" style="color:var(--ql-teal);">12</td>
+                            <td class="text-center" style="color:var(--ql-teal);">12</td>
+                        </tr>
+                        <tr>
+                            <td>協作人數</td>
+                            <td class="text-center">—</td>
+                            <td class="text-center">—</td>
+                            <td class="text-center" style="color:var(--ql-teal);">最多 10 人</td>
+                        </tr>
+                        <tr>
+                            <td>版本歷史</td>
+                            <td class="text-center">—</td>
+                            <td class="text-center">90 天</td>
+                            <td class="text-center" style="color:var(--ql-teal);">無限</td>
+                        </tr>
+                        <tr>
+                            <td>客服等級</td>
+                            <td class="text-center" style="font-size:0.875rem;">社群</td>
+                            <td class="text-center" style="font-size:0.875rem;">優先電郵</td>
+                            <td class="text-center" style="color:var(--ql-teal);font-size:0.875rem;">專屬客服</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-5">
+        <div class="container" style="max-width:720px;">
+            <h2 class="fw-bold text-center mb-4">常見問題</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item border mb-3" style="border-radius:var(--ql-radius);overflow:hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                            免費方案包含什麼？
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:var(--ql-muted);font-size:0.875rem;">
+                            免費方案提供每月 5,000 字的 AI 輔助寫作，基本 AI 建議（每日 10 次），以及 PDF 格式匯出功能，永久免費、無需信用卡。
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border mb-3" style="border-radius:var(--ql-radius);overflow:hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                            可以隨時取消嗎？
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:var(--ql-muted);font-size:0.875rem;">
+                            可以。你可以在任何時候取消訂閱，當前週期結束後不會再扣款，且不需要填寫任何理由。
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border mb-3" style="border-radius:var(--ql-radius);overflow:hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                            支援哪些瀏覽器？
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:var(--ql-muted);font-size:0.875rem;">
+                            Quill 支援所有主流現代瀏覽器，包含 Chrome、Firefox、Safari、Edge 的最新版本。建議使用 Chrome 或 Edge 以獲得最佳體驗。
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border" style="border-radius:var(--ql-radius);overflow:hidden;">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                            資料安全性如何保障？
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:var(--ql-muted);font-size:0.875rem;">
+                            所有傳輸均採用 TLS 加密，靜態資料以 AES-256 加密儲存於符合 SOC 2 認證的伺服器。你的內容不會用於模型訓練。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="ql-footer">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <p class="mb-0 fw-bold" style="color:#fff;">Quill</p>
+                <p class="mb-0" style="font-size:0.8rem;">© 2026 Quill. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
