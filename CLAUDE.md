@@ -1,8 +1,8 @@
-# CLAUDE.md — DesignVault
+# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Project Overview (DesignVault)
 
 DesignVault is a **static front-end portfolio** showcasing five web design demos. There is no build process, no backend, and no package manager. Pages use **Bootstrap 5.3.3** (loaded via CDN) plus a per-demo `custom.css` for brand-specific overrides.
 
@@ -61,6 +61,8 @@ Each demo's homepage loads `custom.css`; subpages load `../custom.css`.
 ---
 
 ## Running the Project
+
+**Live site:** Deployed on GitHub Pages at the repo's GitHub Pages URL.
 
 Open any HTML file directly in a browser, or spin up a local HTTP server for accurate relative-path and font behaviour:
 
@@ -230,7 +232,7 @@ When modifying `css/style.css` or `js/main.js`, update the version query string 
 ## Editing Conventions for AI Assistants
 
 1. **No build step** — edits to HTML/CSS take effect immediately on refresh. Never suggest running `npm install` or `npm build`.
-2. **No `<style>` blocks** — demo pages have no inline `<style>`. All brand CSS goes in the demo's `custom.css`, never scattered as inline `style=""` attributes.
+2. **No `<style>` blocks** — demo pages have no inline `<style>` elements. Brand colours, spacing, and radii belong in `custom.css` as CSS variables. One-off presentational tweaks (e.g. `letter-spacing: 1.2px` on a single label) may use inline `style=""`, but do not scatter brand tokens (colours, radii) as inline values.
 3. **Bootstrap utilities first** — use Bootstrap classes (`d-flex`, `gap-2`, `text-muted`, etc.) before writing custom CSS. Add custom CSS only when Bootstrap has no equivalent or brand identity requires it.
 4. **CSS variables first** — when changing colours, spacing, or radii in a demo, update the CSS variable in `custom.css :root` rather than scattering literal values.
 5. **Global styles** (`css/style.css`) apply only to `index.html`. Do not import it from demo pages.
