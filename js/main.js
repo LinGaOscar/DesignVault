@@ -3,6 +3,7 @@ const DEMOS = {
     folder: 'maison-noir-template',
     files: [
       ['pages/fashion-ecommerce/custom.css',            'custom.css'],
+      ['pages/fashion-ecommerce/api-guide.js',          'api-guide.js'],
       ['pages/fashion-ecommerce/index.html',            'index.html'],
       ['pages/fashion-ecommerce/womens/index.html',     'womens/index.html'],
       ['pages/fashion-ecommerce/mens/index.html',       'mens/index.html'],
@@ -14,6 +15,7 @@ const DEMOS = {
     folder: 'nexusflow-template',
     files: [
       ['pages/saas-dashboard/custom.css',           'custom.css'],
+      ['pages/saas-dashboard/api-guide.js',         'api-guide.js'],
       ['pages/saas-dashboard/index.html',           'index.html'],
       ['pages/saas-dashboard/analytics/index.html', 'analytics/index.html'],
       ['pages/saas-dashboard/users/index.html',     'users/index.html'],
@@ -25,6 +27,7 @@ const DEMOS = {
     folder: 'aurele-template',
     files: [
       ['pages/boutique-brand/custom.css',             'custom.css'],
+      ['pages/boutique-brand/api-guide.js',           'api-guide.js'],
       ['pages/boutique-brand/index.html',             'index.html'],
       ['pages/boutique-brand/story/index.html',       'story/index.html'],
       ['pages/boutique-brand/collections/index.html', 'collections/index.html'],
@@ -36,6 +39,7 @@ const DEMOS = {
     folder: 'orbital-template',
     files: [
       ['pages/space-scifi/custom.css',            'custom.css'],
+      ['pages/space-scifi/api-guide.js',          'api-guide.js'],
       ['pages/space-scifi/index.html',            'index.html'],
       ['pages/space-scifi/rooms/index.html',      'rooms/index.html'],
       ['pages/space-scifi/experiences/index.html','experiences/index.html'],
@@ -47,6 +51,7 @@ const DEMOS = {
     folder: 'quill-template',
     files: [
       ['pages/quill-landing/custom.css',            'custom.css'],
+      ['pages/quill-landing/api-guide.js',          'api-guide.js'],
       ['pages/quill-landing/index.html',            'index.html'],
       ['pages/quill-landing/features/index.html',   'features/index.html'],
       ['pages/quill-landing/pricing/index.html',    'pricing/index.html'],
