@@ -21,12 +21,17 @@
   var panel = document.createElement('div');
   panel.className = 'ag-panel';
   endpoints.forEach(function (ep) {
+    var m = (ep.method || '').toLowerCase();
     var row = document.createElement('div');
     row.className = 'ag-row';
-    var m = ep.method.toLowerCase();
-    row.innerHTML =
-      '<span class="ag-method ag-' + m + '">' + ep.method + '</span>' +
-      '<span class="ag-path">' + ep.path + '</span>';
+    var badge = document.createElement('span');
+    badge.className = 'ag-method ag-' + m;
+    badge.textContent = ep.method;
+    var pathSpan = document.createElement('span');
+    pathSpan.className = 'ag-path';
+    pathSpan.textContent = ep.path;
+    row.appendChild(badge);
+    row.appendChild(pathSpan);
     panel.appendChild(row);
   });
 
