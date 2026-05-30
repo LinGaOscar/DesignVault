@@ -245,5 +245,13 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+window.API_ENDPOINTS = [
+  { method: 'GET',    path: '/api/users' },
+  { method: 'PATCH',  path: '/api/users/:id' },
+  { method: 'DELETE', path: '/api/users/:id' },
+];
+</script>
+<script src="../api-guide.js"></script>
 </body>
 </html>
