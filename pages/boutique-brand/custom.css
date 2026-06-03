@@ -40,7 +40,8 @@
 .au-hero { min-height: 100vh; background: var(--au-bg); display: flex; align-items: center; padding-top: 80px; }
 .au-hero-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; line-height: 1.0; letter-spacing: -1px; }
 .au-hero-title em { font-style: italic; }
-.au-hero-img { background: #ede9e3; min-height: 60vh; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 10rem; color: rgba(0,0,0,0.06); }
+.au-hero-img { position: relative; overflow: hidden; min-height: 60vh; }
+.au-hero-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* Section headings */
 .section-tag { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--au-gold); }
@@ -48,7 +49,8 @@
 
 /* Collection cards */
 .collection-card { overflow: hidden; }
-.collection-img { aspect-ratio: 3/4; background: #ede9e3; display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: transform 0.4s; overflow: hidden; }
+.collection-img { aspect-ratio: 3/4; overflow: hidden; position: relative; transition: transform 0.4s; }
+.collection-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .collection-card:hover .collection-img { transform: scale(1.04); }
 .collection-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.1rem; letter-spacing: 1px; }
 

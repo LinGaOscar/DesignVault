@@ -22,22 +22,27 @@ DesignVault/
 └── pages/
     ├── fashion-ecommerce/
     │   ├── custom.css                # MAISON NOIR brand overrides
+    │   ├── api-guide.js              # API toolbar (see below)
     │   ├── index.html
     │   ├── womens/ mens/ accessories/ about/
     ├── saas-dashboard/
     │   ├── custom.css                # NexusFlow Enterprise brand overrides
+    │   ├── api-guide.js
     │   ├── index.html
     │   ├── analytics/ users/ orders/ settings/
     ├── boutique-brand/
     │   ├── custom.css                # AURÈLE brand overrides
+    │   ├── api-guide.js
     │   ├── index.html
     │   ├── story/ collections/ works/ contact/
     ├── space-scifi/
     │   ├── custom.css                # ORBITAL brand overrides
+    │   ├── api-guide.js
     │   ├── index.html
     │   ├── rooms/ experiences/ book/ about/
     └── quill-landing/
         ├── custom.css                # Quill brand overrides
+        ├── api-guide.js
         ├── index.html
         ├── features/ pricing/ about/
 ```
@@ -148,6 +153,33 @@ Bootstrap's grid utilities (`col-12 col-md-X col-lg-X`, `row-cols-*`) handle lay
 | boutique-brand | Cormorant Garamond | Inter |
 | space-scifi | `'Courier New', 'Consolas', monospace` (no Google Fonts) | monospace |
 | quill-landing | Inter only | Inter |
+
+---
+
+## API Guide Toolbar (`api-guide.js`)
+
+Each demo has a `pages/<demo>/api-guide.js` that injects a fixed bottom toolbar showing which API endpoints the page requires. This is intentional infrastructure for developers who download the ZIP — `cleanHtml()` does **not** strip it.
+
+**How it works:**
+
+1. The host page declares `window.API_ENDPOINTS` before loading the script:
+
+```html
+<script>
+window.API_ENDPOINTS = [
+  { method: 'GET',  path: '/api/products/featured' },
+  { method: 'POST', path: '/api/orders' },
+];
+</script>
+<script src="api-guide.js"></script>        <!-- homepage -->
+<script src="../api-guide.js"></script>     <!-- subpages -->
+```
+
+2. The script (a self-contained IIFE, no dependencies) injects `.ag-bar` (fixed 40 px bottom strip) and `.ag-panel` (expandable endpoint list). CSS uses the `.ag-` prefix to avoid collision with demo styles.
+
+3. Only pages with data-fetching get the toolbar. Static/editorial pages (e.g. `about/`, `story/`) omit it. Each demo covers at most 3 pages (including `index.html`).
+
+**Do not** add `api-guide.js` entries to `cleanHtml()` — the toolbar must survive the ZIP download.
 
 ---
 
