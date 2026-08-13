@@ -31,6 +31,15 @@ DesignVault/
 
 每個 Demo 包含一個 `custom.css`（品牌 CSS 變數）與各子頁 HTML，使用 Bootstrap 5.3.3 CDN。
 
+## 功能
+
+- 首頁每張卡片可**下載模板**：點擊後由 `js/main.js` 用 JSZip 即時打包該 Demo 的 HTML/CSS/圖片為 `.zip`，並自動移除 DesignVault 專屬導覽元素（如返回連結），下載即為可獨立使用的靜態模板。
+- 每個 Demo 的部分頁面內建 `api-guide.js` 工具列，列出該頁面預期串接的 API endpoints，供下載模板後接後端的開發者參考（此工具列不會被下載時的清理流程移除）。
+
+## 部署
+
+push 到 `main` 分支會經由 `.github/workflows/deploy.yml` 自動部署到 GitHub Pages。
+
 ## 技術棧
 
 - **HTML5 / CSS3 / Vanilla JavaScript**（無框架、無套件管理器）
